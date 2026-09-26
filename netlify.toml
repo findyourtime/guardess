@@ -1,0 +1,21 @@
+# Site statique : aucune commande de build, on publie la racine.
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
+# La planche de validation n'a pas à être indexée
+[[headers]]
+  for = "/preview.html"
+  [headers.values]
+    X-Robots-Tag = "noindex"
