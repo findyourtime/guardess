@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Guardess — Aperçu Liquid Glass</title>
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* ------------------------------------------------------------------
+   Palette de marque (identité conservée) + teintes de dégradé ajoutées
+   ------------------------------------------------------------------ */
+:root {
+  --navy-900: #060B1F;   /* nuit : bas du dégradé sombre */
+  --navy:     #0B1330;   /* marque */
+  --indigo:   #1B2C85;   /* pont entre navy et bleu */
+  --electric: #2F5EFF;   /* marque */
+  --azure:    #5E8BFF;   /* bleu électrique éclairci : halo */
+  --iris:     #7A6CFF;   /* touche violette : irisation du verre */
+  --lavender: #B7C6FF;   /* marque */
+  --mist:     #E4EAFF;   /* lavande très claire : fond clair */
+  --paper:    #F5F7FB;   /* marque */
+
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Manrope", system-ui, sans-serif;
+
+  --radius-lg: 32px;
+  --radius-md: 24px;
+  --radius-pill: 999px;
+}
+
+/* Thème clair (valeurs par défaut) */
+:root {
+  --bg-base: var(--mist);
+  --blob-1: #7F9BFF;               /* azur adouci */
+  --blob-2: var(--lavender);
+  --blob-3: #A99BFF;               /* iris adouci */
+  --blob-4: #FFFFFF;
+  --blob-opacity: .9;
+
+  --text: #0B1330;
+  --text-muted: #3A4468;
+  --glass-bg: rgba(255, 255, 255, .22);
+  --glass-bg-strong: rgba(255, 255, 255, .34);
+  --glass-edge: rgba(255, 255, 255, .55);
+  --glass-edge-soft: rgba(255, 255, 255, .25);
+  --glass-shadow:
+    0 1px 1px rgba(11, 19, 48, .04),
+    0 8px 20px -6px rgba(27, 44, 133, .16),
+    0 30px 60px -20px rgba(27, 44, 133, .28);
+  --specular: rgba(255, 255, 255, .55);
+  --focus: var(--electric);
+  --cta-bg: var(--electric);
+  --cta-text: #FFFFFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-base: var(--navy-900);
+    --blob-1: var(--electric);
+    --blob-2: var(--indigo);
+    --blob-3: var(--iris);
+    --blob-4: var(--azure);
+    --blob-opacity: .85;
+
+    --text: var(--paper);
+    --text-muted: #B9C3E6;
+    --glass-bg: rgba(255, 255, 255, .12);
+    --glass-bg-strong: rgba(255, 255, 255, .18);
+    --glass-edge: rgba(255, 255, 255, .35);
+    --glass-edge-soft: rgba(255, 255, 255, .12);
+    --glass-shadow:
+      0 1px 1px rgba(0, 0, 0, .25),
+      0 10px 24px -8px rgba(0, 0, 0, .45),
+      0 40px 80px -24px rgba(3, 6, 20, .75);
+    --specular: rgba(255, 255, 255, .28);
+    --focus: var(--lavender);
+    --cta-bg: var(--paper);
+    --cta-text: var(--navy);
+  }
+}
+:root[data-theme="dark"] {
+  --bg-base: var(--navy-900);
+  --blob-1: var(--electric);
+  --blob-2: var(--indigo);
+  --blob-3: var(--iris);
+  --blob-4: var(--azure);
+  --blob-opacity: .85;
+
+  --text: var(--paper);
+  --text-muted: #B9C3E6;
+  --glass-bg: rgba(255, 255, 255, .12);
+  --glass-bg-strong: rgba(255, 255, 255, .18);
+  --glass-edge: rgba(255, 255, 255, .35);
+  --glass-edge-soft: rgba(255, 255, 255, .12);
+  --glass-shadow:
+    0 1px 1px rgba(0, 0, 0, .25),
+    0 10px 24px -8px rgba(0, 0, 0, .45),
+    0 40px 80px -24px rgba(3, 6, 20, .75);
+  --specular: rgba(255, 255, 255, .28);
+  --focus: var(--lavender);
+  --cta-bg: var(--paper);
+  --cta-text: var(--navy);
+}
+
+/* ------------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg-base);
+  color: var(--text);
+  font: 400 1rem/1.6 var(--font-body);
+  padding:
+    max(24px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(48px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  overflow-x: hidden;
+  transition: background-color .5s ease, color .5s ease;
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.1; margin: 0; letter-spacing: -.02em; }
+p { margin: 0; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 12px; }
+
+/* --- Fond mesh : 4 halos flous qui dérivent lentement --- */
+.mesh {
+  position: fixed; inset: -20vmax; z-index: -1; pointer-events: none;
+  filter: blur(60px) saturate(120%);
+}
+.mesh span {
+  position: absolute; border-radius: 50%;
+  opacity: var(--blob-opacity);
+  transition: background-color .6s ease;
+  will-change: transform;
+}
+.mesh span:nth-child(1) { width: 60vmax; height: 60vmax; left: 5%;  top: 0;   background: var(--blob-1); animation: drift1 26s ease-in-out infinite alternate; }
+.mesh span:nth-child(2) { width: 70vmax; height: 70vmax; right: 0;  top: 25%; background: var(--blob-2); animation: drift2 32s ease-in-out infinite alternate; }
+.mesh span:nth-child(3) { width: 42vmax; height: 42vmax; left: 30%; bottom: 5%; background: var(--blob-3); animation: drift3 22s ease-in-out infinite alternate; }
+.mesh span:nth-child(4) { width: 30vmax; height: 30vmax; right: 20%; top: 5%; background: var(--blob-4); opacity: calc(var(--blob-opacity) * .7); animation: drift1 28s ease-in-out infinite alternate-reverse; }
+@keyframes drift1 { to { transform: translate3d(12vmax, 8vmax, 0) scale(1.1); } }
+@keyframes drift2 { to { transform: translate3d(-10vmax, -6vmax, 0) scale(.92); } }
+@keyframes drift3 { to { transform: translate3d(-8vmax, -10vmax, 0) scale(1.15); } }
+/* grain léger pour éviter le banding du dégradé */
+.grain {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .06; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- Le composant verre --- */
+.glass {
+  position: relative;
+  isolation: isolate;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  backdrop-filter: blur(32px) saturate(180%);
+  border: 1px solid var(--glass-edge-soft);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge),          /* arête lumineuse haute */
+    inset 0 -1px 0 rgba(255, 255, 255, .06),  /* rebond bas */
+    var(--glass-shadow);
+  transition: transform .5s cubic-bezier(.2, .8, .2, 1), box-shadow .5s ease, background-color .5s ease;
+}
+/* arête : dégradé de bordure plus clair en haut à gauche */
+.glass::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: linear-gradient(140deg, var(--glass-edge) 0%, var(--glass-edge-soft) 35%, transparent 60%, var(--glass-edge-soft) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+/* reflet spéculaire diagonal */
+.glass--specular::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+  background:
+    linear-gradient(115deg, var(--specular) 0%, transparent 28%),
+    linear-gradient(115deg, transparent 58%, rgba(255, 255, 255, .08) 64%, transparent 72%);
+}
+@supports (corner-shape: squircle) {
+  .glass, .swatch, .btn, .seg { corner-shape: squircle; }
+  .glass { border-radius: 48px; }
+}
+@media (hover: hover) {
+  .glass--lift:hover { transform: translateY(-4px); }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass { background: var(--glass-bg-strong); }
+}
+
+/* --- Mise en page de l'aperçu --- */
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 24px; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 10px 10px 10px 20px; border-radius: var(--radius-pill);
+  position: sticky; top: max(12px, env(safe-area-inset-top)); z-index: 10;
+}
+.logo { font: 700 1.15rem var(--font-display); letter-spacing: -.01em; display: flex; align-items: center; gap: 10px; }
+.logo svg { width: 22px; height: 22px; }
+.eyebrow { font: 600 .75rem var(--font-body); text-transform: uppercase; letter-spacing: .14em; color: var(--text-muted); }
+
+.seg { display: inline-flex; padding: 4px; gap: 2px; border-radius: var(--radius-pill); background: var(--glass-bg); border: 1px solid var(--glass-edge-soft); }
+.seg button {
+  font: 600 .85rem var(--font-body); color: var(--text-muted); background: transparent; border: 0;
+  padding: 8px 14px; border-radius: var(--radius-pill); cursor: pointer; min-height: 36px;
+  transition: background-color .3s ease, color .3s ease;
+}
+.seg button[aria-pressed="true"] { background: var(--glass-bg-strong); color: var(--text); box-shadow: inset 0 1px 0 var(--glass-edge), 0 2px 8px rgba(0,0,0,.12); }
+
+.section-title { display: grid; gap: 6px; margin-top: 24px; }
+.section-title h2 { font-size: clamp(1.5rem, 4vw, 2rem); }
+.section-title p { color: var(--text-muted); max-width: 60ch; }
+
+/* Palette */
+.palette { padding: 20px; display: grid; gap: 20px; }
+.palette h3 { font-size: 1rem; font-weight: 600; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+.swatch { border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-edge-soft); background: var(--glass-bg); }
+.swatch i { display: block; height: 72px; }
+.swatch div { padding: 10px 12px; font-size: .8rem; line-height: 1.35; }
+.swatch b { display: block; font-family: var(--font-display); font-weight: 600; font-size: .9rem; }
+.swatch code, .swatch em { display: block; }
+.swatch code { font-size: .78rem; color: var(--text-muted); }
+.swatch em { font-style: normal; font-size: .7rem; color: var(--text-muted); }
+.ramp { height: 72px; border-radius: 20px; border: 1px solid var(--glass-edge-soft); }
+.ramp--dark  { background: radial-gradient(60% 90% at 15% 20%, #2F5EFF 0%, transparent 60%), radial-gradient(50% 80% at 85% 30%, #5E8BFF 0%, transparent 55%), radial-gradient(60% 90% at 70% 100%, #7A6CFF 0%, transparent 60%), radial-gradient(80% 100% at 40% 80%, #1B2C85 0%, transparent 70%), #060B1F; }
+.ramp--light { background: radial-gradient(60% 90% at 15% 20%, #7F9BFF 0%, transparent 60%), radial-gradient(50% 80% at 85% 30%, #FFFFFF 0%, transparent 55%), radial-gradient(60% 90% at 70% 100%, #A99BFF 0%, transparent 60%), radial-gradient(80% 100% at 40% 80%, #B7C6FF 0%, transparent 70%), #E4EAFF; }
+.ramp-row { display: grid; gap: 8px; }
+.ramp-row span { font-size: .8rem; color: var(--text-muted); }
+
+/* Panneau hero */
+.demo { display: grid; gap: 24px; grid-template-columns: 1fr; }
+@media (min-width: 880px) { .demo { grid-template-columns: 1.25fr 1fr; align-items: stretch; } }
+.hero-panel { padding: clamp(24px, 5vw, 48px); display: grid; gap: 20px; align-content: center; }
+.hero-panel h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); text-wrap: balance; }
+.hero-panel p { color: var(--text-muted); font-size: 1.05rem; max-width: 44ch; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px;
+  font: 600 .95rem var(--font-body); text-decoration: none; border-radius: var(--radius-pill); cursor: pointer;
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, background-color .3s ease;
+}
+.btn--primary { background: var(--cta-bg); color: var(--cta-text); border: 0; box-shadow: 0 8px 24px -8px rgba(47, 94, 255, .6), inset 0 1px 0 rgba(255,255,255,.4); }
+.btn--glass { color: var(--text); background: var(--glass-bg); border: 1px solid var(--glass-edge-soft); box-shadow: inset 0 1px 0 var(--glass-edge); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%); }
+@media (hover: hover) { .btn:hover { transform: translateY(-2px); } }
+.btn svg { width: 18px; height: 18px; }
+
+/* Schéma face / côté */
+.views { padding: 24px; display: grid; gap: 16px; }
+.views__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.view { display: grid; justify-items: center; gap: 14px; padding: 20px 8px 16px; border-radius: var(--radius-md); background: var(--glass-bg); border: 1px solid var(--glass-edge-soft); }
+.view figcaption { text-align: center; font-size: .85rem; line-height: 1.35; }
+.view figcaption b { display: block; font-family: var(--font-display); font-size: 1rem; }
+.view figcaption span { color: var(--text-muted); }
+.stage { perspective: 520px; height: 150px; display: grid; place-items: center; }
+.watch { position: relative; width: 92px; height: 110px; border-radius: 28px; background: linear-gradient(160deg, #3A4260, #10162C); padding: 7px; box-shadow: 0 16px 30px -12px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.25); }
+.watch::before, .watch::after { content: ""; position: absolute; left: 18px; right: 18px; height: 22px; background: #1A2140; z-index: -1; }
+.watch::before { top: -18px; border-radius: 10px 10px 4px 4px; }
+.watch::after  { bottom: -18px; border-radius: 4px 4px 10px 10px; }
+.screen { position: relative; height: 100%; border-radius: 22px; background: #000; overflow: hidden; display: grid; place-items: center; }
+.screen .time { font: 700 1.35rem var(--font-display); color: #fff; letter-spacing: -.02em; }
+.screen .notif { position: absolute; left: 8px; right: 8px; bottom: 10px; height: 16px; border-radius: 6px; background: linear-gradient(90deg, #2F5EFF, #7A6CFF); opacity: .9; }
+.screen .louvre { position: absolute; inset: 0; opacity: 0; background: repeating-linear-gradient(90deg, rgba(0,0,0,.95) 0 3px, rgba(0,0,0,.55) 3px 5px); transition: opacity .6s ease; }
+.watch--side { transform: rotateY(58deg); }
+.watch--side .louvre { opacity: 1; }
+.watch--side .time, .watch--side .notif { opacity: .08; }
+.views__note { font-size: .8rem; color: var(--text-muted); text-align: center; }
+
+/* Carte produit */
+.cards { display: grid; gap: 24px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+.card { padding: 24px; display: grid; gap: 12px; align-content: start; }
+.card .chip { justify-self: start; font: 600 .72rem var(--font-body); letter-spacing: .1em; text-transform: uppercase; padding: 6px 10px; border-radius: var(--radius-pill); background: var(--glass-bg-strong); border: 1px solid var(--glass-edge-soft); }
+.card h3 { font-size: 1.3rem; }
+.card p { color: var(--text-muted); font-size: .95rem; }
+.card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: .9rem; }
+.card li::before { content: "—"; margin-right: 8px; color: var(--electric); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .card li::before { color: var(--lavender); } }
+:root[data-theme="dark"] .card li::before { color: var(--lavender); }
+
+.spec { padding: 20px 24px; font-size: .9rem; }
+.spec dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; }
+.spec dt { font-weight: 600; }
+.spec dd { margin: 0; color: var(--text-muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; }
+
+/* Apparition au scroll */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh span:nth-child(n) { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .glass, .btn, .screen .louvre { transition: none; }
+  .glass--lift:hover, .btn:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="mesh" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+<div class="grain" aria-hidden="true"></div>
+
+<main class="wrap">
+  <header class="glass topbar">
+    <span class="logo">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6l-8-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Guardess
+    </span>
+    <div class="seg" role="group" aria-label="Thème de l'aperçu">
+      <button type="button" data-theme-set="auto" aria-pressed="true">Auto</button>
+      <button type="button" data-theme-set="light" aria-pressed="false">Clair</button>
+      <button type="button" data-theme-set="dark" aria-pressed="false">Sombre</button>
+    </div>
+  </header>
+
+  <div class="section-title reveal">
+    <span class="eyebrow">Proposition 01 · Direction Liquid Glass</span>
+    <h2>Palette du dégradé de fond</h2>
+    <p>Les quatre couleurs de marque sont conservées. Trois teintes s'y ajoutent pour le dégradé : un indigo qui fait le lien entre le navy et le bleu électrique, un azur pour les halos, et une pointe d'iris pour les reflets du verre.</p>
+  </div>
+
+  <section class="glass palette reveal" aria-labelledby="pal-h">
+    <h3 id="pal-h">Couleurs de marque</h3>
+    <div class="swatches">
+      <div class="swatch"><i style="background:#0B1330"></i><div><b>Navy</b><code>#0B1330</code></div></div>
+      <div class="swatch"><i style="background:#2F5EFF"></i><div><b>Électrique</b><code>#2F5EFF</code></div></div>
+      <div class="swatch"><i style="background:#B7C6FF"></i><div><b>Lavande</b><code>#B7C6FF</code></div></div>
+      <div class="swatch"><i style="background:#F5F7FB"></i><div><b>Papier</b><code>#F5F7FB</code></div></div>
+    </div>
+    <h3>Teintes ajoutées pour le dégradé</h3>
+    <div class="swatches">
+      <div class="swatch"><i style="background:#060B1F"></i><div><b>Nuit</b><code>#060B1F</code><em>base sombre</em></div></div>
+      <div class="swatch"><i style="background:#1B2C85"></i><div><b>Indigo</b><code>#1B2C85</code><em>pont navy → bleu</em></div></div>
+      <div class="swatch"><i style="background:#5E8BFF"></i><div><b>Azur</b><code>#5E8BFF</code><em>halo lumineux</em></div></div>
+      <div class="swatch"><i style="background:#7A6CFF"></i><div><b>Iris</b><code>#7A6CFF</code><em>irisation, parcimonie</em></div></div>
+      <div class="swatch"><i style="background:#E4EAFF"></i><div><b>Brume</b><code>#E4EAFF</code><em>base claire</em></div></div>
+    </div>
+    <h3>Le dégradé tel qu'il sera composé</h3>
+    <div class="ramp-row"><div class="ramp ramp--dark"></div><span>Mode sombre : fond nuit, halos électrique, azur, iris et indigo</span></div>
+    <div class="ramp-row"><div class="ramp ramp--light"></div><span>Mode clair : fond brume, halos azur adouci, lavande, iris adouci et blanc</span></div>
+  </section>
+
+  <div class="section-title reveal">
+    <span class="eyebrow">Composant</span>
+    <h2>Aperçu du panneau en verre</h2>
+    <p>Le hero tel qu'il apparaîtra, avec le schéma face / côté. Le fond derrière dérive lentement, et bascule le thème en haut pour voir les deux versions.</p>
+  </div>
+
+  <section class="demo">
+    <div class="glass glass--specular hero-panel reveal">
+      <span class="eyebrow">Vitre + coque anti-espion · Apple Watch</span>
+      <h1>Ton poignet n'appartient qu'à toi.</h1>
+      <p>Une vitre en verre trempé 9H à filtre de confidentialité et une coque rigide ajustée. Ton écran reste net pour toi et devient noir pour ton voisin.</p>
+      <div class="actions">
+        <a class="btn btn--primary" href="mailto:fonte.athletique@gmail.com?subject=Liste%20de%20lancement%20Guardess">
+          Rejoindre la liste de lancement
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn--glass" href="#tech">Voir la technologie</a>
+      </div>
+    </div>
+
+    <figure class="glass glass--specular views reveal" id="tech" style="margin:0" aria-labelledby="views-cap">
+      <span class="eyebrow" id="views-cap">Ce que voit chacun</span>
+      <div class="views__grid">
+        <figure class="view" style="margin:0">
+          <div class="stage"><div class="watch"><div class="screen"><span class="time">10:09</span><span class="notif"></span><span class="louvre"></span></div></div></div>
+          <figcaption><b>De face</b><span>Net, lumineux</span></figcaption>
+        </figure>
+        <figure class="view" style="margin:0">
+          <div class="stage"><div class="watch watch--side"><div class="screen"><span class="time">10:09</span><span class="notif"></span><span class="louvre"></span></div></div></div>
+          <figcaption><b>De côté</b><span>Écran noir</span></figcaption>
+        </figure>
+      </div>
+      <p class="views__note">La grille optique coupe la lumière au-delà d'environ 30° d'angle.</p>
+    </figure>
+  </section>
+
+  <section class="cards" aria-label="Variantes de carte">
+    <article class="glass glass--lift card reveal">
+      <span class="chip">Produit 01</span>
+      <h3>Vitre anti-espion 9H</h3>
+      <p>Carte en verre standard, qui se soulève au survol.</p>
+      <ul><li>Verre trempé 9H</li><li>Filtre de confidentialité</li><li>Bords 2.5D</li></ul>
+    </article>
+    <article class="glass glass--lift glass--specular card reveal">
+      <span class="chip">Produit 02</span>
+      <h3>Coque rigide ajustée</h3>
+      <p>Même carte avec le reflet spéculaire diagonal activé.</p>
+      <ul><li>Polycarbonate rigide</li><li>Ajustement précis</li><li>Accès aux boutons</li></ul>
+    </article>
+    <div class="glass spec reveal">
+      <span class="eyebrow">Recette du verre</span>
+      <dl style="margin-top:12px">
+        <dt>Flou</dt><dd>blur(32px) saturate(180%)</dd>
+        <dt>Fond</dt><dd>blanc 12 % sombre / 22 % clair</dd>
+        <dt>Arête</dt><dd>1px blanc 35 % → 12 %</dd>
+        <dt>Rayon</dt><dd>32px (squircle si supporté)</dd>
+        <dt>Ombre</dt><dd>3 couches + reflet interne</dd>
+        <dt>Reflet</dt><dd>dégradé 115°, 0 → 28 %</dd>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const buttons = document.querySelectorAll('[data-theme-set]');
+  const apply = (t) => {
+    if (t === 'auto') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', t);
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === t)));
+  };
+  buttons.forEach(b => b.addEventListener('click', () => apply(b.dataset.themeSet)));
+
+  const els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    els.forEach(e => e.classList.add('is-in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  els.forEach(e => io.observe(e));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guardess — Vitre et coque anti-espion pour Apple Watch</title>
+<meta name="description" content="Guardess : une vitre en verre trempé 9H à filtre de confidentialité et une coque rigide ajustée pour Apple Watch. Ton écran reste net de face, noir vu de côté.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#E4EAFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#060B1F" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Guardess — Ton poignet n'appartient qu'à toi.">
+<meta property="og:description" content="Vitre anti-espion 9H + coque rigide pour Apple Watch. Rejoins la liste de lancement.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6l-8-3Z' fill='%232F5EFF'/%3E%3Cpath d='M9 12h6' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/main.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<div class="mesh" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- 1. Navigation -->
+<header class="nav-wrap">
+  <nav class="nav glass" aria-label="Navigation principale">
+    <a class="brand" href="#top" aria-label="Guardess, retour en haut">
+      <!-- Logo : dépose assets/logo.svg, il remplacera automatiquement le pictogramme et le mot -->
+      <img class="brand__img" src="assets/logo.svg" alt="" data-optional="logo" width="120" height="28">
+      <span class="brand__fallback">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6l-8-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Guardess
+      </span>
+    </a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+      <span class="sr-only">Menu</span>
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <ul class="nav__links" id="nav-links">
+      <li><a href="#pack">Le pack</a></li>
+      <li><a href="#technologie">La technologie</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a class="nav__cta" href="#lancement">Lancement</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="contenu">
+
+  <!-- 2. Hero : la montre tourne avec le scroll -->
+  <section class="hero" id="top" aria-labelledby="hero-title" data-hero>
+    <div class="hero__sticky">
+      <div class="hero__grid container">
+        <div class="hero__copy">
+          <p class="eyebrow">Vitre + coque anti-espion · Apple Watch</p>
+          <h1 id="hero-title">Ton poignet n'appartient qu'à&nbsp;toi.</h1>
+          <p class="lead">Une vitre en verre trempé 9H à filtre de confidentialité, une coque rigide ajustée. Ton écran reste net pour toi et devient noir pour ton voisin de métro.</p>
+          <div class="actions">
+            <a class="btn btn--primary" href="#lancement">
+              Rejoindre la liste de lancement
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn--glass" href="#technologie">Comment ça marche</a>
+          </div>
+        </div>
+
+        <figure class="hero__panel glass glass--specular" aria-labelledby="hero-fig-cap">
+          <div class="stage stage--hero" aria-hidden="true">
+            <div class="watch" data-watch>
+              <div class="watch__band watch__band--top"></div>
+              <div class="watch__band watch__band--bottom"></div>
+              <div class="watch__body">
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                <span class="watch__crown"></span>
+                <div class="watch__face">
+                  <div class="screen">
+                    <span class="screen__time">10:09</span>
+                    <span class="screen__msg"><b>Léa</b> On se voit à 19h&nbsp;?</span>
+                    <span class="screen__louvre"></span>
+                    <span class="screen__glare"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <figcaption id="hero-fig-cap" class="hero__cap">
+            <span class="angle-chip"><span data-angle>0°</span> <span data-angle-label>De face · net</span></span>
+            <span class="hero__hint">Fais défiler : la montre pivote, l'écran s'éteint pour qui regarde de côté.</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Le pack -->
+  <section class="section" id="pack" aria-labelledby="pack-title">
+    <div class="container">
+      <header class="section__head tilt">
+        <p class="eyebrow">Le pack</p>
+        <h2 id="pack-title">Deux pièces, une seule idée : ce qui est sur ton écran reste à toi.</h2>
+      </header>
+
+      <div class="pack">
+        <div class="pack__scene glass tilt" data-explode>
+          <div class="stage stage--explode" aria-hidden="true">
+            <div class="explode">
+              <div class="layer layer--case"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="layer layer--watch"><i></i><i></i><i></i><i></i><div class="layer__screen"></div></div>
+              <div class="layer layer--glass"><div class="layer__louvre"></div></div>
+            </div>
+          </div>
+          <ol class="pack__legend">
+            <li><span class="dot dot--glass"></span>Vitre anti-espion</li>
+            <li><span class="dot dot--watch"></span>Ton Apple Watch</li>
+            <li><span class="dot dot--case"></span>Coque rigide</li>
+          </ol>
+          <!-- Photo : dépose assets/pack.jpg, elle s'affichera ici à la place de la vue éclatée -->
+          <img class="pack__photo" src="assets/pack.jpg" alt="Le pack Guardess : vitre anti-espion et coque rigide" data-optional="photo" width="1200" height="1200">
+        </div>
+
+        <div class="pack__cards">
+          <article class="card glass glass--specular tilt" data-pointer-tilt>
+            <span class="chip">Pièce 01</span>
+            <h3>Vitre anti-espion 9H</h3>
+            <p>Verre trempé de dureté 9H, avec un filtre de confidentialité intégré. Il résiste aux rayures du quotidien et coupe la vue latérale sans ternir l'écran de face.</p>
+            <ul class="ticks">
+              <li>Verre trempé 9H, bords arrondis 2.5D</li>
+              <li>Filtre à grille optique, angle de coupe ~30°</li>
+              <li>Tactile intact, traitement anti-traces</li>
+            </ul>
+          </article>
+          <article class="card glass glass--specular tilt" data-pointer-tilt>
+            <span class="chip">Pièce 02</span>
+            <h3>Coque rigide ajustée</h3>
+            <p>Une coque fine qui épouse le boîtier au dixième de millimètre. Elle protège les tranches et encadre la vitre pour qu'elle ne bouge pas.</p>
+            <ul class="ticks">
+              <li>Polycarbonate rigide, finition mate</li>
+              <li>Couronne et bouton latéral accessibles</li>
+              <li>Capteurs et charge non obstrués</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. La technologie -->
+  <section class="section" id="technologie" aria-labelledby="tech-title">
+    <div class="container">
+      <header class="section__head tilt">
+        <p class="eyebrow">La technologie</p>
+        <h2 id="tech-title">Des milliers de micro-stores, invisibles de face.</h2>
+        <p class="section__lead">Le filtre est une grille optique : de minuscules lamelles verticales, comme des stores vénitiens à l'échelle du micron. La lumière qui sort droit de l'écran passe entre elles. Celle qui part de biais se heurte aux lamelles et s'éteint.</p>
+      </header>
+
+      <div class="tech">
+        <figure class="tech__diagram glass glass--specular tilt" data-louvre-diagram>
+          <svg viewBox="0 0 360 216" role="img" aria-labelledby="louvre-title louvre-desc">
+            <title id="louvre-title">Coupe de la grille optique</title>
+            <desc id="louvre-desc">Des lamelles verticales sont posées au-dessus des pixels de l'écran. Un rayon de lumière passe entre elles quand l'angle de vue est faible, et s'arrête sur une lamelle quand l'angle dépasse environ 30 degrés.</desc>
+            <defs>
+              <linearGradient id="px" x1="0" x2="1">
+                <stop offset="0" stop-color="#2F5EFF"/><stop offset=".5" stop-color="#7A6CFF"/><stop offset="1" stop-color="#5E8BFF"/>
+              </linearGradient>
+            </defs>
+            <rect x="8" y="196" width="344" height="12" rx="6" fill="url(#px)"/>
+            <g class="louvres">
+              <rect x="10" y="112" width="6" height="80" rx="2"/>
+              <rect x="66" y="112" width="6" height="80" rx="2"/>
+              <rect x="122" y="112" width="6" height="80" rx="2"/>
+              <rect x="178" y="112" width="6" height="80" rx="2"/>
+              <rect x="234" y="112" width="6" height="80" rx="2"/>
+              <rect x="290" y="112" width="6" height="80" rx="2"/>
+              <rect x="346" y="112" width="6" height="80" rx="2"/>
+            </g>
+            <g class="rays" data-rays></g>
+            <line class="axis" x1="180" y1="20" x2="180" y2="108"/>
+          </svg>
+          <figcaption class="tech__control">
+            <ul class="tech__legend" aria-hidden="true">
+              <li><span class="key key--louvre"></span>Lamelles</li>
+              <li><span class="key key--px"></span>Pixels de l'écran</li>
+              <li><span class="key key--ray"></span>Lumière</li>
+            </ul>
+            <p class="tech__status" data-louvre-status>Visible</p>
+            <label for="angle">Angle de vue <output for="angle" data-louvre-out>0°</output></label>
+            <input id="angle" type="range" min="0" max="70" step="1" value="0" data-louvre-input>
+          </figcaption>
+        </figure>
+
+        <ul class="tech__points">
+          <li class="glass tilt">
+            <b>De face : 100 % à toi</b>
+            <span>Face à l'écran, la lumière traverse la grille presque sans perte. Couleurs et luminosité restent fidèles.</span>
+          </li>
+          <li class="glass tilt">
+            <b>Au-delà de ~30° : noir</b>
+            <span>Ton voisin de bureau, de rame ou de table voit une vitre sombre. Notifications, messages et codes restent privés.</span>
+          </li>
+          <li class="glass tilt">
+            <b>Sans électronique</b>
+            <span>Pas de batterie, pas de réglage : c'est la géométrie du verre qui fait tout le travail, en permanence.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Installation -->
+  <section class="section" id="installation" aria-labelledby="install-title">
+    <div class="container">
+      <header class="section__head tilt">
+        <p class="eyebrow">Installation</p>
+        <h2 id="install-title">Trois gestes, une minute.</h2>
+      </header>
+      <ol class="steps">
+        <li class="step glass glass--specular tilt" data-pointer-tilt>
+          <span class="step__num">01</span>
+          <svg class="step__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="12" y="8" width="24" height="32" rx="9" stroke="currentColor" stroke-width="2.5"/><path d="M18 20l4-4m2 10 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M38 6v6m-3-3h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Nettoyer</h3>
+          <p>Lingette humide puis chiffon microfibre. Retire la dernière poussière avec l'autocollant fourni.</p>
+        </li>
+        <li class="step glass glass--specular tilt" data-pointer-tilt>
+          <span class="step__num">02</span>
+          <svg class="step__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="12" y="8" width="24" height="32" rx="9" stroke="currentColor" stroke-width="2.5" stroke-dasharray="4 4"/><path d="M24 2v8m0 28v8M2 24h8m28 0h8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="24" r="4" stroke="currentColor" stroke-width="2.5"/></svg>
+          <h3>Aligner</h3>
+          <p>Pose la vitre dans la coque, puis présente l'ensemble face à l'écran, couronne à droite.</p>
+        </li>
+        <li class="step glass glass--specular tilt" data-pointer-tilt>
+          <span class="step__num">03</span>
+          <svg class="step__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="12" y="16" width="24" height="28" rx="9" stroke="currentColor" stroke-width="2.5"/><path d="M24 2v10m-5-5 5 5 5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Presser</h3>
+          <p>Appuie fermement jusqu'au clic sur tout le tour. La coque verrouille la vitre, c'est prêt.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 6. Compatibilité -->
+  <section class="section" id="compatibilite" aria-labelledby="compat-title">
+    <div class="container">
+      <header class="section__head tilt">
+        <p class="eyebrow">Compatibilité</p>
+        <h2 id="compat-title">Trois tailles, un ajustement précis.</h2>
+        <p class="section__lead">La taille est gravée au dos de ta montre. Chaque pack est taillé pour une seule taille de boîtier.</p>
+      </header>
+      <ul class="sizes">
+        <li class="size glass tilt" data-pointer-tilt>
+          <svg class="size__watch" viewBox="0 0 80 110" aria-hidden="true"><rect x="22" y="2" width="36" height="16" rx="5"/><rect x="22" y="92" width="36" height="16" rx="5"/><rect class="size__case" x="14" y="16" width="52" height="78" rx="17"/></svg>
+          <p class="size__mm">41<small>mm</small></p>
+          <p class="size__models">Apple Watch Series 7, 8 et 9</p>
+        </li>
+        <li class="size glass tilt" data-pointer-tilt>
+          <svg class="size__watch" viewBox="0 0 80 110" aria-hidden="true"><rect x="21" y="0" width="38" height="16" rx="5"/><rect x="21" y="94" width="38" height="16" rx="5"/><rect class="size__case" x="10" y="12" width="60" height="86" rx="19"/></svg>
+          <p class="size__mm">45<small>mm</small></p>
+          <p class="size__models">Apple Watch Series 7, 8 et 9</p>
+        </li>
+        <li class="size glass tilt" data-pointer-tilt>
+          <svg class="size__watch" viewBox="0 0 80 110" aria-hidden="true"><rect x="20" y="0" width="40" height="14" rx="4"/><rect x="20" y="96" width="40" height="14" rx="4"/><rect class="size__case" x="7" y="10" width="66" height="90" rx="15"/><rect class="size__btn" x="73" y="36" width="4" height="16" rx="2"/></svg>
+          <p class="size__mm">49<small>mm</small></p>
+          <p class="size__models">Apple Watch Ultra et Ultra 2</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7. Liste de lancement -->
+  <section class="section" id="lancement" aria-labelledby="launch-title">
+    <div class="container">
+      <div class="launch glass glass--specular tilt">
+        <p class="eyebrow">Liste de lancement</p>
+        <h2 id="launch-title">Sois prévenu·e le jour J.</h2>
+        <p class="section__lead">Pas de vente en ligne pour l'instant. Écris-nous en précisant la taille de ta montre : tu recevras un seul e-mail, le jour du lancement.</p>
+        <a class="btn btn--primary btn--lg" href="mailto:fonte.athletique@gmail.com?subject=Guardess%20%E2%80%94%20Liste%20de%20lancement&amp;body=Bonjour%2C%0A%0AJe%20veux%20%C3%AAtre%20pr%C3%A9venu%C2%B7e%20du%20lancement%20de%20Guardess.%0ATaille%20de%20ma%20montre%20%3A%2041%20%2F%2045%20%2F%2049%20mm%0A%0AMerci%20!">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Me prévenir au lancement
+        </a>
+        <p class="launch__mail">ou écris à <a href="mailto:fonte.athletique@gmail.com">fonte.athletique@gmail.com</a></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 8. Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner glass">
+      <p><b>Guardess</b> · © <span data-year>2026</span></p>
+      <p>Guardess est une marque indépendante, non affiliée à Apple Inc. Apple Watch est une marque d'Apple Inc.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
