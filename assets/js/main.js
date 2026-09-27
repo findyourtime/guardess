@@ -99,11 +99,11 @@
   const angleLabel = document.querySelector('[data-angle-label]');
   const setWatch = deg => {
     if (!watch) return;
-    watch.style.setProperty('--k', (deg / 64).toFixed(3));
-    watch.style.setProperty('--louvre', smooth(12, 28, deg).toFixed(3));
-    watch.style.setProperty('--fade', smooth(36, 44, deg).toFixed(3));
+    /* le modèle 3D (watch3d.js) écoute cet événement */
+    watch.dataset.deg = deg.toFixed(2);
+    watch.dispatchEvent(new CustomEvent('watchangle', { detail: deg }));
     if (angleEl) angleEl.textContent = `${Math.round(deg)}°`;
-    if (angleLabel) angleLabel.textContent = deg < 12 ? 'De face · net' : deg < 28 ? 'Ça s\u2019assombrit…' : 'De côté · écran noir';
+    if (angleLabel) angleLabel.textContent = deg < 18 ? 'De face · net' : deg < 34 ? 'Ça s\u2019assombrit…' : 'De côté · écran noir';
   };
 
   /* ---------- Vue éclatée du pack ---------- */
@@ -122,12 +122,12 @@
         const r = hero.getBoundingClientRect();
         const p = clamp(-r.top / (r.height - vh));
         const k = smooth(.06, .8, p);
-        deg = lerp(0, 64, k);
+        deg = lerp(0, 66, k);
       } else {
         /* le centre du panneau passe de 72 % à 28 % de la hauteur d'écran */
         const r = panel.getBoundingClientRect();
         const k = smooth(.72, .28, (r.top + r.height / 2) / vh);
-        deg = lerp(0, 64, k);
+        deg = lerp(0, 66, k);
       }
       setWatch(deg);
     }

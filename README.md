@@ -27,10 +27,13 @@ Dépose ces fichiers dans `assets/`. Ils s'affichent automatiquement dès qu'ils
 
 ## Animations 3D
 
-- **Hero** : deux rendus photo (`assets/img/watch-front.webp`, `watch-side.webp`)
-  s'enchaînent en pivotant en 3D de 0° à 64° pendant le scroll. Au-delà de
-  ~20°, la grille de confidentialité noircit l'écran. Sur grand écran, la scène
-  reste épinglée pendant le scroll. Sur mobile, elle pivote pendant qu'elle traverse l'écran.
+- **Hero** : une Apple Watch modélisée en 3D temps réel (three.js, `assets/js/watch3d.js`) :
+  boîtier aluminium, bracelet sport en boucle, couronne crantée, bouton latéral.
+  Le scroll la fait pivoter de 0° à 66°. L'écran est un shader : sa luminosité dépend
+  de l'angle réel entre l'écran et la caméra (net sous 18°, noir au-delà de 32°), comme
+  le filtre à micro-lamelles. Sur grand écran, la scène reste épinglée pendant le scroll.
+  Sur mobile, elle pivote pendant que le panneau traverse le milieu de l'écran.
+  Si WebGL est indisponible, le rendu photo `assets/img/watch-front.webp` reste affiché.
 - **Le pack** : vue éclatée. La vitre et la coque s'écartent de la montre au scroll.
 - **La technologie** : coupe de la grille optique. L'angle de vue suit le scroll,
   ou le curseur si on le manipule. Les rayons passent sous 30° et sont bloqués au-delà.

@@ -17,6 +17,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 <script src="assets/js/main.js" defer></script>
+<script type="module" src="assets/js/watch3d.js"></script>
+<link rel="modulepreload" href="assets/vendor/three/three.module.min.js">
 </head>
 <body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -69,12 +71,10 @@
 
         <figure class="hero__panel glass glass--specular" aria-labelledby="hero-fig-cap">
           <div class="stage stage--hero" aria-hidden="true">
-            <div class="watch" data-watch>
-              <div class="watch__front">
-                <img src="assets/img/watch-front.webp" alt="" width="511" height="913" decoding="async" fetchpriority="high">
-                <span class="watch__louvre"></span>
-              </div>
-              <img class="watch__side" src="assets/img/watch-side.webp" alt="" width="707" height="913" decoding="async">
+            <div class="watch3d" data-watch data-deg="0">
+              <!-- image de repli : visible jusqu'au chargement de la 3D, ou si WebGL est indisponible -->
+              <img class="watch3d__poster" src="assets/img/watch-front.webp" alt="" width="511" height="913" decoding="async" fetchpriority="high">
+              <canvas class="watch3d__canvas"></canvas>
             </div>
           </div>
           <figcaption id="hero-fig-cap" class="hero__cap">
