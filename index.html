@@ -17,6 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css?v=dev">
 <script src="assets/js/main.js?v=dev" defer></script>
+<script type="module" src="assets/js/watch3d.js?v=dev"></script>
 </head>
 <body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -69,16 +70,10 @@
 
         <figure class="hero__panel glass glass--specular" aria-labelledby="hero-fig-cap">
           <div class="stage stage--hero" aria-hidden="true">
-            <!-- Plateau tournant : une photo par angle (data-frame-deg). Ajouter des vues intermédiaires
-                 (ex. tous les 10°) suffit à rendre la rotation plus continue, sans toucher au code. -->
-            <div class="turntable" data-watch>
-              <img class="turntable__frame" src="assets/img/turn-000.webp" data-frame-deg="0" alt="" width="840" height="1064" decoding="async" fetchpriority="high">
-              <img class="turntable__frame" src="assets/img/turn-045.webp" data-frame-deg="45" alt="" width="840" height="1064" decoding="async">
-              <img class="turntable__frame" src="assets/img/turn-090.webp" data-frame-deg="90" alt="" width="840" height="1064" decoding="async">
-              <div class="turntable__screen">
-                <span class="turntable__time">10:09</span>
-                <span class="turntable__msg"><b>Léa</b>On se voit à 19h&nbsp;?</span>
-              </div>
+            <div class="watch3d" data-watch data-deg="0">
+              <canvas class="watch3d__canvas"></canvas>
+              <!-- repli si WebGL est indisponible -->
+              <img class="watch3d__fallback" src="assets/img/turn-000.webp" alt="" width="840" height="1064" decoding="async" loading="lazy">
             </div>
           </div>
           <figcaption id="hero-fig-cap" class="hero__cap">

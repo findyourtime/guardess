@@ -97,23 +97,14 @@
   const panel = document.querySelector('.hero__panel');
   const angleEl = document.querySelector('[data-angle]');
   const angleLabel = document.querySelector('[data-angle-label]');
-  /* Plateau tournant : chaque photo porte son angle ; entre deux vues, la suivante apparaît
-     en fondu par-dessus (le fond studio étant identique, seule la montre change). */
-  const frames = watch ? [...watch.querySelectorAll('[data-frame-deg]')].map(el => ({ el, deg: +el.dataset.frameDeg })).sort((a, b) => a.deg - b.deg) : [];
-  const MAX_DEG = frames.length ? frames[frames.length - 1].deg : 90;
+  const MAX_DEG = 66;
   const setWatch = deg => {
     if (!watch) return;
-    let i = 0;
-    while (i < frames.length - 2 && deg > frames[i + 1].deg) i++;
-    const a = frames[i], b = frames[i + 1];
-    const t = b ? smooth(.36, .64, (deg - a.deg) / (b.deg - a.deg)) : 0;
-    frames.forEach(f => { f.el.style.opacity = f === a ? 1 : f === b ? t.toFixed(3) : 0; });
-    /* l'écran allumé n'existe que sur la vue de face ; le filtre l'éteint entre 8° et 26° */
-    const face = frames[0];
-    const faceShown = a === face ? 1 - t : 0;
-    watch.style.setProperty('--screen', (faceShown * (1 - smooth(8, 26, deg))).toFixed(3));
+    /* le modèle 3D (watch3d.js) écoute cet événement */
+    watch.dataset.deg = deg.toFixed(2);
+    watch.dispatchEvent(new CustomEvent('watchangle', { detail: deg }));
     if (angleEl) angleEl.textContent = `${Math.round(deg)}°`;
-    if (angleLabel) angleLabel.textContent = deg < 8 ? 'De face · net' : deg < 26 ? 'Ça s\u2019assombrit…' : 'De côté · écran noir';
+    if (angleLabel) angleLabel.textContent = deg < 18 ? 'De face · net' : deg < 34 ? 'Ça s\u2019assombrit…' : 'De côté · écran noir';
   };
 
   /* ---------- Vue éclatée du pack ---------- */

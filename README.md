@@ -27,12 +27,12 @@ Dépose ces fichiers dans `assets/`. Ils s'affichent automatiquement dès qu'ils
 
 ## Animations 3D
 
-- **Hero** : plateau tournant photo. Chaque vue de la montre est une image
-  `assets/img/turn-XXX.webp` sur le même fond studio, avec son angle dans
-  `data-frame-deg`. Le scroll passe de l'une à l'autre. Sur la vue de face, l'écran
-  (heure + message) s'éteint entre 8° et 26°. Pour une rotation plus continue,
-  ajouter des vues intermédiaires (tous les 10 à 15°, même cadrage, même fond) :
-  aucun code à changer, il suffit d'ajouter une balise `<img>` dans `.turntable`.
+- **Hero** : Apple Watch modélisée en 3D temps réel (three.js r170 servi en local,
+  `assets/js/watch3d.js`) : boîtier aluminium, bracelet sport gris clair en boucle,
+  couronne crantée, bouton latéral, micro, tenon. Le scroll la fait pivoter de 0° à 66°.
+  L'écran est un shader : sa luminosité suit l'angle réel entre l'écran et la caméra
+  (net sous 18°, noir au-delà de 32°), comme le filtre à micro-lamelles. Si WebGL est
+  indisponible, la photo `assets/img/turn-000.webp` s'affiche à la place.
 - **Le pack** : vue éclatée. La vitre et la coque s'écartent de la montre au scroll.
 - **La technologie** : coupe de la grille optique. L'angle de vue suit le scroll,
   ou le curseur si on le manipule. Les rayons passent sous 30° et sont bloqués au-delà.
