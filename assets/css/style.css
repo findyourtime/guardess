@@ -279,12 +279,14 @@ a { color: inherit; }
 
 /* ---------- Montre du hero : plateau tournant photo ---------- */
 .stage { position: relative; display: grid; place-items: center; perspective: 1100px; }
-.stage--hero { --h: clamp(340px, 52vh, 460px); height: var(--h); }
+.stage--hero { --h: min(clamp(340px, 52vh, 460px), calc((100vw - 2 * var(--gutter) - 48px) * 1064 / 840)); height: var(--h); }
 @media (min-width: 880px) { .stage--hero { --h: clamp(400px, 60vh, 560px); } }
 /* carte « studio » : même gris que le fond des photos, pour un enchaînement sans couture */
 .turntable {
   --studio: rgb(213 213 214);
-  position: relative; height: 100%; aspect-ratio: 840 / 1064; max-width: 100%;
+  /* dimensions explicites : Safari iOS calcule mal height:100% + aspect-ratio dans une grille */
+  position: relative; flex: none;
+  height: var(--h); width: calc(var(--h) * 840 / 1064);
   border-radius: 28px; overflow: hidden; background: var(--studio);
   box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset, 0 24px 48px -20px rgba(3, 6, 20, .5);
   isolation: isolate;
