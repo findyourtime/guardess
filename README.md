@@ -27,7 +27,8 @@ Dépose ces fichiers dans `assets/`. Ils s'affichent automatiquement dès qu'ils
 
 ## Animations 3D
 
-- **Hero** : la montre (en CSS 3D) pivote de 0° à 64° pendant le scroll. Au-delà de
+- **Hero** : deux rendus photo (`assets/img/watch-front.webp`, `watch-side.webp`)
+  s'enchaînent en pivotant en 3D de 0° à 64° pendant le scroll. Au-delà de
   ~20°, la grille de confidentialité noircit l'écran. Sur grand écran, la scène
   reste épinglée pendant le scroll. Sur mobile, elle pivote pendant qu'elle traverse l'écran.
 - **Le pack** : vue éclatée. La vitre et la coque s'écartent de la montre au scroll.

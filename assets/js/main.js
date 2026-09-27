@@ -97,14 +97,13 @@
   const panel = document.querySelector('.hero__panel');
   const angleEl = document.querySelector('[data-angle]');
   const angleLabel = document.querySelector('[data-angle-label]');
-  const setWatch = (deg, rx) => {
+  const setWatch = deg => {
     if (!watch) return;
-    watch.style.setProperty('--ry', `${-deg}deg`);
-    watch.style.setProperty('--rx', `${rx}deg`);
-    watch.style.setProperty('--louvre', smooth(18, 34, deg).toFixed(3));
-    watch.style.setProperty('--glare', (deg / 60).toFixed(3));
+    watch.style.setProperty('--k', (deg / 64).toFixed(3));
+    watch.style.setProperty('--louvre', smooth(12, 28, deg).toFixed(3));
+    watch.style.setProperty('--fade', smooth(36, 44, deg).toFixed(3));
     if (angleEl) angleEl.textContent = `${Math.round(deg)}°`;
-    if (angleLabel) angleLabel.textContent = deg < 18 ? 'De face · net' : deg < 32 ? 'Ça s’assombrit…' : 'De côté · écran noir';
+    if (angleLabel) angleLabel.textContent = deg < 12 ? 'De face · net' : deg < 28 ? 'Ça s\u2019assombrit…' : 'De côté · écran noir';
   };
 
   /* ---------- Vue éclatée du pack ---------- */
@@ -118,17 +117,19 @@
     ticking = false;
     const vh = innerHeight;
     if (hero && watch) {
-      let deg, rx;
+      let deg;
       if (pinned.matches) {
         const r = hero.getBoundingClientRect();
         const p = clamp(-r.top / (r.height - vh));
         const k = smooth(.06, .8, p);
-        deg = lerp(0, 64, k); rx = lerp(8, 2, k);
+        deg = lerp(0, 64, k);
       } else {
-        const k = smooth(.35, .8, viewProgress(panel, vh));
-        deg = lerp(0, 64, k); rx = lerp(8, 2, k);
+        /* le centre du panneau passe de 72 % à 28 % de la hauteur d'écran */
+        const r = panel.getBoundingClientRect();
+        const k = smooth(.72, .28, (r.top + r.height / 2) / vh);
+        deg = lerp(0, 64, k);
       }
-      setWatch(deg, rx);
+      setWatch(deg);
     }
     if (explode) {
       const p = viewProgress(explodeScene, vh);
@@ -157,7 +158,7 @@
       tilts.forEach(el => el.style.removeProperty('--t'));
       explode?.style.setProperty('--e', '.55');
       if (explode) explode.style.transform = '';
-      setWatch(0, 8);
+      setWatch(0);
       return;
     }
     addEventListener('scroll', request, { passive: true });

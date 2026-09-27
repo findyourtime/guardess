@@ -277,70 +277,40 @@ a { color: inherit; }
   .hero__sticky { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; align-items: center; padding-bottom: 0; }
 }
 
-/* ---------- Montre 3D (CSS) ---------- */
+/* ---------- Montre du hero : deux rendus photo enchaînés en 3D ---------- */
 .stage { position: relative; display: grid; place-items: center; perspective: 1100px; }
-.stage--hero { height: clamp(300px, 46vh, 460px); --s: .78; }
-@media (min-width: 880px) { .stage--hero { --s: 1; } }
+.stage--hero { --h: clamp(270px, 42vh, 380px); height: calc(var(--h) + 48px); }
+@media (min-width: 880px) { .stage--hero { --h: clamp(320px, 50vh, 460px); } }
+/* --k : 0 de face → 1 de côté ; --fade : fondu face → côté ; --louvre : noircissement de l'écran */
 .watch {
-  --ry: -14deg; --rx: 8deg; --louvre: 0; --glare: 0;
-  position: relative; width: 180px; height: 216px;
+  --k: 0; --fade: 0; --louvre: 0;
+  position: relative; height: var(--h); aspect-ratio: 511 / 913;
   transform-style: preserve-3d;
-  transform: scale(var(--s, 1)) rotateX(var(--rx)) rotateY(var(--ry));
+  /* recentre la composition quand le bracelet de la vue de côté apparaît à droite */
+  transform: translateX(calc(var(--fade) * var(--h) * -.155));
 }
-.watch__body { position: absolute; inset: 0; transform-style: preserve-3d; }
-.watch__body > i {
-  position: absolute; inset: 0; border-radius: 52px;
-  background: linear-gradient(160deg, #4A5378, #1A2140 60%, #0E1328);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+.watch img { display: block; height: 100%; width: auto; max-width: none; filter: drop-shadow(0 28px 36px rgba(3, 6, 20, .45)); }
+.watch__front {
+  position: absolute; inset: 0;
+  transform: rotateY(calc(var(--k) * -42deg)) scale(calc(1 - var(--k) * .04));
+  opacity: calc(1 - var(--fade));
 }
-.watch__body > i:nth-child(1)  { transform: translateZ(-1px); }
-.watch__body > i:nth-child(2)  { transform: translateZ(-3.5px); }
-.watch__body > i:nth-child(3)  { transform: translateZ(-6px); }
-.watch__body > i:nth-child(4)  { transform: translateZ(-8.5px); }
-.watch__body > i:nth-child(5)  { transform: translateZ(-11px); }
-.watch__body > i:nth-child(6)  { transform: translateZ(-13.5px); }
-.watch__body > i:nth-child(7)  { transform: translateZ(-16px); }
-.watch__body > i:nth-child(8)  { transform: translateZ(-18.5px); }
-.watch__body > i:nth-child(9)  { transform: translateZ(-21px); }
-.watch__body > i:nth-child(10) { transform: translateZ(-23.5px); background: #0B1024; box-shadow: 0 30px 60px -10px rgba(0, 0, 0, .55); }
-.watch__crown {
-  position: absolute; right: -9px; top: 58px; width: 16px; height: 36px; border-radius: 6px;
-  background: repeating-linear-gradient(180deg, #5A6488 0 2px, #2A3150 2px 4px);
-  transform: translateZ(-12px) rotateY(90deg); transform-origin: left center;
+/* zone écran de la vue de face (mesurée sur le rendu) */
+.watch__louvre {
+  position: absolute; left: 5.4%; top: 21.8%; width: 83.6%; height: 53.8%;
+  border-radius: 19% / 10.6%;
+  opacity: var(--louvre);
+  background:
+    linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, .06) 46%, transparent 54%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, .97) 0 2px, rgba(4, 7, 18, .9) 2px 4px);
 }
-.watch__face {
-  position: absolute; inset: 0; border-radius: 52px; padding: 11px;
-  background: linear-gradient(160deg, #2C3452, #0A0E1E);
-  transform: translateZ(1px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), inset 0 0 0 1px rgba(255, 255, 255, .08);
-}
-.watch__band {
-  position: absolute; left: 32px; right: 32px; height: 150px; border-radius: 26px;
-  background: linear-gradient(90deg, #1A2140, #2A3358 50%, #1A2140);
-  transform-style: preserve-3d;
-}
-.watch__band--top { bottom: 100%; transform-origin: 50% 100%; transform: translateZ(-12px) translateY(18px) rotateX(28deg); }
-.watch__band--bottom { top: 100%; transform-origin: 50% 0; transform: translateZ(-12px) translateY(-18px) rotateX(-28deg); }
-.screen {
-  position: relative; height: 100%; border-radius: 42px; overflow: hidden; background: #000;
-  display: grid; align-content: center; justify-items: center; gap: 10px; padding: 16px;
-}
-.screen__time, .screen__msg { opacity: calc(1 - var(--louvre) * .96); }
-.screen__time { font: 700 2.6rem/1 var(--font-display); letter-spacing: -.03em; color: #fff; }
-.screen__msg {
-  width: 100%; padding: 8px 10px; border-radius: 14px; font-size: .72rem; line-height: 1.3; color: #fff;
-  background: linear-gradient(135deg, rgba(47, 94, 255, .9), rgba(122, 108, 255, .9));
-}
-.screen__msg b { display: block; font-size: .78rem; }
-.screen__louvre {
-  position: absolute; inset: 0; opacity: var(--louvre);
-  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .96) 0 3px, rgba(4, 7, 18, .8) 3px 5px);
-}
-.screen__glare {
-  position: absolute; inset: -40%;
-  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, .22) 48%, transparent 56%);
-  transform: translateX(calc(var(--glare) * 60%));
-  pointer-events: none;
+.watch__side {
+  position: absolute; top: 0; height: 100%;
+  /* aligne le boîtier de la vue de côté sur celui de la vue de face */
+  left: calc(var(--h) * .0963);
+  transform: rotateY(calc((1 - var(--k)) * 38deg));
+  transform-origin: 24% 50%;
+  opacity: var(--fade);
 }
 
 /* ---------- Le pack ---------- */
