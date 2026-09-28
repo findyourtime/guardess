@@ -3,9 +3,8 @@
 # Sans ce secret, le job est ignoré au lieu d'échouer.
 name: Deploy to Netlify
 
+# Désactivé au push : crédits Netlify épuisés. Relancer à la main (onglet Actions) une fois rechargés.
 on:
-  push:
-    branches: [main, claude/guardess-watch-site-06gvnr]
   workflow_dispatch:
 
 concurrency:
