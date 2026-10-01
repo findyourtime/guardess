@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main, claude/guardess-watch-site-06gvnr]
+    branches: [main]   # seule main a le droit de publier sur Pages
   workflow_dispatch:
 
 permissions:
