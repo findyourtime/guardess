@@ -427,6 +427,8 @@ input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius
 footer { padding-block: 40px 56px; color: var(--ink-3); font-size: .86rem; }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; border-top: 1px solid var(--line); padding-top: 24px; }
 footer b { color: var(--ink); font-family: var(--f-display); }
+footer a { color: var(--ink-2); text-underline-offset: 3px; }
+footer a:hover { color: var(--ink); }
 
 /* ---------- Mouvement réduit ---------- */
 @media (prefers-reduced-motion: reduce) {
@@ -671,7 +673,7 @@ footer b { color: var(--ink); font-family: var(--f-display); }
 
 <footer>
   <div class="wrap">
-    <p><b>Guardess</b> · 2026</p>
+    <p><b>Guardess</b> · 2026 · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></p>
     <p>Guardess is an independent brand, not affiliated with Apple Inc. Apple Watch is a trademark of Apple Inc.</p>
   </div>
 </footer>
@@ -824,7 +826,7 @@ footer b { color: var(--ink); font-family: var(--f-display); }
           cart: {
             iframe: false,
             popup: false,
-            text: { title: 'Your cart', empty: 'Your cart is empty.', total: 'Subtotal', button: 'Checkout', notice: 'Shipping and taxes calculated at checkout.', closeAccessibilityLabel: 'Close cart' }
+            text: { title: 'Your cart', empty: 'Your cart is empty.', total: 'Subtotal', button: 'Checkout', notice: 'Shipping and taxes calculated at checkout. 14-day returns, see our Terms.', closeAccessibilityLabel: 'Close cart' }
           },
           toggle: {
             iframe: false,

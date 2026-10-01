@@ -1,0 +1,57 @@
+/* Pages légales Guardess : mêmes jetons que la page d'accueil, mise en page de lecture */
+:root {
+  color-scheme: dark;
+  --bg: #060B1F; --bg-2: #0B1330; --ink: #F2F5FC; --ink-2: #B8C2E4; --ink-3: #8491BD;
+  --accent: #5E8BFF; --line: rgba(183, 198, 255, .16); --glass: rgba(255, 255, 255, .06); --edge: rgba(255, 255, 255, .12);
+  --logo-ink: #F5F7FB;
+  --f-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --gut: max(16px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #F5F7FB; --bg-2: #FFFFFF; --ink: #0B1330; --ink-2: #33406B; --ink-3: #5A6690;
+    --accent: #2F5EFF; --line: rgba(11, 19, 48, .12); --glass: rgba(11, 19, 48, .03); --edge: rgba(11, 19, 48, .1);
+    --logo-ink: #0B1330;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 24px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.7 var(--f-body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.wrap { max-width: 760px; margin: 0 auto; padding-inline: var(--gut); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2; background: color-mix(in oklab, var(--bg) 82%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 700 1.1rem var(--f-display); letter-spacing: -.02em; }
+.logo { width: 22px; height: auto; }
+.logo .lg-shield { fill: var(--logo-ink); } .logo .lg-bar { fill: #2F5EFF; } .logo .lg-tip { fill: #B7C6FF; }
+.back { font-weight: 600; font-size: .92rem; color: var(--ink-2); text-decoration: none; }
+.back:hover { color: var(--ink); }
+main { padding-block: 56px 72px; }
+.kicker { font: 500 .78rem var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 700 clamp(2.2rem, 6vw, 3.4rem)/1.05 var(--f-display); letter-spacing: -.035em; margin: 10px 0 12px; text-wrap: balance; }
+.updated { color: var(--ink-3); font-size: .9rem; margin: 0 0 28px; }
+.summary { padding: 18px 20px; border: 1px solid var(--edge); border-radius: 16px; background: var(--glass); color: var(--ink-2); margin-bottom: 36px; }
+.summary p { margin: 0; }
+.toc { margin: 0 0 44px; padding: 0; list-style: none; columns: 2; column-gap: 28px; font-size: .92rem; }
+.toc li { break-inside: avoid; padding: 3px 0; }
+.toc a { color: var(--ink-2); text-decoration: none; }
+.toc a:hover { color: var(--ink); text-decoration: underline; }
+h2 { font: 600 1.35rem/1.25 var(--f-display); letter-spacing: -.02em; margin: 44px 0 10px; padding-top: 22px; border-top: 1px solid var(--line); }
+h3 { font: 600 1.02rem var(--f-body); margin: 22px 0 6px; }
+p, li { color: var(--ink-2); max-width: 68ch; text-wrap: pretty; }
+strong { color: var(--ink); font-weight: 600; }
+ul { padding-left: 1.2em; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 20px; margin: 12px 0; }
+dt { color: var(--ink-3); font-size: .92rem; }
+dd { margin: 0; color: var(--ink); }
+.pending { color: var(--ink-3); font-style: italic; }
+.form { padding: 18px 20px; border-left: 2px solid var(--accent); background: var(--glass); border-radius: 0 12px 12px 0; font-size: .94rem; }
+.form p { margin: 0 0 8px; }
+footer { border-top: 1px solid var(--line); padding-block: 26px 40px; color: var(--ink-3); font-size: .86rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 22px; justify-content: space-between; }
+footer a { color: var(--ink-2); }
+@media (max-width: 560px) { .toc { columns: 1; } dl { grid-template-columns: 1fr; gap: 2px; } dd { margin-bottom: 10px; } }
