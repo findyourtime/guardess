@@ -7,7 +7,7 @@
 <meta name="description" content="Guardess : une vitre en verre trempé 9H à micro-lamelles et une coque rigide pour Apple Watch. Ton écran reste net de face, noir vu de côté.">
 <meta name="theme-color" content="#060B1F">
 <meta property="og:title" content="Guardess · Ton poignet n'appartient qu'à toi.">
-<meta property="og:description" content="Vitre anti-espion 9H et coque rigide pour Apple Watch. Rejoins la liste de lancement.">
+<meta property="og:description" content="Vitre anti-espion 9H et coque rigide pour Apple Watch. Commande ton pack.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6l-8-3Z' fill='%232F5EFF'/%3E%3Cpath d='M8.5 12.2h7' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="modulepreload" href="assets/vendor/three/three.module.min.js">
@@ -305,6 +305,11 @@ input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius
 .mailbox { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 6px; }
 .mail-addr { font: 500 1rem var(--f-mono); padding: 12px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--glass); user-select: all; }
 .copy-state { font-size: .85rem; color: var(--ink-3); min-height: 1.4em; }
+.shop { width: 100%; max-width: 460px; min-height: 120px; }
+.shop-loading { color: var(--ink-3); font-size: .95rem; }
+.contact { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding-top: 18px; border-top: 1px solid var(--line); width: 100%; color: var(--ink-2); font-size: .95rem; }
+.contact .mail-addr { font-size: .9rem; padding: 8px 12px; }
+.btn-sm { min-height: 40px; padding: 0 16px; font-size: .88rem; }
 .launch .glyph { position: absolute; right: -40px; bottom: -80px; width: 380px; height: 380px; opacity: .12; color: var(--accent); pointer-events: none; }
 
 footer { padding-block: 40px 56px; color: var(--ink-3); font-size: .86rem; }
@@ -336,7 +341,7 @@ footer b { color: var(--ink); font-family: var(--f-display); }
       <li><a href="#pack">Le pack</a></li>
       <li><a href="#technologie">La technologie</a></li>
       <li><a href="#compatibilite">Compatibilité</a></li>
-      <li><a class="cta" href="#lancement">Lancement</a></li>
+      <li><a class="cta" href="#lancement">Commander</a></li>
     </ul>
   </nav>
 </header>
@@ -354,7 +359,7 @@ footer b { color: var(--ink); font-family: var(--f-display); }
             <h1>Ton poignet n'appartient qu'à toi.</h1>
             <p>Une vitre en verre trempé 9H à micro-lamelles et une coque rigide ajustée. Ton écran reste net pour toi, noir pour tous les autres.</p>
             <div class="actions">
-              <a class="btn btn-solid" href="#lancement">Rejoindre la liste de lancement
+              <a class="btn btn-solid" href="#lancement">Commander mon pack
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
               <a class="btn btn-glass" href="#technologie">Comment ça marche</a>
             </div>
@@ -507,20 +512,21 @@ footer b { color: var(--ink); font-family: var(--f-display); }
     </div>
   </section>
 
-  <!-- 6. LANCEMENT -->
+  <!-- 6. COMMANDER (bouton d'achat Shopify) -->
   <section class="sec" id="lancement" aria-labelledby="launch-title" style="padding-top:0">
     <div class="wrap">
       <div class="launch glass rv">
         <svg class="glyph" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6l-8-3Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
-        <span class="kicker">Liste de lancement</span>
-        <h2 id="launch-title">Sois prévenu·e le jour J.</h2>
-        <p>Pas de vente en ligne pour l'instant. Écris-nous avec la taille de ta montre (41, 45 ou 49 mm) : tu recevras un seul e-mail, le jour du lancement.</p>
-        <div class="mailbox">
+        <span class="kicker">Commander</span>
+        <h2 id="launch-title">Ton pack Guardess.</h2>
+        <p>La vitre anti-espion et la coque rigide, ajustées à ta taille de boîtier. Livraison et taxes calculées au paiement.</p>
+        <div class="shop" id="product-component-1790866120223">
+          <p class="shop-loading">Chargement de la boutique…</p>
+        </div>
+        <div class="contact">
+          <span>Une question avant de commander ?</span>
           <span class="mail-addr" id="mail-addr">fonte.athletique@gmail.com</span>
-          <button class="btn btn-solid" type="button" id="copy-btn">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="2"/></svg>
-            Copier l'adresse</button>
-          <a class="btn btn-glass" href="mailto:fonte.athletique@gmail.com?subject=Guardess%20%3A%20liste%20de%20lancement&amp;body=Taille%20de%20ma%20montre%20%3A%20">Ouvrir mon e-mail</a>
+          <button class="btn btn-glass btn-sm" type="button" id="copy-btn">Copier l'adresse</button>
         </div>
         <p class="copy-state" id="copy-state" aria-live="polite"></p>
       </div>
@@ -647,6 +653,88 @@ footer b { color: var(--ink); font-family: var(--f-display); }
 })();
 </script>
 
+<script>
+/* ---------- Bouton d'achat Shopify (Buy Button JS) ---------- */
+(function () {
+  var NODE_ID = 'product-component-1790866120223';
+  var node = document.getElementById(NODE_ID);
+  if (!node) return;
+  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+  /* couleurs du composant (il s'affiche dans un iframe : on lui passe la palette du thème actif) */
+  var root = document.documentElement;
+  var dark = root.dataset.theme ? root.dataset.theme === 'dark' : !matchMedia('(prefers-color-scheme: light)').matches;
+  var C = dark
+    ? { ink: '#F2F5FC', ink2: '#B8C2E4', btn: '#F5F7FB', btnInk: '#0B1330', btnHover: '#DCE3FF', panel: '#0B1330', line: 'rgba(183,198,255,.18)' }
+    : { ink: '#0B1330', ink2: '#33406B', btn: '#2F5EFF', btnInk: '#FFFFFF', btnHover: '#2449CC', panel: '#F5F7FB', line: 'rgba(11,19,48,.14)' };
+  var font = { 'font-family': 'Manrope, sans-serif' };
+  var button = {
+    'font-family': 'Manrope, sans-serif', 'font-weight': '600', 'font-size': '15px',
+    'background-color': C.btn, 'color': C.btnInk, 'border-radius': '999px', 'padding-top': '15px', 'padding-bottom': '15px',
+    ':hover': { 'background-color': C.btnHover, 'color': C.btnInk }, ':focus': { 'background-color': C.btnHover }
+  };
+  function fail() { node.innerHTML = '<p class="shop-loading">La boutique ne s’est pas chargée. Écris-nous à l’adresse ci-dessous pour commander.</p>'; }
+  function loadScript() {
+    var script = document.createElement('script');
+    script.async = true; script.src = scriptURL;
+    script.onload = ShopifyBuyInit; script.onerror = fail;
+    (document.head || document.body).appendChild(script);
+  }
+  function ShopifyBuyInit() {
+    var client = ShopifyBuy.buildClient({
+      domain: 'eqe0ex-41.myshopify.com',
+      storefrontAccessToken: '9d3867e5c67024fc1625e8ffacd9ff14'
+    });
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      node.innerHTML = '';
+      ui.createComponent('product', {
+        id: '15817235497300',
+        node: node,
+        moneyFormat: '%E2%82%AC%7B%7Bamount_with_comma_separator%7D%7D',
+        options: {
+          product: {
+            iframe: true,
+            contents: { img: true, title: true, price: true, options: true, quantity: false, button: true },
+            styles: {
+              product: { 'max-width': '100%', 'margin-left': '0', 'margin-bottom': '0', 'text-align': 'left' },
+              title: { 'font-family': 'Space Grotesk, sans-serif', 'font-weight': '600', 'font-size': '22px', 'color': C.ink },
+              price: { 'font-family': 'IBM Plex Mono, monospace', 'font-size': '18px', 'color': C.ink },
+              compareAt: { 'font-family': 'IBM Plex Mono, monospace', 'color': C.ink2 },
+              unitPrice: { 'color': C.ink2 },
+              options: font, label: { 'font-family': 'Manrope, sans-serif', 'color': C.ink2 },
+              select: { 'font-family': 'Manrope, sans-serif', 'color': C.ink, 'background-color': 'transparent', 'border-color': C.line, 'border-radius': '12px' },
+              button: button
+            },
+            googleFonts: ['Manrope', 'Space Grotesk', 'IBM Plex Mono'],
+            text: { button: 'Ajouter au panier', outOfStock: 'Épuisé', unavailable: 'Indisponible' }
+          },
+          modalProduct: {
+            contents: { img: false, imgWithCarousel: true, button: false, buttonWithQuantity: true },
+            styles: { product: { 'max-width': '100%', 'margin-left': '0', 'margin-bottom': '0' }, button: button },
+            googleFonts: ['Manrope', 'Space Grotesk'],
+            text: { button: 'Ajouter au panier' }
+          },
+          option: {},
+          cart: {
+            styles: {
+              button: button,
+              title: { 'font-family': 'Space Grotesk, sans-serif', 'color': '#0B1330' },
+              footer: { 'background-color': '#ffffff' }
+            },
+            googleFonts: ['Manrope', 'Space Grotesk'],
+            text: { title: 'Ton panier', empty: 'Ton panier est vide.', total: 'Sous-total', button: 'Payer', notice: 'Livraison et taxes calculées au paiement.' },
+            popup: false
+          },
+          toggle: {
+            styles: { toggle: { 'background-color': '#2F5EFF', ':hover': { 'background-color': '#2449CC' }, ':focus': { 'background-color': '#2449CC' } } },
+            googleFonts: ['Manrope']
+          }
+        }
+      });
+    }).catch(fail);
+  }
+  if (window.ShopifyBuy && window.ShopifyBuy.UI) ShopifyBuyInit(); else loadScript();
+})();
+</script>
 <script type="module">
 /* ---------- 3D temps réel : montre du hero + vue éclatée du pack (three.js r170) ---------- */
 import * as THREE from './assets/vendor/three/three.module.min.js';
