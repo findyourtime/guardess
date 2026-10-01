@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Guardess</title>
-<meta name="description" content="Guardess : une vitre en verre trempé 9H à micro-lamelles et une coque rigide pour Apple Watch. Ton écran reste net de face, noir vu de côté.">
+<meta name="description" content="Guardess: a 9H tempered-glass privacy screen and a rigid case for Apple Watch. Clear when you look at it, dark from the side.">
 <meta name="theme-color" content="#060B1F">
-<meta property="og:title" content="Guardess · Ton poignet n'appartient qu'à toi.">
-<meta property="og:description" content="Vitre anti-espion 9H et coque rigide pour Apple Watch. Commande ton pack.">
+<meta property="og:title" content="Guardess · Your wrist, your eyes only.">
+<meta property="og:description" content="Privacy screen protector and rigid case for Apple Watch, 40 to 49 mm.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6l-8-3Z' fill='%232F5EFF'/%3E%3Cpath d='M8.5 12.2h7' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="modulepreload" href="assets/vendor/three/three.module.min.js">
@@ -284,7 +284,9 @@ input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius
 }
 
 /* ---------- COMPATIBILITÉ ---------- */
-.sizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.sizes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.sizes-note { margin-top: 18px; color: var(--ink-3); font-size: .9rem; }
+@media (max-width: 1100px) { .sizes { grid-template-columns: repeat(3, 1fr); } }
 .size { padding: 26px 22px 22px; display: grid; gap: 14px; justify-items: center; text-align: center; }
 .size svg { width: 100%; max-width: 200px; height: auto; overflow: visible; }
 .size .case { fill: var(--bg-2); stroke: var(--ink-2); stroke-width: 1.5; }
@@ -420,42 +422,42 @@ footer b { color: var(--ink); font-family: var(--f-display); }
       Guardess
     </a>
     <ul>
-      <li><a href="#pack">Le pack</a></li>
-      <li><a href="#technologie">La technologie</a></li>
-      <li><a href="#compatibilite">Compatibilité</a></li>
-      <li><a class="cta" href="#lancement">Commander</a></li>
+      <li><a href="#pack">The pack</a></li>
+      <li><a href="#technologie">How it works</a></li>
+      <li><a href="#compatibilite">Sizes</a></li>
+      <li><a class="cta" href="#lancement">Buy</a></li>
     </ul>
   </nav>
 </header>
 
 <main id="top">
   <!-- 1. HERO -->
-  <section class="hero" id="hero" aria-label="Présentation">
+  <section class="hero" id="hero" aria-label="Introduction">
     <div class="stage">
-      <canvas id="hero-canvas" role="img" aria-label="Apple Watch équipée Guardess qui pivote de face vers le profil"></canvas>
+      <canvas id="hero-canvas" role="img" aria-label="Apple Watch turning from a front view to a side view"></canvas>
       <div class="hero-ui wrap">
         <div class="beats" id="beats">
           <div class="beat-stack">
           <article class="beat" data-beat="0">
-            <span class="tag glass"><b>NOUVEAU</b> Vitre + coque anti-espion pour Apple Watch</span>
-            <h1>Ton poignet n'appartient qu'à toi.</h1>
-            <p>Une vitre en verre trempé 9H à micro-lamelles et une coque rigide ajustée. Ton écran reste net pour toi, noir pour tous les autres.</p>
+            <span class="tag glass"><b>NEW</b> Privacy screen + case for Apple Watch</span>
+            <h1>Your wrist, your eyes only.</h1>
+            <p>A 9H tempered-glass privacy screen and a fitted rigid case. Your screen stays clear for you and turns dark for everyone around you.</p>
             <div class="actions">
-              <a class="btn btn-solid" href="#lancement">Commander mon pack
+              <a class="btn btn-solid" href="#lancement">Get your pack
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              <a class="btn btn-glass" href="#technologie">Comment ça marche</a>
+              <a class="btn btn-glass" href="#technologie">How it works</a>
             </div>
           </article>
           <article class="beat" data-beat="1" aria-hidden="true">
-            <h2>De face, tout est net.</h2>
-            <p>10:09, et le message de Léa. Tant que tu regardes ton poignet dans l'axe, la vitre laisse passer toute la lumière de l'écran.</p>
+            <h2>Head-on, everything is clear.</h2>
+            <p>10:09 and a message from Lea. When you look straight at your wrist, the screen reads exactly as it should.</p>
           </article>
           <article class="beat" data-beat="2" aria-hidden="true">
-            <h2>Passé 30°, un écran noir.</h2>
-            <p>Dans le métro, en réunion, à table : ton voisin ne voit qu'une surface sombre. Notifications, messages et codes restent entre toi et ta montre.</p>
+            <h2>From the side, a dark screen.</h2>
+            <p>On the train, in a meeting, at the table: the person next to you sees a dark surface. Notifications, messages and codes stay between you and your watch.</p>
           </article>
           </div>
-          <div class="hud" role="img" aria-label="Angle de vue de l'écran">
+          <div class="hud" role="img" aria-label="Viewing angle of the screen">
             <svg viewBox="0 0 116 66" aria-hidden="true">
               <path class="arc-ok" d="M 58 8 A 50 50 0 0 1 83 14.7" fill="none" stroke-width="5" stroke-linecap="round"/>
               <path class="arc-blocked" d="M 86.5 16.8 A 50 50 0 0 1 108 58" fill="none" stroke-width="5" stroke-linecap="round"/>
@@ -464,21 +466,20 @@ footer b { color: var(--ink); font-family: var(--f-display); }
               <line class="needle" id="needle" x1="58" y1="58" x2="58" y2="16"/>
               <circle class="hub" cx="58" cy="58" r="4"/>
               <text class="tick" x="58" y="4" text-anchor="middle">0°</text>
-              <text class="tick" x="93" y="12">30°</text>
               <text class="tick" x="112" y="64" text-anchor="end">90°</text>
             </svg>
-            <div class="hud-read"><span class="deg mono" id="hud-deg">0°</span><span class="state" id="hud-state">De face · net</span></div>
+            <div class="hud-read"><span class="deg mono" id="hud-deg">0°</span><span class="state" id="hud-state">Head-on · clear</span></div>
           </div>
         </div>
       </div>
-      <div class="scroll-cue" aria-hidden="true">Défiler<i></i></div>
+      <div class="scroll-cue" aria-hidden="true">Scroll<i></i></div>
     </div>
   </section>
 
   <div class="ticker" aria-hidden="true">
     <div class="ticker-track">
-      <span>Verre trempé 9H</span><span>Micro-lamelles</span><span>Angle de coupe 30°</span><span>Coque rigide ajustée</span><span>41 · 45 · 49 mm</span><span>Pose en une minute</span>
-      <span>Verre trempé 9H</span><span>Micro-lamelles</span><span>Angle de coupe 30°</span><span>Coque rigide ajustée</span><span>41 · 45 · 49 mm</span><span>Pose en une minute</span>
+      <span>9H tempered glass</span><span>Privacy filter</span><span>Rigid fitted case</span><span>40 · 41 · 44 · 45 · 49 mm</span><span>Easy to fit</span>
+      <span>9H tempered glass</span><span>Privacy filter</span><span>Rigid fitted case</span><span>40 · 41 · 44 · 45 · 49 mm</span><span>Easy to fit</span>
     </div>
   </div>
 
@@ -487,24 +488,24 @@ footer b { color: var(--ink); font-family: var(--f-display); }
     <div class="stage">
       <canvas id="pack-canvas" aria-hidden="true"></canvas>
       <div class="callouts" aria-hidden="true">
-        <div class="callout" id="c-glass"><i></i><b></b><span>Vitre 9H à micro-lamelles</span></div>
-        <div class="callout" id="c-watch"><i></i><b></b><span>Ton Apple Watch</span></div>
-        <div class="callout" id="c-case"><i></i><b></b><span>Coque rigide ajustée</span></div>
+        <div class="callout" id="c-glass"><i></i><b></b><span>9H privacy glass</span></div>
+        <div class="callout" id="c-watch"><i></i><b></b><span>Your Apple Watch</span></div>
+        <div class="callout" id="c-case"><i></i><b></b><span>Rigid fitted case</span></div>
       </div>
       <div class="pack-ui wrap">
         <div class="pack-copy">
-          <span class="kicker">Le pack</span>
-          <h2 id="pack-title">Deux pièces qui se verrouillent autour de ta montre.</h2>
-          <p>La coque encadre le boîtier, la vitre se clipse dedans. Rien ne dépasse, rien ne bouge.</p>
+          <span class="kicker">The pack</span>
+          <h2 id="pack-title">Two pieces that lock around your watch.</h2>
+          <p>The case frames the watch and the screen sits inside it.</p>
           <article class="piece glass rv">
-            <h3>Vitre anti-espion</h3>
-            <p>Verre trempé, filtre de confidentialité intégré dans l'épaisseur.</p>
-            <div class="spec"><span>Dureté 9H</span><span>Bords 2.5D</span><span>Coupe à 30°</span></div>
+            <h3>Privacy screen</h3>
+            <p>Tempered glass with a built-in privacy filter.</p>
+            <div class="spec"><span>9H hardness</span><span>Privacy filter</span></div>
           </article>
           <article class="piece glass rv">
-            <h3>Coque rigide</h3>
-            <p>Polycarbonate fin, couronne et bouton accessibles, capteurs dégagés.</p>
-            <div class="spec"><span>Ajustée par taille</span><span>Finition mate</span></div>
+            <h3>Rigid case</h3>
+            <p>Covers the edges of the case, with the crown and side button left free.</p>
+            <div class="spec"><span>Made per case size</span></div>
           </article>
         </div>
       </div>
@@ -515,37 +516,37 @@ footer b { color: var(--ink); font-family: var(--f-display); }
   <section class="sec" id="technologie" aria-labelledby="tech-title">
     <div class="wrap">
       <header class="sec-head rv">
-        <span class="kicker">La technologie</span>
-        <h2 id="tech-title">Des stores vénitiens, à l'échelle du micron.</h2>
-        <p>Dans l'épaisseur du verre, des milliers de lamelles verticales. La lumière qui sort droit de l'écran passe entre elles. Celle qui part de biais les heurte et s'éteint.</p>
+        <span class="kicker">How it works</span>
+        <h2 id="tech-title">Clear head-on, dark from the side.</h2>
+        <p>A privacy filter narrows the angle the screen can be read from. Light leaving the screen straight ahead gets through. Light leaving at a steep angle is blocked, so people beside you see a dark surface.</p>
       </header>
       <div class="tech">
         <figure class="tech-fig glass rv">
           <svg id="louvre-svg" viewBox="0 0 360 230" role="img" aria-labelledby="lv-t">
-            <title id="lv-t">Coupe du filtre : des lamelles au-dessus des pixels laissent passer les rayons droits et arrêtent les rayons obliques au-delà de 30 degrés.</title>
+            <title id="lv-t">Simplified illustration of a privacy filter: straight light passes, light at a steep angle is blocked.</title>
             <defs><linearGradient id="px" x1="0" x2="1"><stop offset="0" stop-color="#2F5EFF"/><stop offset=".5" stop-color="#7A6CFF"/><stop offset="1" stop-color="#5E8BFF"/></linearGradient></defs>
             <line class="axis" x1="180" y1="10" x2="180" y2="150"/>
             <g id="rays"></g>
             <g id="louvres"></g>
             <rect x="6" y="198" width="348" height="10" rx="5" fill="url(#px)"/>
             <text class="lbl" x="6" y="224">PIXELS</text>
-            <text class="lbl" x="354" y="224" text-anchor="end">PAS 28 · HAUTEUR 38 (ÉCHELLE ×1000)</text>
+            <text class="lbl" x="354" y="224" text-anchor="end">ILLUSTRATION, NOT TO SCALE</text>
           </svg>
           <div class="tech-ctrl">
-            <label for="angle">Angle de vue</label>
+            <label for="angle">Viewing angle</label>
             <input id="angle" type="range" min="0" max="70" value="0" step="1">
             <output id="angle-out" for="angle" class="mono">0°</output>
           </div>
         </figure>
         <div class="tech-side">
           <div class="rv">
-            <div class="big-deg">30<sup>°</sup></div>
-            <p>C'est l'angle de coupe : au-delà, l'écran devient noir. En deçà, rien ne change pour toi.</p>
+            <div class="big-deg">9H</div>
+            <p>Tempered-glass hardness rating, with the privacy filter built into the glass.</p>
           </div>
           <ul class="facts rv">
-            <li><b>0°</b><span>Face à l'écran : couleurs et luminosité intactes.</span></li>
-            <li><b>30°</b><span>La lumière oblique commence à buter sur les lamelles.</span></li>
-            <li><b>45°+</b><span>Ce que voit ton voisin : une vitre sombre.</span></li>
+            <li><b>Head-on</b><span>What you see: your screen, readable as usual.</span></li>
+            <li><b>Angled</b><span>The screen gets darker as the angle grows.</span></li>
+            <li><b>Side</b><span>What the person next to you sees: a dark surface.</span></li>
           </ul>
         </div>
       </div>
@@ -557,26 +558,26 @@ footer b { color: var(--ink); font-family: var(--f-display); }
     <div class="wrap">
       <header class="sec-head rv">
         <span class="kicker">Installation</span>
-        <h2 id="inst-title">Trois gestes, une minute.</h2>
+        <h2 id="inst-title">Three steps to fit it.</h2>
       </header>
       <ol class="steps" id="steps">
         <li class="step">
           <span class="n">1</span>
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="10" y="6" width="20" height="26" rx="7" stroke="currentColor" stroke-width="2"/><path d="M15 16l3-3m1 8 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M33 4v5m-2.5-2.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <h3>Nettoyer</h3>
-          <p>Lingette humide, puis chiffon microfibre. L'autocollant fourni retire la dernière poussière.</p>
+          <h3>Clean</h3>
+          <p>Wipe the screen and remove any dust so nothing gets trapped under the glass.</p>
         </li>
         <li class="step">
           <span class="n">2</span>
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="10" y="7" width="20" height="26" rx="7" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><circle cx="20" cy="20" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M20 1v6m0 26v6M1 20h6m26 0h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <h3>Aligner</h3>
-          <p>Pose la vitre dans la coque, présente l'ensemble face à l'écran, couronne à droite.</p>
+          <h3>Align</h3>
+          <p>Line the screen up with the watch face, crown on the right.</p>
         </li>
         <li class="step">
           <span class="n">3</span>
           <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="10" y="13" width="20" height="24" rx="7" stroke="currentColor" stroke-width="2"/><path d="M20 2v8m-4-4 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h3>Presser</h3>
-          <p>Appuie sur tout le tour jusqu'au clic. La coque verrouille la vitre : c'est prêt.</p>
+          <h3>Press</h3>
+          <p>Press firmly all around the edge until it sits flat. Done.</p>
         </li>
       </ol>
     </div>
@@ -586,11 +587,12 @@ footer b { color: var(--ink); font-family: var(--f-display); }
   <section class="sec" id="compatibilite" aria-labelledby="cmp-title" style="padding-top:0">
     <div class="wrap">
       <header class="sec-head rv">
-        <span class="kicker">Compatibilité</span>
-        <h2 id="cmp-title">Trois tailles, dessinées à l'échelle.</h2>
-        <p>La taille est gravée au dos de ta montre. Chaque pack est taillé pour un seul boîtier.</p>
+        <span class="kicker">Sizes</span>
+        <h2 id="cmp-title">Five sizes, drawn to scale.</h2>
+        <p>Your case size is engraved on the back of your watch. Each pack fits one case size, so pick the one that matches.</p>
       </header>
       <div class="sizes" id="sizes"></div>
+      <p class="sizes-note">Series 10 and Series 11 (42 and 46 mm) are not covered yet.</p>
     </div>
   </section>
 
@@ -599,16 +601,16 @@ footer b { color: var(--ink); font-family: var(--f-display); }
     <div class="wrap">
       <div class="launch glass rv">
         <svg class="glyph" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6l-8-3Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
-        <span class="kicker">Commander</span>
-        <h2 id="launch-title">Ton pack Guardess.</h2>
-        <p>La vitre anti-espion et la coque rigide, ajustées à ta taille de boîtier. Livraison et taxes calculées au paiement.</p>
+        <span class="kicker">Buy</span>
+        <h2 id="launch-title">Your Guardess pack.</h2>
+        <p>The privacy screen and the rigid case, made for your case size. Shipping and taxes are calculated at checkout.</p>
         <div class="shop" id="product-component-1790866120223">
-          <p class="shop-loading">Chargement de la boutique…</p>
+          <p class="shop-loading">Loading the shop…</p>
         </div>
         <div class="contact">
-          <span>Une question avant de commander ?</span>
+          <span>Questions before you order?</span>
           <span class="mail-addr" id="mail-addr">fonte.athletique@gmail.com</span>
-          <button class="btn btn-glass btn-sm" type="button" id="copy-btn">Copier l'adresse</button>
+          <button class="btn btn-glass btn-sm" type="button" id="copy-btn">Copy address</button>
         </div>
         <p class="copy-state" id="copy-state" aria-live="polite"></p>
       </div>
@@ -619,7 +621,7 @@ footer b { color: var(--ink); font-family: var(--f-display); }
 <footer>
   <div class="wrap">
     <p><b>Guardess</b> · 2026</p>
-    <p>Guardess est une marque indépendante, non affiliée à Apple Inc. Apple Watch est une marque d'Apple Inc.</p>
+    <p>Guardess is an independent brand, not affiliated with Apple Inc. Apple Watch is a trademark of Apple Inc.</p>
   </div>
 </footer>
 
@@ -636,9 +638,11 @@ footer b { color: var(--ink); font-family: var(--f-display); }
 
   /* Tailles à l'échelle : 1 mm = 3 unités SVG */
   const sizes = [
-    { mm: 41, w: 35, models: 'Apple Watch Series 7, 8 et 9' },
-    { mm: 45, w: 38, models: 'Apple Watch Series 7, 8 et 9' },
-    { mm: 49, w: 44, models: 'Apple Watch Ultra et Ultra 2', ultra: true },
+    { mm: 40, w: 34, models: 'Series 4, 5, 6 and SE' },
+    { mm: 41, w: 35, models: 'Series 7, 8 and 9' },
+    { mm: 44, w: 38, models: 'Series 4, 5, 6 and SE' },
+    { mm: 45, w: 38, models: 'Series 7, 8 and 9' },
+    { mm: 49, w: 44, models: 'Ultra and Ultra 2', ultra: true },
   ];
   const K = 3, BASE = 190;
   document.getElementById('sizes').innerHTML = sizes.map(s => {
@@ -707,8 +711,8 @@ footer b { color: var(--ink); font-family: var(--f-display); }
   const copyBtn = document.getElementById('copy-btn'), state = document.getElementById('copy-state');
   copyBtn.addEventListener('click', () => {
     const addr = document.getElementById('mail-addr');
-    const fallback = () => { const s = getSelection(), rg = document.createRange(); rg.selectNodeContents(addr); s.removeAllRanges(); s.addRange(rg); state.textContent = 'Adresse sélectionnée : copie-la avec ton clavier.'; };
-    try { navigator.clipboard.writeText(addr.textContent).then(() => { state.textContent = 'Adresse copiée.'; }, fallback); } catch { fallback(); }
+    const fallback = () => { const s = getSelection(), rg = document.createRange(); rg.selectNodeContents(addr); s.removeAllRanges(); s.addRange(rg); state.textContent = 'Address selected: copy it with your keyboard.'; };
+    try { navigator.clipboard.writeText(addr.textContent).then(() => { state.textContent = 'Address copied.'; }, fallback); } catch { fallback(); }
   });
 
   const tick = () => {
@@ -743,7 +747,7 @@ footer b { color: var(--ink); font-family: var(--f-display); }
   var SDK = 'assets/vendor/shopify/buybutton.min.js';
   var started = false;
   function fail() {
-    node.innerHTML = '<p class="shop-loading">La boutique ne s’est pas chargée. Écris-nous à l’adresse ci-dessous pour commander.</p>';
+    node.innerHTML = '<p class="shop-loading">The shop didn’t load. Email us at the address below to order.</p>';
   }
   function init() {
     var client = ShopifyBuy.buildClient({
@@ -757,28 +761,28 @@ footer b { color: var(--ink); font-family: var(--f-display); }
       ui.createComponent('product', {
         id: '15817235497300',
         node: node,
-        moneyFormat: '%7B%7Bamount_with_comma_separator%7D%7D%C2%A0%E2%82%AC',   /* « 29,90 € » */
+        moneyFormat: '%E2%82%AC%7B%7Bamount%7D%7D',   /* €29.90 */
         options: {
           product: {
             iframe: false,
             layout: 'horizontal',
             contents: { img: true, imgWithCarousel: false, title: true, variantTitle: false, price: true, options: true, quantity: false, button: true, description: false },
             order: ['img', 'title', 'price', 'options', 'button'],
-            text: { button: 'Ajouter au panier', outOfStock: 'Épuisé', unavailable: 'Indisponible' }
+            text: { button: 'Add to cart', outOfStock: 'Sold out', unavailable: 'Unavailable' }
           },
           cart: {
             iframe: false,
             popup: false,
-            text: { title: 'Ton panier', empty: 'Ton panier est vide.', total: 'Sous-total', button: 'Payer', notice: 'Livraison et taxes calculées au paiement.', closeAccessibilityLabel: 'Fermer le panier' }
+            text: { title: 'Your cart', empty: 'Your cart is empty.', total: 'Subtotal', button: 'Checkout', notice: 'Shipping and taxes calculated at checkout.', closeAccessibilityLabel: 'Close cart' }
           },
           toggle: {
             iframe: false,
             sticky: true,
             contents: { title: false, icon: true },
-            text: { title: 'Panier' }
+            text: { title: 'Cart' }
           },
           lineItem: {
-            text: { quantityInputAccessibilityLabel: 'Quantité', removeItemAccessibilityLabel: 'Retirer' }
+            text: { quantityInputAccessibilityLabel: 'Quantity', removeItemAccessibilityLabel: 'Remove' }
           }
         }
       });
@@ -863,8 +867,8 @@ const drawScreen = () => {
   const g = c.createLinearGradient(bx, by, bx + bw, by + bh); g.addColorStop(0, '#2F5EFF'); g.addColorStop(1, '#7A6CFF');
   c.fillStyle = g; c.beginPath(); c.roundRect(bx, by, bw, bh, 44 * k); c.fill();
   c.fillStyle = '#fff'; c.textAlign = 'left';
-  c.font = `600 ${44 * k}px Manrope, "Helvetica Neue", Arial, sans-serif`; c.fillText('Léa', bx + 32 * k, by + 62 * k);
-  c.font = `400 ${40 * k}px Manrope, "Helvetica Neue", Arial, sans-serif`; c.fillText('On se voit à 19h ?', bx + 32 * k, by + 116 * k);
+  c.font = `600 ${44 * k}px Manrope, "Helvetica Neue", Arial, sans-serif`; c.fillText('Lea', bx + 32 * k, by + 62 * k);
+  c.font = `400 ${40 * k}px Manrope, "Helvetica Neue", Arial, sans-serif`; c.fillText('Dinner at 7?', bx + 32 * k, by + 116 * k);
 };
 drawScreen();
 const screenTextures = new Set();
@@ -990,7 +994,7 @@ const setHud = deg => {
   needle.style.transform = `rotate(${deg.toFixed(1)}deg)`;
   hudDeg.textContent = `${Math.round(deg)}°`;
   const blocked = deg >= 30;
-  hudState.textContent = deg < 18 ? 'De face · net' : blocked ? 'De côté · écran noir' : 'Ça s’assombrit';
+  hudState.textContent = deg < 18 ? 'Head-on · clear' : blocked ? 'Side · dark' : 'Getting darker';
   hudState.classList.toggle('is-blocked', blocked);
 };
 
