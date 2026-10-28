@@ -3,170 +3,181 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Guardess</title>
-<meta name="description" content="Guardess: a 9H tempered-glass privacy screen and a rigid case for Apple Watch. Clear when you look at it, dark from the side.">
-<meta name="theme-color" content="#060B1F">
+<title>Guardess · Privacy case for Apple Watch</title>
+<meta name="description" content="Guardess: a privacy tempered glass and a rigid bumper made as one piece for Apple Watch. Clear when you look at it, dark from the side. 40 to 49 mm.">
+<meta name="theme-color" content="#03060E">
 <meta property="og:title" content="Guardess · Your wrist, your eyes only.">
-<meta property="og:description" content="Privacy screen protector and rigid case for Apple Watch, 40 to 49 mm.">
+<meta property="og:description" content="Privacy glass and rigid bumper in one piece for Apple Watch, 40 to 49 mm.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://findyourtime.github.io/guardess/assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/logo-180.png">
 <link rel="modulepreload" href="assets/vendor/three/three.module.min.js">
+<link rel="modulepreload" href="assets/js/scene.js?v=dev">
+<link rel="preload" href="assets/fonts/space-grotesk-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/space-grotesk-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/manrope-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/fonts.css">
+<script>
+/* Avant tout rendu : mouvement réduit, et intro complète (1re visite) ou courte (visites suivantes) */
+(function () {
+  var d = document.documentElement, rm = matchMedia('(prefers-reduced-motion: reduce)').matches, seen = false;
+  try { seen = sessionStorage.getItem('gd-intro') === '1'; } catch (e) {}
+  d.classList.add('js', rm ? 'rm' : 'motion', rm ? 'intro-none' : seen ? 'intro-quick' : 'intro-full');
+  if (rm) d.classList.add('intro-done');
+})();
+</script>
 <style>
 /* ============================================================
-   Guardess · Liquid Glass
-   Palette : nuit #060B1F · navy #0B1330 · électrique #2F5EFF
+   Guardess · interface HUD futuriste × Liquid Glass
+   Palette : nuit #03060E · navy #0B1330 · électrique #2F5EFF
              azur #5E8BFF · lavande #B7C6FF · papier #F5F7FB
-   Dark-first (scène de nuit, verre lumineux), variante claire.
+   Sombre par défaut, variante claire.
    ============================================================ */
 :root {
   color-scheme: dark;
-  --bg: #060B1F;
-  --bg-2: #0B1330;
-  --blob-1: #2F5EFF; --blob-2: #1B2C85; --blob-3: #5E8BFF; --blob-4: #3A2F9E;
-  --ink: #F2F5FC;
-  --ink-2: #B8C2E4;
-  --ink-3: #8491BD;
-  --accent: #5E8BFF;
-  --accent-ink: #0B1330;
-  --accent-solid: #F5F7FB;
-  --line: rgba(183, 198, 255, .18);
-  --glass: rgba(255, 255, 255, .09);
-  --glass-2: rgba(255, 255, 255, .15);
-  --edge: rgba(255, 255, 255, .34);
-  --edge-2: rgba(255, 255, 255, .1);
-  --spec: rgba(255, 255, 255, .22);
-  --shadow: 0 1px 1px rgba(0,0,0,.25), 0 12px 28px -10px rgba(0,0,0,.5), 0 40px 80px -30px rgba(2,4,14,.8);
-  --ok: #B7C6FF;
-  --blocked: #FF8FB1;
-  --svg-ink: #DCE3FF;
-  --logo-ink: #F5F7FB;
+  --bg: #03060E; --bg-2: #070C1C; --bg-3: #0E1838;
+  --ink: #F2F5FC; --ink-2: #B3BEDF; --ink-3: #7F8BB4;
+  --accent: #6F96FF; --accent-solid: #F5F7FB; --accent-ink: #0B1330;
+  --line: rgba(183, 198, 255, .14); --line-2: rgba(183, 198, 255, .34);
+  --grid: rgba(120, 150, 255, .07);
+  --glass: rgba(255, 255, 255, .06); --glass-2: rgba(255, 255, 255, .11);
+  --edge: rgba(255, 255, 255, .26); --edge-2: rgba(255, 255, 255, .09);
+  --glow: rgba(47, 94, 255, .42); --glow-2: rgba(122, 108, 255, .2);
+  --hud: rgba(183, 198, 255, .85);
+  --ok: #B7C6FF; --blocked: #FF8FB1; --live: #4BE38A;
+  --svg-ink: #DCE3FF; --logo-ink: #F5F7FB;
+  --shadow: 0 1px 1px rgba(0,0,0,.3), 0 14px 30px -12px rgba(0,0,0,.55), 0 44px 90px -34px rgba(1,3,12,.9);
 
   --f-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --f-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --ease: cubic-bezier(.23, 1, .32, 1);
-  --r-lg: 28px; --r-md: 20px; --r-pill: 999px;
+  --ease-io: cubic-bezier(.7, 0, .2, 1);
+  --r-lg: 28px; --r-md: 18px; --r-pill: 999px;
   --gut: max(16px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
-  --z-canvas: 0; --z-content: 1; --z-nav: 20; --z-progress: 21;
+  --side: max(var(--gut), calc((100% - 1240px) / 2 + var(--gut)));
 }
+@media (min-width: 900px) { :root { --gut: max(clamp(28px, 4vw, 48px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px)); } }
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
-    --bg: #E6ECFF; --bg-2: #F5F7FB;
-    --blob-1: #8EA6FF; --blob-2: #C9D4FF; --blob-3: #A99BFF; --blob-4: #FFFFFF;
-    --ink: #0B1330; --ink-2: #33406B; --ink-3: #5A6690;
-    --accent: #2F5EFF; --accent-ink: #FFFFFF; --accent-solid: #2F5EFF;
-    --line: rgba(11, 19, 48, .14);
-    --glass: rgba(255, 255, 255, .42); --glass-2: rgba(255, 255, 255, .6);
-    --edge: rgba(255, 255, 255, .85); --edge-2: rgba(255, 255, 255, .4);
-    --spec: rgba(255, 255, 255, .6);
-    --shadow: 0 1px 1px rgba(11,19,48,.05), 0 10px 24px -10px rgba(27,44,133,.2), 0 30px 60px -24px rgba(27,44,133,.3);
-    --ok: #2F5EFF; --blocked: #C2255C; --svg-ink: #1B2C85; --logo-ink: #0B1330;
+    --bg: #F3F6FD; --bg-2: #E9EEFC; --bg-3: #D9E2FF;
+    --ink: #0B1330; --ink-2: #33406B; --ink-3: #56628C;
+    --accent: #2F5EFF; --accent-solid: #2F5EFF; --accent-ink: #FFFFFF;
+    --line: rgba(11, 19, 48, .12); --line-2: rgba(11, 19, 48, .26);
+    --grid: rgba(27, 44, 133, .06);
+    --glass: rgba(255, 255, 255, .55); --glass-2: rgba(255, 255, 255, .8);
+    --edge: rgba(255, 255, 255, .95); --edge-2: rgba(11, 19, 48, .08);
+    --glow: rgba(47, 94, 255, .2); --glow-2: rgba(122, 108, 255, .12);
+    --hud: rgba(27, 44, 133, .8);
+    --ok: #2F5EFF; --blocked: #C2255C; --live: #13A355;
+    --svg-ink: #1B2C85; --logo-ink: #0B1330;
+    --shadow: 0 1px 1px rgba(11,19,48,.05), 0 12px 26px -12px rgba(27,44,133,.22), 0 32px 64px -26px rgba(27,44,133,.3);
   }
 }
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #E6ECFF; --bg-2: #F5F7FB;
-  --blob-1: #8EA6FF; --blob-2: #C9D4FF; --blob-3: #A99BFF; --blob-4: #FFFFFF;
-  --ink: #0B1330; --ink-2: #33406B; --ink-3: #5A6690;
-  --accent: #2F5EFF; --accent-ink: #FFFFFF; --accent-solid: #2F5EFF;
-  --line: rgba(11, 19, 48, .14);
-  --glass: rgba(255, 255, 255, .42); --glass-2: rgba(255, 255, 255, .6);
-  --edge: rgba(255, 255, 255, .85); --edge-2: rgba(255, 255, 255, .4);
-  --spec: rgba(255, 255, 255, .6);
-  --shadow: 0 1px 1px rgba(11,19,48,.05), 0 10px 24px -10px rgba(27,44,133,.2), 0 30px 60px -24px rgba(27,44,133,.3);
-  --ok: #2F5EFF; --blocked: #C2255C; --svg-ink: #1B2C85; --logo-ink: #0B1330;
+  --bg: #F3F6FD; --bg-2: #E9EEFC; --bg-3: #D9E2FF;
+  --ink: #0B1330; --ink-2: #33406B; --ink-3: #56628C;
+  --accent: #2F5EFF; --accent-solid: #2F5EFF; --accent-ink: #FFFFFF;
+  --line: rgba(11, 19, 48, .12); --line-2: rgba(11, 19, 48, .26);
+  --grid: rgba(27, 44, 133, .06);
+  --glass: rgba(255, 255, 255, .55); --glass-2: rgba(255, 255, 255, .8);
+  --edge: rgba(255, 255, 255, .95); --edge-2: rgba(11, 19, 48, .08);
+  --glow: rgba(47, 94, 255, .2); --glow-2: rgba(122, 108, 255, .12);
+  --hud: rgba(27, 44, 133, .8);
+  --ok: #2F5EFF; --blocked: #C2255C; --live: #13A355;
+  --svg-ink: #1B2C85; --logo-ink: #0B1330;
+  --shadow: 0 1px 1px rgba(11,19,48,.05), 0 12px 26px -12px rgba(27,44,133,.22), 0 32px 64px -26px rgba(27,44,133,.3);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-padding-top: 96px; -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0; background: var(--bg); color: var(--ink);
-  font: 400 1rem/1.6 var(--f-body); overflow-x: clip;
-  -webkit-font-smoothing: antialiased;
-}
-h1, h2, h3 { font-family: var(--f-display); margin: 0; line-height: 1.05; letter-spacing: -.035em; text-wrap: balance; font-weight: 600; }
+html { scroll-padding-top: 84px; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.6 var(--f-body); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; line-height: 1.02; letter-spacing: -.035em; text-wrap: balance; font-weight: 600; }
 p { margin: 0; text-wrap: pretty; }
 a { color: inherit; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 10px; }
-.wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding-inline: var(--gut); }
-.mono { font-family: var(--f-mono); font-weight: 500; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding-inline: var(--gut); }
+.mono { font-family: var(--f-mono); font-weight: 500; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: fixed; z-index: 200; left: 12px; top: -64px; padding: 12px 16px; border-radius: 12px; background: var(--accent-solid); color: var(--accent-ink); font-weight: 600; text-decoration: none; transition: top .2s var(--ease); }
+.skip:focus { top: calc(env(safe-area-inset-top, 0px) + 12px); }
 
-/* ---------- Fond : maillage de lumière + grain ---------- */
-.mesh { position: fixed; inset: -25vmax; z-index: -2; pointer-events: none; filter: blur(70px) saturate(125%); }
-.mesh i { position: absolute; border-radius: 50%; opacity: .8; will-change: transform; }
-.mesh i:nth-child(1) { width: 55vmax; height: 55vmax; left: 8%; top: 4%; background: var(--blob-1); animation: d1 28s ease-in-out infinite alternate; }
-.mesh i:nth-child(2) { width: 70vmax; height: 70vmax; right: -4%; top: 28%; background: var(--blob-2); animation: d2 34s ease-in-out infinite alternate; }
-.mesh i:nth-child(3) { width: 38vmax; height: 38vmax; left: 35%; bottom: 8%; background: var(--blob-3); opacity: .55; animation: d3 24s ease-in-out infinite alternate; }
-.mesh i:nth-child(4) { width: 34vmax; height: 34vmax; right: 18%; top: 0; background: var(--blob-4); opacity: .6; animation: d1 30s ease-in-out infinite alternate-reverse; }
-@keyframes d1 { to { transform: translate3d(12vmax, 9vmax, 0) scale(1.08); } }
-@keyframes d2 { to { transform: translate3d(-11vmax, -7vmax, 0) scale(.92); } }
-@keyframes d3 { to { transform: translate3d(-9vmax, -11vmax, 0) scale(1.14); } }
-.grain { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .07; mix-blend-mode: overlay;
+/* ---------- Fond : nuit, grille de laboratoire, halo qui suit la montre ---------- */
+.bg { position: fixed; inset: 0; z-index: -3; pointer-events: none; background: radial-gradient(130vmax 80vmax at 50% -25%, var(--bg-3), transparent 62%), radial-gradient(90vmax 60vmax at 0% 110%, var(--glow-2), transparent 60%), var(--bg); }
+.bg::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 56px 56px; background-position: center; -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000 15%, transparent 72%); mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000 15%, transparent 72%); }
+.glow { position: fixed; z-index: -2; left: 0; top: 0; width: 100vmax; height: 100vmax; margin: -50vmax 0 0 -50vmax; border-radius: 50%; pointer-events: none; background: radial-gradient(closest-side, var(--glow), transparent); opacity: 0; transform: translate3d(70vw, 45vh, 0); will-change: transform, opacity; }
+.grain { position: fixed; inset: 0; z-index: 30; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+#gl { position: fixed; left: 0; top: 0; width: 100%; height: 100vh; height: 100lvh; z-index: 0; pointer-events: none; display: block; opacity: 0; }
+main, footer { position: relative; z-index: 1; }
+.no-gl #gl, .rm #gl, .no-gl .glow, .rm .glow { display: none; }
 
-/* ---------- Verre ---------- */
-.glass {
-  position: relative; isolation: isolate;
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(30px) saturate(180%); backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid var(--edge-2); border-radius: var(--r-lg);
-  box-shadow: inset 0 1px 0 var(--edge), var(--shadow);
-}
-.glass::before {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
-  background: linear-gradient(118deg, var(--spec) 0%, transparent 30%), linear-gradient(118deg, transparent 60%, rgba(255,255,255,.06) 66%, transparent 74%);
-}
-
-/* ---------- Boutons ---------- */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 22px;
-  border-radius: var(--r-pill); border: 0; cursor: pointer; text-decoration: none;
-  font: 600 .95rem/1 var(--f-body); letter-spacing: -.005em;
-  transition: transform .2s var(--ease), background-color .2s var(--ease), box-shadow .2s var(--ease);
-}
+/* ---------- Verre, boutons, éléments HUD ---------- */
+.glass { position: relative; isolation: isolate; background: var(--glass); -webkit-backdrop-filter: blur(26px) saturate(170%); backdrop-filter: blur(26px) saturate(170%); border: 1px solid var(--edge-2); border-radius: var(--r-lg); box-shadow: inset 0 1px 0 var(--edge), var(--shadow); }
+.frame::before, .frame::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1.5px solid var(--hud); pointer-events: none; opacity: .7; }
+.frame::before { left: 10px; top: 10px; border-right: 0; border-bottom: 0; }
+.frame::after { right: 10px; bottom: 10px; border-left: 0; border-top: 0; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: var(--r-pill); border: 0; cursor: pointer; text-decoration: none; font: 600 .95rem/1 var(--f-body); letter-spacing: -.005em; transition: transform .2s var(--ease), box-shadow .2s var(--ease), background-color .2s var(--ease); }
 .btn svg { width: 18px; height: 18px; flex: none; }
 .btn:active { transform: scale(.97); }
-.btn-solid { background: var(--accent-solid); color: var(--accent-ink); box-shadow: 0 10px 30px -12px rgba(94,139,255,.7), inset 0 1px 0 rgba(255,255,255,.5); }
-.btn-glass { color: var(--ink); background: var(--glass); border: 1px solid var(--edge-2); box-shadow: inset 0 1px 0 var(--edge); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
-@media (hover: hover) { .btn:hover { transform: translateY(-1px); } .btn:active { transform: scale(.97); } }
+.btn-solid { background: var(--accent-solid); color: var(--accent-ink); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 12px 34px -12px var(--glow); }
+.btn-ghost { color: var(--ink); background: var(--glass); border: 1px solid var(--edge-2); box-shadow: inset 0 1px 0 var(--edge); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+@media (hover: hover) { .btn:hover { transform: translateY(-1px); } .btn-solid:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 16px 40px -12px var(--glow); } }
+.btn-sm { min-height: 40px; padding: 0 16px; font-size: .88rem; }
+.kicker { display: inline-flex; align-items: center; gap: 10px; font: 500 .74rem/1.2 var(--f-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.kicker::before { content: ""; width: 20px; height: 1px; background: currentColor; flex: none; }
+.lead { color: var(--ink-2); font-size: clamp(1rem, 1.4vw, 1.14rem); max-width: 46ch; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--live); box-shadow: 0 0 0 4px color-mix(in srgb, var(--live) 22%, transparent); flex: none; }
 
-/* ---------- Navigation ---------- */
-/* ---------- Loader : affiché jusqu'au premier rendu de la montre 3D ---------- */
-.loader {
-  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--bg);
-  transition: opacity .5s var(--ease), visibility 0s linear .5s;
-}
-.loader-in { display: grid; justify-items: center; gap: 22px; }
-.loader .logo { width: 64px; height: auto; overflow: visible; }
-.loader .lg-shield { fill: transparent; stroke: var(--logo-ink); stroke-width: 6; stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: ld-draw 1.4s var(--ease) forwards, ld-fill .5s ease .9s forwards; }
-.loader .lg-bar, .loader .lg-tip { opacity: 0; transform: translateX(-14px); animation: ld-bar .5s var(--ease) 1s forwards; }
-.loader-bar { width: 120px; height: 2px; border-radius: 2px; background: var(--line); overflow: hidden; }
-.loader-bar i { display: block; height: 100%; width: 40%; border-radius: 2px; background: var(--accent); animation: ld-slide 1.1s var(--ease) infinite; }
-@keyframes ld-draw { to { stroke-dashoffset: 0; } }
-@keyframes ld-fill { to { fill: var(--logo-ink); stroke-width: 0; } }
-@keyframes ld-bar { to { opacity: 1; transform: none; } }
-@keyframes ld-slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
-html.is-ready .loader { opacity: 0; visibility: hidden; pointer-events: none; }
-html:not(.is-ready) body { overflow: hidden; }
-@media (prefers-reduced-motion: reduce) {
-  .loader .lg-shield { animation: none; fill: var(--logo-ink); stroke-width: 0; }
-  .loader .lg-bar, .loader .lg-tip { animation: none; opacity: 1; transform: none; }
-  .loader-bar i { animation: none; width: 100%; opacity: .5; }
-}
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: var(--z-progress); background: transparent; }
-.progress i { display: block; height: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
-.nav-wrap { position: fixed; left: 0; right: 0; top: calc(env(safe-area-inset-top, 0px) + 12px); z-index: var(--z-nav); padding-inline: var(--gut); pointer-events: none; }
-.nav { pointer-events: auto; max-width: 1120px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 7px 7px 18px; border-radius: var(--r-pill); }
-.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 700 1.1rem var(--f-display); letter-spacing: -.02em; min-height: 44px; }
+/* ---------- Intro : le logo se dessine, puis la montre s'allume ---------- */
+.intro { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--bg); overflow: hidden; transition: opacity .8s var(--ease), visibility 0s linear .8s; }
+.intro::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 56px 56px; background-position: center; -webkit-mask-image: radial-gradient(circle at 50% 50%, #000, transparent 55%); mask-image: radial-gradient(circle at 50% 50%, #000, transparent 55%); }
+.intro-core { position: relative; display: grid; justify-items: center; gap: 14px; padding-top: 150px; }
+.intro-word { font: 600 clamp(1.6rem, 5vw, 2.3rem)/1 var(--f-display); letter-spacing: .32em; margin-right: -.32em; }
+.intro-sub { font-size: .72rem; letter-spacing: .26em; text-transform: uppercase; color: var(--ink-3); }
+.intro-bar { width: 128px; height: 2px; border-radius: 2px; background: var(--line); overflow: hidden; margin-top: 10px; }
+.intro-bar i { display: block; height: 100%; width: 38%; background: var(--accent); animation: bar 1.1s var(--ease) infinite; }
+@keyframes bar { from { transform: translateX(-100%); } to { transform: translateX(270%); } }
+.intro-scan { position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); box-shadow: 0 0 22px 3px var(--glow); opacity: 0; }
+.intro-full .intro-scan { animation: scan 1.5s var(--ease-io) .55s 1 both; }
+@keyframes scan { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(100vh); opacity: 0; } }
+.intro-logo { position: fixed; z-index: 101; left: 50%; top: 50%; width: 96px; height: auto; margin: -128px 0 0 -48px; overflow: visible; transform-origin: 0 0; filter: drop-shadow(0 0 18px rgba(47, 94, 255, .55)); pointer-events: none; }
 .logo .lg-shield { fill: var(--logo-ink); }
 .logo .lg-bar { fill: #2F5EFF; }
 .logo .lg-tip { fill: #B7C6FF; }
+.intro-full .intro-logo .lg-shield { fill: transparent; stroke: var(--logo-ink); stroke-width: 5; stroke-dasharray: 1460; stroke-dashoffset: 1460; animation: lg-draw 1.15s var(--ease-io) .15s forwards, lg-fill .55s ease 1.05s forwards; }
+.intro-full .intro-logo .lg-bar { opacity: 0; transform: translateX(-30px); animation: lg-in .6s var(--ease) 1.1s forwards; }
+.intro-full .intro-logo .lg-tip { opacity: 0; transform: scale(.3); transform-origin: 228px 130px; animation: lg-in .5s var(--ease) 1.3s forwards; }
+@keyframes lg-draw { to { stroke-dashoffset: 0; } }
+@keyframes lg-fill { to { fill: var(--logo-ink); stroke-width: 0; } }
+@keyframes lg-in { to { opacity: 1; transform: none; } }
+.intro-full .intro-sub { opacity: 0; animation: fade .6s ease 1.4s forwards; }
+@keyframes fade { to { opacity: 1; } }
+.intro-quick .intro-word, .intro-quick .intro-sub, .intro-quick .intro-scan { display: none; }
+.intro-quick .intro-core { padding-top: 120px; }
+.intro-skip { position: fixed; z-index: 102; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); min-height: 44px; padding: 0 18px; border-radius: var(--r-pill); border: 1px solid var(--line-2); background: transparent; color: var(--ink-2); font: 500 .78rem var(--f-mono); letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: opacity .4s var(--ease); }
+.intro-skip:hover { color: var(--ink); border-color: var(--hud); }
+.intro-quick .intro-skip, .intro-none .intro, .intro-none .intro-logo, .intro-none .intro-skip { display: none; }
+.intro-out .intro { opacity: 0; visibility: hidden; }
+.intro-out .intro-skip { opacity: 0; pointer-events: none; }
+.intro-done .intro, .intro-done .intro-skip, .intro-done .intro-logo { display: none; }
+.intro-full:not(.intro-done) body, .intro-quick:not(.intro-done) body { overflow: hidden; }
+
+/* ---------- Navigation ---------- */
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 21; pointer-events: none; }
+.progress i { display: block; height: 100%; background: linear-gradient(90deg, #2F5EFF, #B7C6FF); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+.nav-wrap { position: fixed; left: 0; right: 0; top: calc(env(safe-area-inset-top, 0px) + 12px); z-index: 20; padding-inline: var(--gut); pointer-events: none; transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.js:not(.intro-done) .nav-wrap { opacity: 0; }
+.nav { pointer-events: auto; max-width: 1180px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 6px 6px 16px; border-radius: var(--r-pill); }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 700 1.08rem var(--f-display); letter-spacing: -.02em; min-height: 44px; }
 .brand .logo { width: 24px; height: auto; flex: none; }
 .nav ul { display: flex; gap: 2px; margin: 0; padding: 0; list-style: none; align-items: center; }
 .nav ul a { display: inline-flex; align-items: center; min-height: 42px; padding: 0 14px; border-radius: var(--r-pill); text-decoration: none; font-weight: 600; font-size: .9rem; color: var(--ink-2); transition: color .2s, background-color .2s; }
@@ -174,183 +185,225 @@ html:not(.is-ready) body { overflow: hidden; }
 .nav ul a.cta { background: var(--accent-solid); color: var(--accent-ink); }
 @media (max-width: 760px) { .nav ul li:not(:last-child) { display: none; } }
 
-/* ---------- HERO : scène épinglée ---------- */
-.hero { position: relative; height: 340vh; }
-.stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
-.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: var(--z-canvas); }
-.hero-ui { position: relative; z-index: var(--z-content); height: 100%; display: grid; align-items: center; padding-block: calc(env(safe-area-inset-top, 0px) + 84px) 24px; }
-.beats { position: relative; display: grid; gap: 28px; max-width: 540px; }
+/* ---------- HUD superposé (cadre de visée, légendes) ---------- */
+.hud-layer { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.no-gl .hud-layer, .rm .hud-layer { display: none; }
+.lock { opacity: 0; transition: opacity .4s; }
+.lock i { position: fixed; left: 0; top: 0; width: 22px; height: 22px; border: 1.5px solid var(--hud); will-change: transform; }
+.lock i:nth-child(1) { border-right: 0; border-bottom: 0; }
+.lock i:nth-child(2) { border-left: 0; border-bottom: 0; margin-left: -22px; }
+.lock i:nth-child(3) { border-right: 0; border-top: 0; margin-top: -22px; }
+.lock i:nth-child(4) { border-left: 0; border-top: 0; margin: -22px 0 0 -22px; }
+.lock-tag { position: fixed; left: 0; top: 0; margin-top: -34px; padding: 3px 8px; border-radius: 6px; font-size: .68rem; letter-spacing: .14em; color: var(--hud); white-space: nowrap; background: var(--glass); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); will-change: transform; }
+.callout { position: fixed; left: 0; top: 0; display: flex; align-items: center; gap: 0; opacity: 0; white-space: nowrap; will-change: transform, opacity; }
+.callout::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 4px var(--glow); flex: none; margin-left: -4.5px; }
+.callout b { width: 48px; height: 1px; background: var(--hud); flex: none; }
+.callout span { font: 500 .74rem var(--f-mono); letter-spacing: .08em; text-transform: uppercase; padding: 7px 11px; border-radius: 10px; color: var(--ink); background: var(--glass-2); border: 1px solid var(--edge-2); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.callout em { font-style: normal; color: var(--accent); margin-right: 6px; }
+.callout.left { flex-direction: row-reverse; }
+.callout.left::before { margin: 0 -4.5px 0 0; }
+/* sur mobile, seuls les numéros : ils renvoient aux trois pièces décrites sous la montre */
+@media (max-width: 899px) { .callout span { font-size: .7rem; padding: 5px 8px; color: transparent; width: 2.6em; overflow: hidden; white-space: nowrap; } .callout em { margin: 0; } .callout b { width: 22px; } }
+
+/* ---------- Scènes épinglées : la montre suit le défilement ---------- */
+.pin { position: relative; height: calc(var(--len, 250) * 1vh); }
+@supports (height: 1svh) { .pin { height: calc(var(--len, 250) * 1svh); } }
+.stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: clip; display: grid; grid-template-rows: minmax(150px, 1fr) auto; gap: 12px; padding: calc(env(safe-area-inset-top, 0px) + 76px) var(--gut) calc(env(safe-area-inset-bottom, 0px) + 14px); }
+.stage > .dock { grid-row: 1; }
+.stage > .copy { grid-row: 2; position: relative; }
+.dock { position: relative; min-height: 0; }
+.dock .still { display: none; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.no-gl .dock .still, .rm .dock .still { display: block; }
+.copy { display: grid; gap: 14px; align-content: center; }
+.copy h2 { font-size: clamp(1.7rem, 4.4vw, 3.6rem); }
+@media (max-width: 899px) {
+  .stage > .copy { padding: 16px 18px 18px; border-radius: 24px; background: var(--glass); border: 1px solid var(--edge-2); -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%); box-shadow: inset 0 1px 0 var(--edge); gap: 10px; }
+  .copy .lead { font-size: .92rem; line-height: 1.5; }
+}
+@media (max-width: 899px) and (max-height: 700px) { .copy .lead.opt { display: none; } }
+@media (min-width: 900px) {
+  .stage { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); grid-template-rows: minmax(0, 1fr); align-items: center; column-gap: clamp(28px, 4vw, 72px); padding: 96px var(--side) 36px; }
+  .stage > .copy { grid-column: 1; grid-row: 1; }
+  .stage > .dock { grid-column: 2; grid-row: 1; align-self: stretch; }
+  .stage.flip { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+  .stage.flip > .dock { grid-column: 1; }
+  .stage.flip > .copy { grid-column: 2; }
+}
+.rm .pin { height: auto; }
+.rm .stage { position: relative; height: auto; overflow: visible; padding-block: 72px 32px; }
+.rm .stage > .dock { min-height: 52vh; }
+
+/* ---------- 1. Hero ---------- */
+.beats { display: grid; gap: 22px; }
 .beat-stack { display: grid; }
-.beat { grid-area: 1 / 1; display: grid; gap: 22px; align-content: center; transition: none; will-change: opacity, transform; }
-.beat h1 { font-size: clamp(2.3rem, min(6vw, 8.6vh), 5rem); font-weight: 700; letter-spacing: -.04em; }
-.beat h2 { font-size: clamp(2rem, min(4.8vw, 7vh), 4rem); }
-.beat p { color: var(--ink-2); font-size: clamp(1.02rem, 1.4vw, 1.18rem); max-width: 42ch; }
+.beat { grid-area: 1 / 1; display: grid; gap: 20px; align-content: center; will-change: opacity, transform; }
+.beat h1 { font-size: clamp(2.2rem, min(6.2vw, 9vh), 5.4rem); font-weight: 700; letter-spacing: -.045em; }
+.beat h2 { font-size: clamp(1.9rem, min(4.6vw, 7vh), 4rem); }
 .beat .actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.tag { justify-self: start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border-radius: var(--r-pill); font-size: .78rem; font-weight: 600; color: var(--ink-2); }
-.tag b { display: inline-grid; place-items: center; height: 22px; padding: 0 8px; border-radius: var(--r-pill); background: var(--accent-solid); color: var(--accent-ink); font: 600 .7rem var(--f-mono); }
+.status { display: inline-flex; align-items: center; gap: 10px; font: 500 .72rem var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+.js .hx { opacity: 0; transform: translateY(16px); }
+.intro-done .hx { opacity: 1; transform: none; transition: opacity .9s var(--ease) calc(var(--d, 0) * 1ms + 150ms), transform .9s var(--ease) calc(var(--d, 0) * 1ms + 150ms); }
+.rm .hx { transition: none; }
+.rm .beat:not([data-beat="0"]) { display: none; }
 
-/* Jauge d'angle (HUD) */
-.hud { justify-self: start; display: flex; align-items: center; gap: 16px; padding: 12px 18px 12px 12px; border-radius: 24px; background: var(--glass); border: 1px solid var(--edge-2); box-shadow: inset 0 1px 0 var(--edge), var(--shadow); -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%); }
-.hud svg { width: 116px; height: 66px; flex: none; }
-.hud .arc-ok { stroke: var(--ok); } .hud .arc-blocked { stroke: var(--blocked); opacity: .8; }
-.hud .needle { stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; transform-origin: 58px 58px; }
-.hud .hub { fill: var(--ink); }
-.hud .tick { fill: var(--ink-3); font: 500 8px var(--f-mono); }
-.hud-read { display: grid; gap: 2px; min-width: 150px; }
-.hud-read .deg { font: 500 1.6rem/1 var(--f-mono); letter-spacing: -.02em; }
-.hud-read .state { font-size: .82rem; font-weight: 600; color: var(--ink-2); }
-.hud-read .state.is-blocked { color: var(--blocked); }
-.scroll-cue { position: absolute; z-index: var(--z-content); left: 50%; bottom: 22px; transform: translateX(-50%); display: grid; justify-items: center; gap: 6px; font-size: .74rem; color: var(--ink-3); letter-spacing: .08em; text-transform: uppercase; }
-.scroll-cue i { width: 1px; height: 34px; background: linear-gradient(var(--ink-3), transparent); animation: cue 1.8s var(--ease) infinite; transform-origin: top; }
+/* jauge d'angle */
+.gauge { justify-self: start; display: flex; align-items: center; gap: 16px; padding: 12px 18px 12px 12px; border-radius: 22px; background: var(--glass); border: 1px solid var(--edge-2); box-shadow: inset 0 1px 0 var(--edge); -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%); }
+.gauge svg { width: 112px; height: 64px; flex: none; overflow: visible; }
+.gauge .arc-ok { stroke: var(--ok); } .gauge .arc-blocked { stroke: var(--blocked); opacity: .85; }
+.gauge .needle { stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; transform-origin: 58px 58px; }
+.gauge .hub { fill: var(--ink); }
+.gauge .tick { fill: var(--ink-3); font: 500 8px var(--f-mono); }
+.gauge-read { display: grid; gap: 3px; min-width: 150px; }
+.gauge-read .lbl { font-size: .62rem; letter-spacing: .16em; color: var(--ink-3); }
+.gauge-read .deg { font: 500 1.55rem/1 var(--f-mono); letter-spacing: -.02em; }
+.gauge-read .state { font-size: .82rem; font-weight: 600; color: var(--ink-2); }
+.gauge-read .state.is-blocked { color: var(--blocked); }
+.rm .gauge, .rm .scroll-cue { display: none; }
+.scroll-cue { position: absolute; left: 50%; bottom: 20px; translate: -50% 0; display: grid; justify-items: center; gap: 6px; font: 500 .66rem var(--f-mono); letter-spacing: .18em; color: var(--ink-3); text-transform: uppercase; }
+.scroll-cue i { width: 1px; height: 34px; background: linear-gradient(var(--ink-3), transparent); transform-origin: top; animation: cue 1.8s var(--ease) 2.4s 3; }
 @keyframes cue { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
-
-@media (max-width: 860px) {
-  /* mobile : un panneau compact en bas, la montre occupe tout l'espace au-dessus (taille calculée en JS) */
-  .hero-ui { align-items: end; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); }
-  .beats { max-width: none; gap: 12px; padding: 14px 18px 18px; border-radius: 24px; background: var(--glass); -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%); border: 1px solid var(--edge-2); box-shadow: inset 0 1px 0 var(--edge); }
+@media (max-width: 899px) {
+  .hero .stage > .copy { gap: 10px; }
   .beat { gap: 12px; align-content: start; }
-  .beat[data-beat="0"] .tag, .beat[data-beat="0"] p, .beat .btn-glass { display: none; }
-  .beat h1 { font-size: clamp(1.75rem, 7.4vw, 2.4rem); }
-  .beat h2 { font-size: clamp(1.5rem, 6.4vw, 2rem); }
-  .beat p { font-size: .9rem; line-height: 1.5; }
-  .beat .btn { min-height: 46px; }
-  .hud { order: -1; padding: 0 0 10px; gap: 12px; border-radius: 0; background: none; border: 0; border-bottom: 1px solid var(--line); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; justify-self: stretch; }
-  .hud svg { width: 64px; height: 37px; }
-  .hud-read { min-width: 0; display: flex; align-items: baseline; gap: 10px; }
-  .hud-read .deg { font-size: 1.05rem; }
-  .hud-read .state { font-size: .8rem; }
+  .beat[data-beat="0"] .lead, .beat[data-beat="0"] .status, .beat .btn-ghost { display: none; }
+  .beat h1 { font-size: clamp(1.8rem, 7.6vw, 2.5rem); }
+  .beat h2 { font-size: clamp(1.45rem, 6.4vw, 2rem); }
+  .beat .lead { font-size: .9rem; }
+  .gauge { order: -1; padding: 0 0 10px; gap: 12px; border-radius: 0; background: none; border: 0; border-bottom: 1px solid var(--line); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; justify-self: stretch; }
+  .gauge svg { width: 62px; height: 36px; }
+  .gauge-read { min-width: 0; display: flex; align-items: baseline; gap: 10px; }
+  .gauge-read .lbl { display: none; }
+  .gauge-read .deg { font-size: 1.05rem; }
   .scroll-cue { display: none; }
 }
 
-/* ---------- Bandeau défilant ---------- */
-.ticker { overflow: hidden; border-block: 1px solid var(--line); padding-block: 22px; margin-top: -1px; }
-.ticker-track { display: flex; width: max-content; gap: 48px; animation: tick 38s linear infinite; }
-.ticker span { font: 600 clamp(1.4rem, 3vw, 2.2rem) var(--f-display); letter-spacing: -.02em; white-space: nowrap; color: var(--ink-2); display: inline-flex; align-items: center; gap: 48px; }
-.ticker span::after { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--accent); transform: rotate(45deg); }
+/* ---------- Bandeau ---------- */
+.ticker { position: relative; z-index: 1; overflow: hidden; border-block: 1px solid var(--line); padding-block: 20px; background: color-mix(in srgb, var(--bg) 70%, transparent); }
+.ticker-track { display: flex; width: max-content; gap: 44px; animation: tick 42s linear infinite; }
+.ticker span { font: 600 clamp(1.3rem, 2.8vw, 2.1rem) var(--f-display); letter-spacing: -.02em; white-space: nowrap; color: var(--ink-2); display: inline-flex; align-items: center; gap: 44px; }
+.ticker span::after { content: ""; width: 9px; height: 9px; border: 1.5px solid var(--accent); transform: rotate(45deg); }
 @keyframes tick { to { transform: translateX(-50%); } }
 
-/* ---------- Sections ---------- */
-.sec { padding-block: clamp(96px, 14vw, 180px); }
-.sec-head { display: grid; gap: 18px; max-width: 760px; margin-bottom: clamp(40px, 6vw, 72px); }
-.sec-head h2 { font-size: clamp(2.2rem, 5.2vw, 4.2rem); }
-.sec-head p { color: var(--ink-2); font-size: clamp(1rem, 1.5vw, 1.15rem); max-width: 60ch; }
-.kicker { font: 500 .78rem var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
-.rv { transform: translate3d(0, calc((1 - var(--r, 1)) * 28px), 0); opacity: calc(.35 + var(--r, 1) * .65); }
+/* ---------- 2. Une seule pièce ---------- */
+.parts { display: grid; gap: 10px; margin: 6px 0 0; padding: 0; list-style: none; counter-reset: part; }
+.parts li { position: relative; display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; padding: 14px 16px; border-radius: var(--r-md); border: 1px solid var(--line); background: var(--glass); transition: border-color .4s var(--ease), background-color .4s var(--ease); }
+.parts li::before { counter-increment: part; content: "0" counter(part); grid-row: span 2; font: 500 .74rem var(--f-mono); color: var(--accent); padding-top: 3px; }
+.parts li.on { border-color: var(--line-2); background: var(--glass-2); }
+.parts b { font: 600 1.02rem var(--f-display); letter-spacing: -.01em; }
+.parts span { color: var(--ink-2); font-size: .9rem; }
+@media (max-width: 899px) { .parts { grid-template-columns: repeat(3, 1fr); gap: 6px; } .parts li { grid-template-columns: 1fr; padding: 10px; } .parts li::before { grid-row: auto; } .parts span { display: none; } .parts b { font-size: .84rem; } }
 
-/* ---------- PACK : vue éclatée épinglée ---------- */
-.pack { position: relative; height: 280vh; }
-.pack .stage { display: grid; }
-.pack-ui { position: relative; z-index: var(--z-content); height: 100%; display: grid; grid-template-columns: minmax(0, 420px) 1fr; align-items: center; pointer-events: none; }
-.pack-copy { display: grid; gap: 16px; pointer-events: auto; }
-.pack-copy h2 { font-size: clamp(2rem, 4.4vw, 3.6rem); }
-.pack-copy > p { color: var(--ink-2); }
-.piece { padding: 20px 22px; border-radius: var(--r-md); display: grid; gap: 6px; }
-.piece h3 { font-size: 1.2rem; letter-spacing: -.02em; }
-.piece p { color: var(--ink-2); font-size: .94rem; }
-.piece .spec { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.piece .spec span { font: 500 .72rem var(--f-mono); padding: 4px 9px; border-radius: 8px; border: 1px solid var(--line); color: var(--ink-2); }
-.callouts { position: absolute; inset: 0; z-index: var(--z-content); pointer-events: none; }
-.callout { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 10px; opacity: var(--o, 0); transform: translate3d(var(--x, 0), var(--y, 0), 0); white-space: nowrap; }
-.callout i { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 4px rgba(94,139,255,.35); flex: none; margin-left: -4.5px; }
-.callout b { width: 44px; height: 1px; background: var(--ink-2); flex: none; }
-.callout span { font: 600 .82rem var(--f-body); padding: 6px 12px; border-radius: var(--r-pill); background: var(--glass-2); border: 1px solid var(--edge-2); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
-.callout.left { flex-direction: row-reverse; transform: translate3d(calc(var(--x, 0) - 100%), var(--y, 0), 0); }
-.callout.left i { margin-left: 0; margin-right: -4.5px; }
-@media (max-width: 860px) {
-  .pack-ui { grid-template-columns: 1fr; align-items: end; padding-bottom: 20px; }
-  .pack-copy { gap: 10px; }
-  .pack-copy h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
-  .pack-copy > p { display: none; }
-  .piece { padding: 12px 16px; } .piece p { display: none; }
-  .callouts { display: none; }
-}
+/* ---------- Chiffres clés ---------- */
+.sec { position: relative; padding-block: clamp(80px, 12vw, 150px); }
+.sec-head { display: grid; gap: 16px; max-width: 780px; margin-bottom: clamp(36px, 5vw, 64px); }
+.sec-head h2 { font-size: clamp(2.1rem, 5vw, 4.1rem); }
+.specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.spec { position: relative; padding: clamp(20px, 3vw, 30px); border-radius: var(--r-lg); display: grid; gap: 10px; align-content: start; min-height: 190px; overflow: hidden; }
+.spec .num { font: 600 clamp(3.4rem, 8vw, 6rem)/.85 var(--f-display); letter-spacing: -.06em; }
+.spec .num small { font-size: .38em; color: var(--accent); letter-spacing: -.02em; margin-left: .06em; }
+.spec p { color: var(--ink-2); font-size: .95rem; max-width: 22ch; }
+.spec .mono { font-size: .66rem; letter-spacing: .16em; color: var(--ink-3); text-transform: uppercase; }
+@media (min-width: 900px) { .specs { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
 
-/* ---------- TECHNOLOGIE ---------- */
-.tech { display: grid; gap: 28px; grid-template-columns: 1.35fr 1fr; align-items: start; }
-.tech-fig { margin: 0; padding: clamp(18px, 3vw, 30px); display: grid; gap: 20px; }
-.tech-fig svg { width: 100%; height: auto; overflow: visible; }
-.tech-fig .louvre { fill: var(--svg-ink); }
-.tech-fig .ray { stroke: var(--ok); stroke-width: 2.4; stroke-linecap: round; }
-.tech-fig .ray.blocked { stroke: var(--blocked); }
-.tech-fig .hit { fill: var(--blocked); }
-.tech-fig .axis { stroke: var(--ink-3); stroke-dasharray: 3 5; opacity: .6; }
-.tech-fig .lbl { fill: var(--ink-3); font: 500 10px var(--f-mono); }
-.tech-ctrl { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px; }
-.tech-ctrl label { font-weight: 600; font-size: .9rem; }
-.tech-ctrl output { font: 500 1rem var(--f-mono); min-width: 3.5ch; text-align: right; }
+/* ---------- 3. Le filtre ---------- */
+.louvre { margin: 0; padding: clamp(14px, 2.4vw, 22px); display: grid; gap: 12px; border-radius: 22px; }
+.louvre svg { width: 100%; height: auto; max-height: 32vh; overflow: visible; }
+.louvre .lv { fill: var(--svg-ink); }
+.louvre .ray { stroke: var(--ok); stroke-width: 2.4; stroke-linecap: round; filter: drop-shadow(0 0 3px var(--glow)); }
+.louvre .ray.blocked { stroke: var(--blocked); filter: none; }
+.louvre .hit { fill: var(--blocked); }
+.louvre .axis { stroke: var(--ink-3); stroke-dasharray: 3 5; opacity: .6; }
+.louvre .lbl { fill: var(--ink-3); font: 500 10px var(--f-mono); letter-spacing: .06em; }
+.ctrl { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; }
+.ctrl label { font-weight: 600; font-size: .88rem; }
+.ctrl output { font: 500 1rem var(--f-mono); min-width: 3.5ch; text-align: right; }
 input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; cursor: pointer; }
-input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 6px; background: linear-gradient(90deg, var(--ok) 0 42.8%, var(--blocked) 42.8% 100%); }
-input[type="range"]::-moz-range-track { height: 6px; border-radius: 6px; background: linear-gradient(90deg, var(--ok) 0 42.8%, var(--blocked) 42.8% 100%); }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -10px; border-radius: 50%; background: #F5F7FB; border: 0; box-shadow: 0 2px 10px rgba(6,11,31,.45); }
-input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: #F5F7FB; border: 0; box-shadow: 0 2px 10px rgba(6,11,31,.45); }
-.tech-side { display: grid; gap: 30px; }
-.big-deg { font: 600 clamp(6rem, 16vw, 11rem)/.8 var(--f-display); letter-spacing: -.06em; }
-.big-deg sup { font-size: .42em; vertical-align: top; position: relative; top: .1em; color: var(--accent); }
-.big-deg + p { color: var(--ink-2); max-width: 36ch; }
-.facts { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
-.facts li { display: grid; grid-template-columns: 7ch 1fr; gap: 16px; padding-block: 16px; border-bottom: 1px solid var(--line); }
-.facts b { font: 500 .95rem var(--f-mono); color: var(--accent); }
-.facts span { color: var(--ink-2); font-size: .95rem; }
-@media (max-width: 900px) { .tech { grid-template-columns: 1fr; } }
+input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--ok) 0 42.8%, var(--blocked) 42.8% 100%); }
+input[type="range"]::-moz-range-track { height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--ok) 0 42.8%, var(--blocked) 42.8% 100%); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -11px; border-radius: 50%; background: #F5F7FB; border: 0; box-shadow: 0 0 0 5px var(--glow), 0 2px 10px rgba(3,6,14,.5); }
+input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: #F5F7FB; border: 0; box-shadow: 0 0 0 5px var(--glow), 0 2px 10px rgba(3,6,14,.5); }
+.how-note { color: var(--ink-3); font-size: .82rem; }
+@media (max-width: 899px) { .how .copy h2 { font-size: clamp(1.45rem, 6.2vw, 2rem); } .louvre { padding: 10px 12px 4px; } .louvre svg { max-height: 21svh; } }
 
-/* ---------- INSTALLATION ---------- */
-.steps { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 0; padding: 0; list-style: none; counter-reset: s; }
-.steps::before { content: ""; position: absolute; left: 0; right: 0; top: 30px; height: 1px; background: var(--line); }
-.steps::after { content: ""; position: absolute; left: 0; right: 0; top: 30px; height: 2px; margin-top: -.5px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(var(--draw, 1)); }
-.step { position: relative; display: grid; gap: 12px; padding-top: 0; }
-.step .n { position: relative; z-index: 1; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; font: 500 1rem var(--f-mono); background: var(--bg); border: 1px solid var(--line); color: var(--ink-2); transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease); }
-.step.on .n { background: var(--accent-solid); color: var(--accent-ink); border-color: transparent; }
-.step h3 { font-size: 1.5rem; margin-top: 10px; }
-.step p { color: var(--ink-2); max-width: 32ch; }
-.step svg { width: 38px; height: 38px; color: var(--accent); }
-@media (max-width: 760px) {
-  .steps { grid-template-columns: 1fr; gap: 34px; padding-left: 78px; }
-  .steps::before, .steps::after { left: 30px; right: auto; top: 0; bottom: 0; width: 1px; height: auto; }
-  .steps::after { width: 2px; margin: 0 0 0 -.5px; transform-origin: 50% 0; transform: scaleY(var(--draw, 1)); }
-  .step .n { position: absolute; left: -78px; top: 0; }
-  .step h3 { margin-top: 0; }
-}
+/* ---------- 4. Recharge ---------- */
+.charge-state { display: inline-flex; align-items: center; gap: 10px; justify-self: start; padding: 10px 14px; border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--glass); font: 500 .74rem var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+.charge-state .dot { background: var(--ink-3); box-shadow: none; transition: background-color .3s, box-shadow .3s; }
+.charge-state.on .dot { background: var(--live); box-shadow: 0 0 0 4px color-mix(in srgb, var(--live) 22%, transparent), 0 0 14px var(--live); }
 
-/* ---------- COMPATIBILITÉ ---------- */
-.sizes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+/* ---------- 5. Finitions ---------- */
+.swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 4px; }
+.swatch { display: grid; justify-items: center; gap: 8px; padding: 12px 6px 10px; border-radius: var(--r-md); border: 1px solid var(--line); background: var(--glass); cursor: pointer; font: 600 .78rem var(--f-body); color: var(--ink-2); transition: border-color .25s var(--ease), background-color .25s var(--ease), color .25s var(--ease), transform .2s var(--ease); min-height: 44px; }
+.swatch i { width: 34px; height: 34px; border-radius: 50%; background: var(--c); box-shadow: inset 0 1px 1px rgba(255,255,255,.55), inset 0 -2px 4px rgba(0,0,0,.35), 0 0 0 1px var(--line-2); }
+.swatch[data-finish="transparent"] i { background: linear-gradient(135deg, rgba(255,255,255,.7), rgba(190,205,255,.18) 45%, rgba(255,255,255,.5)); }
+.swatch[aria-pressed="true"] { border-color: var(--accent); background: var(--glass-2); color: var(--ink); }
+.swatch:active { transform: scale(.97); }
+.fin-note { color: var(--ink-3); font-size: .85rem; }
+
+/* ---------- 6. Tailles : planches techniques à l'échelle ---------- */
+.sizes { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.size { position: relative; display: grid; grid-template-columns: 112px 1fr; gap: 6px 18px; align-items: center; padding: 18px 20px; border-radius: var(--r-lg); }
+.size svg { grid-row: span 2; width: 100%; height: auto; overflow: visible; }
+.size .bp-grid { stroke: var(--grid); }
+.size .bp-case { fill: color-mix(in srgb, var(--accent) 7%, transparent); stroke: var(--accent); stroke-width: 1.6; }
+.size .bp-scr { fill: none; stroke: var(--line-2); stroke-dasharray: 3 3; }
+.size .bp-dim { stroke: var(--ink-3); stroke-width: 1; }
+.size .bp-txt { fill: var(--ink-3); font: 500 8px var(--f-mono); }
+.size .bp-draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.4s var(--ease-io) calc(var(--i, 0) * 120ms); }
+.size.in .bp-draw, .rm .size .bp-draw { stroke-dashoffset: 0; }
+.size .mm { font: 600 clamp(2.4rem, 5vw, 3.2rem)/1 var(--f-display); letter-spacing: -.05em; align-self: end; }
+.size .mm small { font: 500 .85rem var(--f-mono); color: var(--ink-3); margin-left: 4px; letter-spacing: 0; }
+.size p { color: var(--ink-2); font-size: .92rem; align-self: start; }
+.size.ultra .bp-case { stroke: #FF8A3D; fill: rgba(255, 138, 61, .07); }
 .sizes-note { margin-top: 18px; color: var(--ink-3); font-size: .9rem; }
-@media (max-width: 1100px) { .sizes { grid-template-columns: repeat(3, 1fr); } }
-.size { padding: 26px 22px 22px; display: grid; gap: 14px; justify-items: center; text-align: center; }
-.size svg { width: 100%; max-width: 200px; height: auto; overflow: visible; }
-.size .case { fill: var(--bg-2); stroke: var(--ink-2); stroke-width: 1.5; }
-.size .scr { fill: #05070d; }
-.size .band { fill: var(--glass-2); stroke: var(--line); }
-.size .ruler { stroke: var(--ink-3); stroke-width: 1; }
-.size .ruler-t { fill: var(--ink-3); font: 500 8px var(--f-mono); }
-.size .mm { font: 600 clamp(2.6rem, 5vw, 3.4rem)/1 var(--f-display); letter-spacing: -.04em; }
-.size .mm small { font: 500 .9rem var(--f-mono); color: var(--ink-3); margin-left: 4px; letter-spacing: 0; }
-.size p { color: var(--ink-2); font-size: .92rem; }
-.size.ultra .case { stroke: #FF8A3D; }
-@media (max-width: 760px) { .sizes { grid-template-columns: 1fr; } .size { grid-template-columns: 120px 1fr; justify-items: start; text-align: left; align-items: center; } .size svg { grid-row: span 2; } }
+@media (min-width: 900px) { .sizes { grid-template-columns: repeat(5, 1fr); gap: 14px; } .size { grid-template-columns: 1fr; justify-items: center; text-align: center; padding: 26px 18px 22px; } .size svg { grid-row: auto; max-width: 180px; } }
 
-/* ---------- LANCEMENT ---------- */
-.launch { padding: clamp(36px, 7vw, 88px) clamp(22px, 5vw, 72px); display: grid; gap: 22px; justify-items: start; overflow: hidden; }
-.launch h2 { font-size: clamp(2.4rem, 6.4vw, 5.2rem); max-width: 14ch; }
-.launch p { color: var(--ink-2); max-width: 52ch; font-size: 1.05rem; }
-.mailbox { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 6px; }
-.mail-addr { font: 500 1rem var(--f-mono); padding: 12px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--glass); user-select: all; }
-.copy-state { font-size: .85rem; color: var(--ink-3); min-height: 1.4em; }
+/* ---------- 7. Pose ---------- */
+.steps { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+.step { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: 2px 14px; padding: 14px 16px; border-radius: var(--r-md); border: 1px solid var(--line); background: var(--glass); opacity: .5; transition: opacity .4s var(--ease), border-color .4s var(--ease), background-color .4s var(--ease); overflow: hidden; }
+.step .n { grid-row: span 2; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 500 .95rem var(--f-mono); border: 1px solid var(--line-2); color: var(--ink-2); transition: background-color .3s, color .3s, border-color .3s; }
+.step h3 { font-size: 1.2rem; letter-spacing: -.02em; align-self: end; }
+.step p { color: var(--ink-2); font-size: .92rem; }
+.step::after { content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(var(--f, 0)); }
+.step.on { opacity: 1; border-color: var(--line-2); background: var(--glass-2); }
+.step.on .n, .step.done .n { background: var(--accent-solid); color: var(--accent-ink); border-color: transparent; }
+.step.done { opacity: .8; }
+.lock-chip { justify-self: start; display: inline-flex; align-items: center; gap: 10px; font: 500 .72rem var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); transition: color .3s; }
+.lock-chip .dot { background: var(--ink-3); box-shadow: none; transition: background-color .3s, box-shadow .3s; }
+.lock-chip.on { color: var(--ink); }
+.lock-chip.on .dot { background: var(--live); box-shadow: 0 0 0 4px color-mix(in srgb, var(--live) 22%, transparent), 0 0 14px var(--live); }
+@media (max-width: 899px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 6px; } .step { grid-template-columns: 1fr; justify-items: start; padding: 10px; } .step .n { width: 32px; height: 32px; font-size: .8rem; grid-row: auto; } .step h3 { font-size: .95rem; } .step p { display: none; } }
+.rm .step { opacity: 1; }
+
+/* ---------- 8. Commander ---------- */
+.buy-grid { display: grid; gap: 18px; }
+.buy-dock { position: relative; height: 46vh; height: 46svh; }
+.buy-dock .dock { position: absolute; inset: 0; }
+.buy-panel { padding: clamp(24px, 4.5vw, 52px); display: grid; gap: 18px; justify-items: start; overflow: hidden; }
+.buy-panel h2 { font-size: clamp(2.3rem, 5.6vw, 4.6rem); }
+.buy-panel > p { color: var(--ink-2); max-width: 52ch; }
+@media (min-width: 900px) {
+  .buy-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
+  .buy-dock { position: sticky; top: 12vh; height: 76vh; height: 76svh; }
+}
 .shop { width: 100%; min-height: 160px; }
 .shop-loading { color: var(--ink-3); font-size: .95rem; }
+.contact { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding-top: 18px; border-top: 1px solid var(--line); width: 100%; color: var(--ink-2); font-size: .95rem; }
+.mail-addr { font: 500 .9rem var(--f-mono); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--glass); user-select: all; }
+.copy-state { font-size: .85rem; color: var(--ink-3); min-height: 1.4em; }
 
 /* ---------- Boutique Shopify : produit ---------- */
 .shop .visuallyhidden, .shopify-buy-cart-wrapper .visuallyhidden, .shopify-buy--visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.shop .shopify-buy__product { display: grid; grid-template-columns: minmax(0, 220px) 1fr; grid-template-rows: auto auto auto 1fr; column-gap: 28px; row-gap: 12px; align-items: start; text-align: left; font-family: var(--f-body); }
-.shop .shopify-buy__product-img-wrapper { grid-row: 1 / span 4; margin: 0; border-radius: 22px; overflow: hidden; background: var(--glass-2); border: 1px solid var(--edge-2); aspect-ratio: 1; }
+.shop .shopify-buy__product { display: grid; grid-template-columns: minmax(0, 180px) 1fr; grid-template-rows: auto auto auto 1fr; column-gap: 24px; row-gap: 12px; align-items: start; text-align: left; font-family: var(--f-body); }
+.shop .shopify-buy__product-img-wrapper { grid-row: 1 / span 4; margin: 0; border-radius: 20px; overflow: hidden; background: var(--glass-2); border: 1px solid var(--edge-2); aspect-ratio: 1; }
 .shop .shopify-buy__product__variant-img { display: block; width: 100%; height: 100%; object-fit: cover; margin: 0; }
-.shop .shopify-buy__product__title { margin: 4px 0 0; font: 600 clamp(1.4rem, 2.6vw, 1.9rem)/1.1 var(--f-display); letter-spacing: -.025em; color: var(--ink); text-wrap: balance; }
+.shop .shopify-buy__product__title { margin: 2px 0 0; font: 600 clamp(1.25rem, 2.2vw, 1.6rem)/1.15 var(--f-display); letter-spacing: -.02em; color: var(--ink); text-wrap: balance; }
 .shop .shopify-buy__product__price { margin: 0; display: flex; align-items: baseline; gap: 10px; }
 .shop .shopify-buy__product__actual-price { font: 500 1.35rem var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
 .shop .shopify-buy__product__compare-price { font: 500 1rem var(--f-mono); color: var(--ink-3); text-decoration: line-through; }
 .shop .shopify-buy__product__unit-price { font-size: .8rem; color: var(--ink-3); }
 .shop .shopify-buy__product__variant-selectors { display: grid; gap: 10px; margin: 0; }
 .shop .shopify-buy__option-select { margin: 0; }
-.shop .shopify-buy__option-select__label { display: block; margin-bottom: 6px; font: 500 .74rem var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.shop .shopify-buy__option-select__label { display: block; margin-bottom: 6px; font: 500 .72rem var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
 .shop .shopify-buy__option-select-wrapper { position: relative; border: 1px solid var(--line); border-radius: 14px; background: var(--glass); overflow: hidden; }
 .shop .shopify-buy__option-select__select { -webkit-appearance: none; appearance: none; width: 100%; min-height: 48px; padding: 0 44px 0 16px; border: 0; background: transparent; color: var(--ink); font: 600 1rem var(--f-body); cursor: pointer; }
 .shop .shopify-buy__option-select__select option { color: #0B1330; }
@@ -359,7 +412,7 @@ input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius
 .shop .shopify-buy__btn, .shopify-buy-cart-wrapper .shopify-buy__btn--cart-checkout {
   display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; padding: 0 24px;
   border: 0; border-radius: var(--r-pill); cursor: pointer; background: var(--accent-solid); color: var(--accent-ink);
-  font: 600 1rem/1 var(--f-body); box-shadow: 0 10px 30px -12px rgba(94,139,255,.7), inset 0 1px 0 rgba(255,255,255,.5);
+  font: 600 1rem/1 var(--f-body); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 12px 34px -12px var(--glow);
   transition: transform .2s var(--ease), opacity .2s var(--ease);
 }
 .shop .shopify-buy__btn:active, .shopify-buy-cart-wrapper .shopify-buy__btn--cart-checkout:active { transform: scale(.97); }
@@ -368,7 +421,7 @@ input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius
 .shop .shopify-buy__btn:focus-visible, .shopify-buy__cart-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 @media (max-width: 600px) {
   .shop .shopify-buy__product { grid-template-columns: 1fr; }
-  .shop .shopify-buy__product-img-wrapper { grid-row: auto; max-width: 260px; }
+  .shop .shopify-buy__product-img-wrapper { grid-row: auto; max-width: 220px; }
 }
 
 /* ---------- Boutique Shopify : panier (tiroir en verre) ---------- */
@@ -380,7 +433,7 @@ input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius
 .shopify-buy-cart-wrapper.is-active { transform: none; visibility: visible; transition: transform .45s var(--ease), visibility 0s; }
 .shopify-buy__cart {
   height: 100%; display: flex; flex-direction: column; color: var(--ink); font-family: var(--f-body);
-  background: color-mix(in oklab, var(--bg-2) 72%, transparent); -webkit-backdrop-filter: blur(30px) saturate(180%); backdrop-filter: blur(30px) saturate(180%);
+  background: color-mix(in oklab, var(--bg-2) 78%, transparent); -webkit-backdrop-filter: blur(30px) saturate(180%); backdrop-filter: blur(30px) saturate(180%);
   border: 1px solid var(--edge-2); border-radius: 26px; box-shadow: inset 0 1px 0 var(--edge), var(--shadow); overflow: hidden;
 }
 .shopify-buy__cart__header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 16px 22px; border-bottom: 1px solid var(--line); }
@@ -408,74 +461,73 @@ input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius
 .shopify-buy-cart-wrapper .shopify-buy__btn--cart-checkout { grid-column: 1 / -1; }
 .shopify-buy__cart__discount { grid-column: 1 / -1; display: flex; justify-content: space-between; font-size: .88rem; color: var(--ink-2); }
 .shopify-buy__cart__discount__text__icon, .shopify-buy__cart-item__discount__icon { width: 12px; height: 12px; fill: currentColor; }
-
-/* ---------- Boutique Shopify : bouton panier flottant ---------- */
 .shopify-buy__cart-toggle {
   position: fixed; z-index: 55; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 18px);
   display: none; align-items: center; gap: 8px; height: 52px; padding: 0 18px 0 16px; border: 1px solid var(--edge-2); border-radius: var(--r-pill);
-  background: var(--accent-solid); color: var(--accent-ink); cursor: pointer; box-shadow: 0 14px 34px -12px rgba(6,11,31,.6), inset 0 1px 0 rgba(255,255,255,.5);
+  background: var(--accent-solid); color: var(--accent-ink); cursor: pointer; box-shadow: 0 14px 34px -12px rgba(3,6,14,.6), inset 0 1px 0 rgba(255,255,255,.5);
   font: 600 .95rem var(--f-body);
 }
 .is-active > .shopify-buy__cart-toggle, .is-active .shopify-buy__cart-toggle { display: inline-flex; }
 .shopify-buy__icon-cart { width: 20px; height: 20px; fill: currentColor; }
 .shopify-buy__cart-toggle__count { min-width: 22px; height: 22px; padding: 0 6px; border-radius: var(--r-pill); display: grid; place-items: center; background: var(--accent-ink); color: var(--accent-solid); font: 600 .78rem var(--f-mono); }
-.contact { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding-top: 18px; border-top: 1px solid var(--line); width: 100%; color: var(--ink-2); font-size: .95rem; }
-.contact .mail-addr { font-size: .9rem; padding: 8px 12px; }
-.btn-sm { min-height: 40px; padding: 0 16px; font-size: .88rem; }
-.launch .glyph { position: absolute; right: -50px; bottom: -90px; width: 340px; height: auto; opacity: .1; pointer-events: none; }
 
+/* ---------- Pied de page ---------- */
 footer { padding-block: 40px 56px; color: var(--ink-3); font-size: .86rem; }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; border-top: 1px solid var(--line); padding-top: 24px; }
 footer b { color: var(--ink); font-family: var(--f-display); }
 footer a { color: var(--ink-2); text-underline-offset: 3px; }
 footer a:hover { color: var(--ink); }
 
+/* ---------- Apparitions au défilement ---------- */
+.js [data-rv] { opacity: 0; transform: translate3d(0, 26px, 0); transition: opacity .9s var(--ease) calc(var(--i, 0) * 90ms), transform .9s var(--ease) calc(var(--i, 0) * 90ms); }
+.js [data-rv].in { opacity: 1; transform: none; }
+.w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.w > span { display: inline-block; transform: translate3d(0, 105%, 0); transition: transform 1s var(--ease) calc(var(--i, 0) * 55ms); }
+.in .w > span, .w.in > span { transform: none; }
+
 /* ---------- Mouvement réduit ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .mesh i, .ticker-track, .scroll-cue i { animation: none !important; }
-  .hero { height: auto; } .hero .stage { position: relative; height: 92svh; }
-  .pack { height: auto; } .pack .stage { position: relative; height: 100svh; }
-  .rv { transform: none; opacity: 1; }
-  .btn, .step .n { transition: none; }
+  .ticker-track, .scroll-cue i, .intro-bar i { animation: none !important; }
+  .js [data-rv], .w > span { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .btn, .swatch, .step, .parts li { transition: none; }
 }
 </style>
 </head>
 <body>
-<div class="loader" id="loader" role="status" aria-live="polite">
-  <div class="loader-in">
-    <svg class="logo" viewBox="0 0 249 295" aria-hidden="true"><path class="lg-shield" fill-rule="evenodd" d="M124.0 1.0 L1.9 55.6 L0.9 58.4 L0.9 115.5 L2.0 119.2 L2.0 131.6 L3.0 134.2 L3.0 140.6 L8.1 165.1 L15.2 185.5 L25.2 205.5 L32.5 216.9 L48.1 236.6 L74.0 261.4 L99.4 279.6 L114.4 288.6 L125.4 293.6 L145.5 282.6 L163.9 270.4 L184.9 253.4 L202.4 235.9 L214.4 220.9 L231.4 196.0 L235.5 192.6 L236.9 180.2 L242.5 159.2 L240.6 158.0 L158.2 158.0 L155.6 159.0 L145.5 159.4 L125.6 191.9 L125.8 193.6 L187.4 193.9 L188.6 195.5 L177.5 210.9 L159.9 228.5 L141.9 242.5 L129.5 250.8 L124.1 252.6 L105.0 240.5 L93.0 231.5 L82.2 221.9 L68.4 206.9 L62.4 198.9 L52.1 182.5 L47.1 171.5 L42.0 157.1 L37.9 137.6 L37.9 132.2 L36.9 129.6 L36.9 119.2 L35.9 116.6 L36.2 80.2 L50.4 73.1 L123.2 40.9 L126.6 40.9 L212.2 78.9 L232.6 77.9 L245.8 81.8 L247.4 81.5 L248.0 79.4 L247.6 55.6 L147.5 10.2 L126.2 1.1Z"/><path class="lg-bar" d="M114.1 136.9 L115.5 137.9 L209.6 137.9 L212.2 138.9 L232.6 138.9 L237.9 137.8 L247.9 119.9 L247.9 103.2 L246.4 102.0 L135.0 102.1 L130.1 108.8 L129.2 111.5 L114.5 135.0Z"/><path class="lg-tip" d="M246.6 124.8 L244.5 126.0 L237.9 137.9 L232.6 139.0 L211.1 139.2 L209.0 143.2 L206.8 157.2 L207.9 157.9 L243.2 158.1 L243.9 152.2 L245.9 145.6 L246.9 135.2 L247.9 132.9 L247.9 128.0Z M248.8 102.5 L248.0 104.5 L248.0 116.4 L248.9 118.4Z"/></svg>
-    <span class="loader-bar" aria-hidden="true"><i></i></span>
-    <span class="sr-only">Loading Guardess</span>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-core">
+    <p class="intro-word" id="intro-word">GUARDESS</p>
+    <p class="intro-sub mono">Privacy case · Apple Watch</p>
+    <span class="intro-bar"><i></i></span>
   </div>
+  <i class="intro-scan"></i>
 </div>
-<noscript><style>.loader { display: none !important; } html:not(.is-ready) body { overflow: auto !important; }</style></noscript>
-<script>
-/* Loader : se retire au premier rendu de la montre 3D (événement « guardess:ready »),
-   au plus tard après 4 s, et jamais avant 700 ms pour éviter un flash. */
-(function () {
-  var t0 = performance.now(), done = false;
-  function ready() {
-    if (done) return; done = true;
-    var wait = Math.max(0, 700 - (performance.now() - t0));
-    setTimeout(function () { document.documentElement.classList.add('is-ready'); }, wait);
-  }
-  addEventListener('guardess:ready', ready);
-  addEventListener('load', function () { setTimeout(ready, 1500); });
-  setTimeout(ready, 4000);
-})();
-</script>
-<div class="mesh" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<svg class="intro-logo logo" id="intro-logo" viewBox="0 0 249 295" aria-hidden="true"><path class="lg-shield" fill-rule="evenodd" d="M124.0 1.0 L1.9 55.6 L0.9 58.4 L0.9 115.5 L2.0 119.2 L2.0 131.6 L3.0 134.2 L3.0 140.6 L8.1 165.1 L15.2 185.5 L25.2 205.5 L32.5 216.9 L48.1 236.6 L74.0 261.4 L99.4 279.6 L114.4 288.6 L125.4 293.6 L145.5 282.6 L163.9 270.4 L184.9 253.4 L202.4 235.9 L214.4 220.9 L231.4 196.0 L235.5 192.6 L236.9 180.2 L242.5 159.2 L240.6 158.0 L158.2 158.0 L155.6 159.0 L145.5 159.4 L125.6 191.9 L125.8 193.6 L187.4 193.9 L188.6 195.5 L177.5 210.9 L159.9 228.5 L141.9 242.5 L129.5 250.8 L124.1 252.6 L105.0 240.5 L93.0 231.5 L82.2 221.9 L68.4 206.9 L62.4 198.9 L52.1 182.5 L47.1 171.5 L42.0 157.1 L37.9 137.6 L37.9 132.2 L36.9 129.6 L36.9 119.2 L35.9 116.6 L36.2 80.2 L50.4 73.1 L123.2 40.9 L126.6 40.9 L212.2 78.9 L232.6 77.9 L245.8 81.8 L247.4 81.5 L248.0 79.4 L247.6 55.6 L147.5 10.2 L126.2 1.1Z"/><path class="lg-bar" d="M114.1 136.9 L115.5 137.9 L209.6 137.9 L212.2 138.9 L232.6 138.9 L237.9 137.8 L247.9 119.9 L247.9 103.2 L246.4 102.0 L135.0 102.1 L130.1 108.8 L129.2 111.5 L114.5 135.0Z"/><path class="lg-tip" d="M246.6 124.8 L244.5 126.0 L237.9 137.9 L232.6 139.0 L211.1 139.2 L209.0 143.2 L206.8 157.2 L207.9 157.9 L243.2 158.1 L243.9 152.2 L245.9 145.6 L246.9 135.2 L247.9 132.9 L247.9 128.0Z M248.8 102.5 L248.0 104.5 L248.0 116.4 L248.9 118.4Z"/></svg>
+<button class="intro-skip" id="intro-skip" type="button">Skip intro</button>
+<noscript><style>.intro, .intro-logo, .intro-skip { display: none !important; } .nav-wrap { opacity: 1 !important; transform: none !important; }</style></noscript>
+
+<div class="bg" aria-hidden="true"></div>
+<div class="glow" id="glow" aria-hidden="true"></div>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="hud-layer" aria-hidden="true">
+  <div class="lock" id="lock"><i></i><i></i><i></i><i></i><span class="lock-tag mono" id="lock-tag">GDS·45 / PRIVACY ON</span></div>
+  <div class="callout" id="co-glass"><b></b><span><em>01</em> Privacy glass · 9H</span></div>
+  <div class="callout" id="co-bumper"><b></b><span><em>02</em> Rigid bumper</span></div>
+  <div class="callout" id="co-open"><b></b><span><em>03</em> Crown + button free</span></div>
+</div>
 <div class="grain" aria-hidden="true"></div>
 <div class="progress" aria-hidden="true"><i id="progress"></i></div>
 
 <header class="nav-wrap">
   <nav class="nav glass" aria-label="Navigation">
     <a class="brand" href="#top">
-      <svg class="logo" viewBox="0 0 249 295" aria-hidden="true"><path class="lg-shield" fill-rule="evenodd" d="M124.0 1.0 L1.9 55.6 L0.9 58.4 L0.9 115.5 L2.0 119.2 L2.0 131.6 L3.0 134.2 L3.0 140.6 L8.1 165.1 L15.2 185.5 L25.2 205.5 L32.5 216.9 L48.1 236.6 L74.0 261.4 L99.4 279.6 L114.4 288.6 L125.4 293.6 L145.5 282.6 L163.9 270.4 L184.9 253.4 L202.4 235.9 L214.4 220.9 L231.4 196.0 L235.5 192.6 L236.9 180.2 L242.5 159.2 L240.6 158.0 L158.2 158.0 L155.6 159.0 L145.5 159.4 L125.6 191.9 L125.8 193.6 L187.4 193.9 L188.6 195.5 L177.5 210.9 L159.9 228.5 L141.9 242.5 L129.5 250.8 L124.1 252.6 L105.0 240.5 L93.0 231.5 L82.2 221.9 L68.4 206.9 L62.4 198.9 L52.1 182.5 L47.1 171.5 L42.0 157.1 L37.9 137.6 L37.9 132.2 L36.9 129.6 L36.9 119.2 L35.9 116.6 L36.2 80.2 L50.4 73.1 L123.2 40.9 L126.6 40.9 L212.2 78.9 L232.6 77.9 L245.8 81.8 L247.4 81.5 L248.0 79.4 L247.6 55.6 L147.5 10.2 L126.2 1.1Z"/><path class="lg-bar" d="M114.1 136.9 L115.5 137.9 L209.6 137.9 L212.2 138.9 L232.6 138.9 L237.9 137.8 L247.9 119.9 L247.9 103.2 L246.4 102.0 L135.0 102.1 L130.1 108.8 L129.2 111.5 L114.5 135.0Z"/><path class="lg-tip" d="M246.6 124.8 L244.5 126.0 L237.9 137.9 L232.6 139.0 L211.1 139.2 L209.0 143.2 L206.8 157.2 L207.9 157.9 L243.2 158.1 L243.9 152.2 L245.9 145.6 L246.9 135.2 L247.9 132.9 L247.9 128.0Z M248.8 102.5 L248.0 104.5 L248.0 116.4 L248.9 118.4Z"/></svg>
+      <svg class="logo" id="nav-logo" viewBox="0 0 249 295" aria-hidden="true"><path class="lg-shield" fill-rule="evenodd" d="M124.0 1.0 L1.9 55.6 L0.9 58.4 L0.9 115.5 L2.0 119.2 L2.0 131.6 L3.0 134.2 L3.0 140.6 L8.1 165.1 L15.2 185.5 L25.2 205.5 L32.5 216.9 L48.1 236.6 L74.0 261.4 L99.4 279.6 L114.4 288.6 L125.4 293.6 L145.5 282.6 L163.9 270.4 L184.9 253.4 L202.4 235.9 L214.4 220.9 L231.4 196.0 L235.5 192.6 L236.9 180.2 L242.5 159.2 L240.6 158.0 L158.2 158.0 L155.6 159.0 L145.5 159.4 L125.6 191.9 L125.8 193.6 L187.4 193.9 L188.6 195.5 L177.5 210.9 L159.9 228.5 L141.9 242.5 L129.5 250.8 L124.1 252.6 L105.0 240.5 L93.0 231.5 L82.2 221.9 L68.4 206.9 L62.4 198.9 L52.1 182.5 L47.1 171.5 L42.0 157.1 L37.9 137.6 L37.9 132.2 L36.9 129.6 L36.9 119.2 L35.9 116.6 L36.2 80.2 L50.4 73.1 L123.2 40.9 L126.6 40.9 L212.2 78.9 L232.6 77.9 L245.8 81.8 L247.4 81.5 L248.0 79.4 L247.6 55.6 L147.5 10.2 L126.2 1.1Z"/><path class="lg-bar" d="M114.1 136.9 L115.5 137.9 L209.6 137.9 L212.2 138.9 L232.6 138.9 L237.9 137.8 L247.9 119.9 L247.9 103.2 L246.4 102.0 L135.0 102.1 L130.1 108.8 L129.2 111.5 L114.5 135.0Z"/><path class="lg-tip" d="M246.6 124.8 L244.5 126.0 L237.9 137.9 L232.6 139.0 L211.1 139.2 L209.0 143.2 L206.8 157.2 L207.9 157.9 L243.2 158.1 L243.9 152.2 L245.9 145.6 L246.9 135.2 L247.9 132.9 L247.9 128.0Z M248.8 102.5 L248.0 104.5 L248.0 116.4 L248.9 118.4Z"/></svg>
       Guardess
     </a>
     <ul>
-      <li><a href="#pack">The pack</a></li>
+      <li><a href="#pack">The case</a></li>
       <li><a href="#technologie">How it works</a></li>
       <li><a href="#compatibilite">Sizes</a></li>
       <li><a class="cta" href="#lancement">Buy</a></li>
@@ -483,187 +535,223 @@ footer a:hover { color: var(--ink); }
   </nav>
 </header>
 
-<main id="top">
-  <!-- 1. HERO -->
-  <section class="hero" id="hero" aria-label="Introduction">
+<main id="main">
+  <!-- 1. HERO : la confidentialité en tournant la montre -->
+  <section class="hero pin" id="top" data-pin="hero" style="--len: 250" aria-label="Introduction">
     <div class="stage">
-      <canvas id="hero-canvas" role="img" aria-label="Apple Watch turning from a front view to a side view"></canvas>
-      <div class="hero-ui wrap">
-        <div class="beats" id="beats">
+      <div class="dock" data-station="hero" role="img" aria-label="Apple Watch wearing the Guardess case, turning from a front view to a side view: the screen goes dark as the angle grows.">
+        <img class="still" data-src="assets/img/still-hero.webp" alt="" width="900" height="900">
+      </div>
+      <div class="copy">
+        <div class="beats">
           <div class="beat-stack">
-          <article class="beat" data-beat="0">
-            <span class="tag glass"><b>NEW</b> Privacy screen + case for Apple Watch</span>
-            <h1>Your wrist, your eyes only.</h1>
-            <p>A 9H tempered-glass privacy screen and a fitted rigid case. Your screen stays clear for you and turns dark for everyone around you.</p>
-            <div class="actions">
-              <a class="btn btn-solid" href="#lancement">Get your pack
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-              <a class="btn btn-glass" href="#technologie">How it works</a>
-            </div>
-          </article>
-          <article class="beat" data-beat="1" aria-hidden="true">
-            <h2>Head-on, everything is clear.</h2>
-            <p>10:09 and a message from Lea. When you look straight at your wrist, the screen reads exactly as it should.</p>
-          </article>
-          <article class="beat" data-beat="2" aria-hidden="true">
-            <h2>From the side, a dark screen.</h2>
-            <p>On the train, in a meeting, at the table: the person next to you sees a dark surface. Notifications, messages and codes stay between you and your watch.</p>
-          </article>
+            <article class="beat" data-beat="0">
+              <span class="status hx" style="--d: 0"><i class="dot"></i>Privacy case for Apple Watch</span>
+              <h1 class="hx" style="--d: 80">Your wrist, your eyes only.</h1>
+              <p class="lead hx" style="--d: 160">A privacy tempered glass and a rigid bumper, made as one piece. Clear when you look at it, dark for everyone beside you.</p>
+              <div class="actions hx" style="--d: 240">
+                <a class="btn btn-solid" href="#lancement">Get your Guardess
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                <a class="btn btn-ghost" href="#technologie">How it works</a>
+              </div>
+            </article>
+            <article class="beat" data-beat="1" aria-hidden="true">
+              <h2>Head-on, it reads as usual.</h2>
+              <p class="lead">10:09 and a message from Lea. When you look straight at your wrist, nothing changes.</p>
+            </article>
+            <article class="beat" data-beat="2" aria-hidden="true">
+              <h2>From the side, it goes dark.</h2>
+              <p class="lead">On the subway, at the office or in class, the person next to you sees a dark screen.</p>
+            </article>
           </div>
-          <div class="hud" role="img" aria-label="Viewing angle of the screen">
+          <div class="gauge hx" style="--d: 320" role="img" aria-label="Viewing angle of the screen">
             <svg viewBox="0 0 116 66" aria-hidden="true">
-              <path class="arc-ok" d="M 58 8 A 50 50 0 0 1 83 14.7" fill="none" stroke-width="5" stroke-linecap="round"/>
-              <path class="arc-blocked" d="M 86.5 16.8 A 50 50 0 0 1 108 58" fill="none" stroke-width="5" stroke-linecap="round"/>
-              <path class="arc-ok" d="M 58 8 A 50 50 0 0 0 33 14.7" fill="none" stroke-width="5" stroke-linecap="round"/>
-              <path class="arc-blocked" d="M 29.5 16.8 A 50 50 0 0 0 8 58" fill="none" stroke-width="5" stroke-linecap="round"/>
+              <path class="arc-ok" d="M 58 8 A 50 50 0 0 1 83 14.7" fill="none" stroke-width="4" stroke-linecap="round"/>
+              <path class="arc-blocked" d="M 86.5 16.8 A 50 50 0 0 1 108 58" fill="none" stroke-width="4" stroke-linecap="round"/>
+              <path class="arc-ok" d="M 58 8 A 50 50 0 0 0 33 14.7" fill="none" stroke-width="4" stroke-linecap="round"/>
+              <path class="arc-blocked" d="M 29.5 16.8 A 50 50 0 0 0 8 58" fill="none" stroke-width="4" stroke-linecap="round"/>
               <line class="needle" id="needle" x1="58" y1="58" x2="58" y2="16"/>
               <circle class="hub" cx="58" cy="58" r="4"/>
-              <text class="tick" x="58" y="4" text-anchor="middle">0°</text>
-              <text class="tick" x="112" y="64" text-anchor="end">90°</text>
+              <text class="tick" x="58" y="3" text-anchor="middle">0°</text>
+              <text class="tick" x="114" y="64" text-anchor="end">90°</text>
             </svg>
-            <div class="hud-read"><span class="deg mono" id="hud-deg">0°</span><span class="state" id="hud-state">Head-on · clear</span></div>
+            <div class="gauge-read"><span class="lbl mono">VIEW ANGLE</span><span class="deg mono" id="g-deg">10°</span><span class="state" id="g-state">Head-on · clear</span></div>
           </div>
         </div>
       </div>
-      <div class="scroll-cue" aria-hidden="true">Scroll<i></i></div>
+      <div class="scroll-cue hx" style="--d: 500" aria-hidden="true">Scroll<i></i></div>
     </div>
   </section>
 
   <div class="ticker" aria-hidden="true">
-    <div class="ticker-track">
-      <span>9H tempered glass</span><span>Privacy filter</span><span>Rigid fitted case</span><span>40 · 41 · 44 · 45 · 49 mm</span><span>Easy to fit</span>
-      <span>9H tempered glass</span><span>Privacy filter</span><span>Rigid fitted case</span><span>40 · 41 · 44 · 45 · 49 mm</span><span>Easy to fit</span>
+    <div class="ticker-track" id="ticker">
+      <span>Privacy tempered glass</span><span>9H hardness</span><span>Glass + bumper in one piece</span><span>Snaps on in seconds</span><span>Charge with it on</span><span>40 · 41 · 44 · 45 · 49 mm</span>
+      <span>Privacy tempered glass</span><span>9H hardness</span><span>Glass + bumper in one piece</span><span>Snaps on in seconds</span><span>Charge with it on</span><span>40 · 41 · 44 · 45 · 49 mm</span>
     </div>
   </div>
 
-  <!-- 2. LE PACK : vue éclatée -->
-  <section class="pack" id="pack" aria-labelledby="pack-title">
-    <div class="stage">
-      <canvas id="pack-canvas" aria-hidden="true"></canvas>
-      <div class="callouts" aria-hidden="true">
-        <div class="callout" id="c-glass"><i></i><b></b><span>9H privacy glass</span></div>
-        <div class="callout" id="c-watch"><i></i><b></b><span>Your Apple Watch</span></div>
-        <div class="callout" id="c-case"><i></i><b></b><span>Rigid fitted case</span></div>
-      </div>
-      <div class="pack-ui wrap">
-        <div class="pack-copy">
-          <span class="kicker">The pack</span>
-          <h2 id="pack-title">Two pieces that lock around your watch.</h2>
-          <p>The case frames the watch and the screen sits inside it.</p>
-          <article class="piece glass rv">
-            <h3>Privacy screen</h3>
-            <p>Tempered glass with a built-in privacy filter.</p>
-            <div class="spec"><span>9H hardness</span><span>Privacy filter</span></div>
-          </article>
-          <article class="piece glass rv">
-            <h3>Rigid case</h3>
-            <p>Covers the edges of the case, with the crown and side button left free.</p>
-            <div class="spec"><span>Made per case size</span></div>
-          </article>
+  <!-- 2. UNE SEULE PIÈCE : vue éclatée -->
+  <section id="pack" aria-labelledby="pack-title">
+    <div class="pin" data-pin="explode" style="--len: 290">
+      <div class="stage flip">
+        <div class="dock" data-station="explode" role="img" aria-label="The Guardess case lifts off the watch: privacy glass and rigid bumper in a single piece, open on the right for the crown and side button. Then it snaps back on.">
+          <img class="still" data-src="assets/img/still-explode.webp" alt="" width="900" height="900">
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. LA TECHNOLOGIE -->
-  <section class="sec" id="technologie" aria-labelledby="tech-title">
-    <div class="wrap">
-      <header class="sec-head rv">
-        <span class="kicker">How it works</span>
-        <h2 id="tech-title">Clear head-on, dark from the side.</h2>
-        <p>A privacy filter narrows the angle the screen can be read from. Light leaving the screen straight ahead gets through. Light leaving at a steep angle is blocked, so people beside you see a dark surface.</p>
-      </header>
-      <div class="tech">
-        <figure class="tech-fig glass rv">
-          <svg id="louvre-svg" viewBox="0 0 360 230" role="img" aria-labelledby="lv-t">
-            <title id="lv-t">Simplified illustration of a privacy filter: straight light passes, light at a steep angle is blocked.</title>
-            <defs><linearGradient id="px" x1="0" x2="1"><stop offset="0" stop-color="#2F5EFF"/><stop offset=".5" stop-color="#7A6CFF"/><stop offset="1" stop-color="#5E8BFF"/></linearGradient></defs>
-            <line class="axis" x1="180" y1="10" x2="180" y2="150"/>
-            <g id="rays"></g>
-            <g id="louvres"></g>
-            <rect x="6" y="198" width="348" height="10" rx="5" fill="url(#px)"/>
-            <text class="lbl" x="6" y="224">PIXELS</text>
-            <text class="lbl" x="354" y="224" text-anchor="end">ILLUSTRATION, NOT TO SCALE</text>
-          </svg>
-          <div class="tech-ctrl">
-            <label for="angle">Viewing angle</label>
-            <input id="angle" type="range" min="0" max="70" value="0" step="1">
-            <output id="angle-out" for="angle" class="mono">0°</output>
-          </div>
-        </figure>
-        <div class="tech-side">
-          <div class="rv">
-            <div class="big-deg">9H</div>
-            <p>Tempered-glass hardness rating, with the privacy filter built into the glass.</p>
-          </div>
-          <ul class="facts rv">
-            <li><b>Head-on</b><span>What you see: your screen, readable as usual.</span></li>
-            <li><b>Angled</b><span>The screen gets darker as the angle grows.</span></li>
-            <li><b>Side</b><span>What the person next to you sees: a dark surface.</span></li>
+        <div class="copy">
+          <span class="kicker" data-scramble>01 · One piece</span>
+          <h2 id="pack-title" data-split>Glass and bumper. One piece.</h2>
+          <p class="lead opt">The privacy glass is built into a rigid bumper that wraps the edges of your watch. Nothing to stick on your screen: it snaps on in seconds.</p>
+          <ul class="parts" id="parts">
+            <li><b>Privacy glass</b><span>Tempered, 9H hardness, with the privacy filter built in.</span></li>
+            <li><b>Rigid bumper</b><span>Wraps the edges of the case and holds the glass.</span></li>
+            <li><b>Open side</b><span>The crown and side button stay free.</span></li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 4. INSTALLATION -->
-  <section class="sec" id="installation" aria-labelledby="inst-title" style="padding-top:0">
+  <!-- Chiffres clés -->
+  <section class="sec" aria-labelledby="specs-title">
     <div class="wrap">
-      <header class="sec-head rv">
-        <span class="kicker">Installation</span>
-        <h2 id="inst-title">Three steps to fit it.</h2>
+      <header class="sec-head">
+        <span class="kicker" data-scramble>Specs</span>
+        <h2 id="specs-title" data-split>Made to disappear on your wrist.</h2>
       </header>
-      <ol class="steps" id="steps">
-        <li class="step">
-          <span class="n">1</span>
-          <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="10" y="6" width="20" height="26" rx="7" stroke="currentColor" stroke-width="2"/><path d="M15 16l3-3m1 8 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M33 4v5m-2.5-2.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <h3>Clean</h3>
-          <p>Wipe the screen and remove any dust so nothing gets trapped under the glass.</p>
-        </li>
-        <li class="step">
-          <span class="n">2</span>
-          <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="10" y="7" width="20" height="26" rx="7" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><circle cx="20" cy="20" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M20 1v6m0 26v6M1 20h6m26 0h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <h3>Align</h3>
-          <p>Line the screen up with the watch face, crown on the right.</p>
-        </li>
-        <li class="step">
-          <span class="n">3</span>
-          <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="10" y="13" width="20" height="24" rx="7" stroke="currentColor" stroke-width="2"/><path d="M20 2v8m-4-4 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h3>Press</h3>
-          <p>Press firmly all around the edge until it sits flat. Done.</p>
-        </li>
-      </ol>
+      <div class="specs">
+        <article class="spec glass frame" data-rv style="--i: 0"><span class="mono">Glass</span><p class="num" data-count="9" data-suffix="H">9<small>H</small></p><p>Hardness rating of the tempered glass.</p></article>
+        <article class="spec glass frame" data-rv style="--i: 1"><span class="mono">Build</span><p class="num" data-count="1">1</p><p>Piece: glass and bumper together.</p></article>
+        <article class="spec glass frame" data-rv style="--i: 2"><span class="mono">Sizes</span><p class="num" data-count="5">5</p><p>Case sizes, from 40 to 49 mm.</p></article>
+        <article class="spec glass frame" data-rv style="--i: 3"><span class="mono">Finishes</span><p class="num" data-count="4">4</p><p>Black, Transparent, Starlight and Silver.</p></article>
+      </div>
     </div>
   </section>
 
-  <!-- 5. COMPATIBILITÉ -->
-  <section class="sec" id="compatibilite" aria-labelledby="cmp-title" style="padding-top:0">
+  <!-- 3. LE FILTRE : schéma + montre pilotés par l'angle -->
+  <section class="how" id="technologie" aria-labelledby="how-title">
+    <div class="pin" data-pin="tilt" style="--len: 200">
+      <div class="stage">
+        <div class="dock" data-station="tilt" role="img" aria-label="The watch turns with the viewing angle: the screen stays readable head-on and darkens from the side.">
+          <img class="still" data-src="assets/img/still-tilt.webp" alt="" width="900" height="900">
+        </div>
+        <div class="copy">
+          <span class="kicker" data-scramble>02 · Privacy filter</span>
+          <h2 id="how-title" data-split>Clear head-on, dark from the side.</h2>
+          <p class="lead opt">A privacy filter narrows the angle the screen can be read from. Light leaving the screen straight ahead gets through. Light leaving at a steep angle is blocked.</p>
+          <figure class="louvre glass">
+            <svg id="louvre-svg" viewBox="0 0 360 230" role="img" aria-labelledby="lv-t">
+              <title id="lv-t">Simplified illustration of a privacy filter: straight light passes, light at a steep angle is blocked.</title>
+              <defs><linearGradient id="px" x1="0" x2="1"><stop offset="0" stop-color="#2F5EFF"/><stop offset=".5" stop-color="#7A6CFF"/><stop offset="1" stop-color="#5E8BFF"/></linearGradient></defs>
+              <line class="axis" x1="180" y1="10" x2="180" y2="150"/>
+              <g id="rays"></g>
+              <g id="louvres"></g>
+              <rect x="6" y="198" width="348" height="10" rx="5" fill="url(#px)"/>
+              <text class="lbl" x="6" y="224">PIXELS</text>
+              <text class="lbl" x="354" y="224" text-anchor="end">ILLUSTRATION, NOT TO SCALE</text>
+            </svg>
+            <div class="ctrl">
+              <label for="angle">Viewing angle</label>
+              <input id="angle" type="range" min="0" max="70" value="0" step="1">
+              <output id="angle-out" for="angle" class="mono">0°</output>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. RECHARGE : fond ouvert -->
+  <section aria-labelledby="charge-title">
+    <div class="pin" data-pin="charge" style="--len: 230">
+      <div class="stage">
+        <div class="dock" data-station="charge" role="img" aria-label="The watch turns to show its back: the case leaves it open, the charger connects and the watch charges with the case on.">
+          <img class="still" data-src="assets/img/still-charge.webp" alt="" width="900" height="900">
+        </div>
+        <div class="copy">
+          <span class="kicker" data-scramble>03 · Open back</span>
+          <h2 id="charge-title" data-split>Charge it with the case on.</h2>
+          <p class="lead opt">The back stays open, so your charger connects as usual and the sensors stay against your wrist.</p>
+          <p class="charge-state" id="charge-state"><i class="dot"></i><span id="charge-text">Back open</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. FINITIONS -->
+  <section aria-labelledby="fin-title">
+    <div class="pin" data-pin="finish" style="--len: 160">
+      <div class="stage flip">
+        <div class="dock" data-station="finish" role="img" aria-label="The Guardess case in the selected finish.">
+          <img class="still" id="finish-still" data-src="assets/img/still-finish-silver.webp" alt="" width="900" height="900">
+        </div>
+        <div class="copy">
+          <span class="kicker" data-scramble>04 · Finishes</span>
+          <h2 id="fin-title" data-split>Four finishes.</h2>
+          <p class="lead opt">Pick the bumper that suits your watch. Your choice carries over to the order form below.</p>
+          <div class="swatches" role="group" aria-label="Case finish">
+            <button class="swatch" type="button" data-finish="black" aria-pressed="false" style="--c: #0d0e11"><i></i>Black</button>
+            <button class="swatch" type="button" data-finish="transparent" aria-pressed="false"><i></i>Transparent</button>
+            <button class="swatch" type="button" data-finish="starlight" aria-pressed="false" style="--c: #e7dac6"><i></i>Starlight</button>
+            <button class="swatch" type="button" data-finish="silver" aria-pressed="true" style="--c: #dfe3e8"><i></i>Silver</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. TAILLES -->
+  <section class="sec" id="compatibilite" aria-labelledby="cmp-title">
     <div class="wrap">
-      <header class="sec-head rv">
-        <span class="kicker">Sizes</span>
-        <h2 id="cmp-title">Five sizes, drawn to scale.</h2>
-        <p>Your case size is engraved on the back of your watch. Each pack fits one case size, so pick the one that matches.</p>
+      <header class="sec-head">
+        <span class="kicker" data-scramble>05 · Sizes</span>
+        <h2 id="cmp-title" data-split>Five sizes, drawn to scale.</h2>
+        <p class="lead">Your case size is engraved on the back of your watch. Each Guardess fits one case size, so pick the one that matches.</p>
       </header>
       <div class="sizes" id="sizes"></div>
       <p class="sizes-note">Series 10 and Series 11 (42 and 46 mm) are not covered yet.</p>
     </div>
   </section>
 
-  <!-- 6. COMMANDER (bouton d'achat Shopify) -->
-  <section class="sec" id="lancement" aria-labelledby="launch-title" style="padding-top:0">
-    <div class="wrap">
-      <div class="launch glass rv">
-        <svg class="glyph logo" viewBox="0 0 249 295" aria-hidden="true"><path class="lg-shield" fill-rule="evenodd" d="M124.0 1.0 L1.9 55.6 L0.9 58.4 L0.9 115.5 L2.0 119.2 L2.0 131.6 L3.0 134.2 L3.0 140.6 L8.1 165.1 L15.2 185.5 L25.2 205.5 L32.5 216.9 L48.1 236.6 L74.0 261.4 L99.4 279.6 L114.4 288.6 L125.4 293.6 L145.5 282.6 L163.9 270.4 L184.9 253.4 L202.4 235.9 L214.4 220.9 L231.4 196.0 L235.5 192.6 L236.9 180.2 L242.5 159.2 L240.6 158.0 L158.2 158.0 L155.6 159.0 L145.5 159.4 L125.6 191.9 L125.8 193.6 L187.4 193.9 L188.6 195.5 L177.5 210.9 L159.9 228.5 L141.9 242.5 L129.5 250.8 L124.1 252.6 L105.0 240.5 L93.0 231.5 L82.2 221.9 L68.4 206.9 L62.4 198.9 L52.1 182.5 L47.1 171.5 L42.0 157.1 L37.9 137.6 L37.9 132.2 L36.9 129.6 L36.9 119.2 L35.9 116.6 L36.2 80.2 L50.4 73.1 L123.2 40.9 L126.6 40.9 L212.2 78.9 L232.6 77.9 L245.8 81.8 L247.4 81.5 L248.0 79.4 L247.6 55.6 L147.5 10.2 L126.2 1.1Z"/><path class="lg-bar" d="M114.1 136.9 L115.5 137.9 L209.6 137.9 L212.2 138.9 L232.6 138.9 L237.9 137.8 L247.9 119.9 L247.9 103.2 L246.4 102.0 L135.0 102.1 L130.1 108.8 L129.2 111.5 L114.5 135.0Z"/><path class="lg-tip" d="M246.6 124.8 L244.5 126.0 L237.9 137.9 L232.6 139.0 L211.1 139.2 L209.0 143.2 L206.8 157.2 L207.9 157.9 L243.2 158.1 L243.9 152.2 L245.9 145.6 L246.9 135.2 L247.9 132.9 L247.9 128.0Z M248.8 102.5 L248.0 104.5 L248.0 116.4 L248.9 118.4Z"/></svg>
-        <span class="kicker">Buy</span>
-        <h2 id="launch-title">Your Guardess pack.</h2>
-        <p>The privacy screen and the rigid case, made for your case size. Shipping and taxes are calculated at checkout.</p>
+  <!-- 7. POSE EN TROIS ÉTAPES -->
+  <section id="installation" aria-labelledby="fit-title">
+    <div class="pin" data-pin="fit" style="--len: 270">
+      <div class="stage">
+        <div class="dock" data-station="fit" role="img" aria-label="Fitting the case: the screen is wiped, the case lines up with the crown and side button, then snaps into place.">
+          <img class="still" data-src="assets/img/still-fit.webp" alt="" width="900" height="900">
+        </div>
+        <div class="copy">
+          <span class="kicker" data-scramble>06 · Fit</span>
+          <h2 id="fit-title" data-split>On in three steps.</h2>
+          <ol class="steps" id="steps">
+            <li class="step"><span class="n">1</span><h3>Clean</h3><p>Wipe the screen so no dust gets trapped under the glass.</p></li>
+            <li class="step"><span class="n">2</span><h3>Align</h3><p>Line up the open side with the crown and side button.</p></li>
+            <li class="step"><span class="n">3</span><h3>Snap</h3><p>Press until the case clicks into place. That’s it.</p></li>
+          </ol>
+          <p class="lock-chip" id="lock-chip"><i class="dot"></i><span id="lock-text">Waiting</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. COMMANDER (bouton d'achat Shopify) -->
+  <section class="sec" id="lancement" aria-labelledby="launch-title">
+    <div class="wrap buy-grid">
+      <div class="buy-dock">
+        <div class="dock" data-station="buy" role="img" aria-label="The Guardess case on an Apple Watch, in the finish selected in the order form.">
+          <img class="still" id="buy-still" data-src="assets/img/still-finish-silver.webp" alt="" width="900" height="900">
+        </div>
+      </div>
+      <div class="buy-panel glass frame" data-rv>
+        <span class="kicker" data-scramble>07 · Order</span>
+        <h2 id="launch-title" data-split>Your Guardess.</h2>
+        <p>Choose your case size and finish. Shipping costs and delivery times are shown at checkout.</p>
         <div class="shop" id="product-component-1790866120223">
           <p class="shop-loading">Loading the shop…</p>
         </div>
         <div class="contact">
           <span>Questions before you order?</span>
           <span class="mail-addr" id="mail-addr">guardess.contact@gmail.com</span>
-          <button class="btn btn-glass btn-sm" type="button" id="copy-btn">Copy address</button>
+          <button class="btn btn-ghost btn-sm" type="button" id="copy-btn">Copy address</button>
         </div>
         <p class="copy-state" id="copy-state" aria-live="polite"></p>
       </div>
@@ -679,17 +767,103 @@ footer a:hover { color: var(--ink); }
 </footer>
 
 <script>
-/* ---------- Scroll : progression, révélations, étapes, schéma (sans 3D) ---------- */
+/* ---------- Intro : logo dessiné, mot-symbole décodé, puis le logo rejoint la barre de navigation ---------- */
 (() => {
-  const RM = matchMedia('(prefers-reduced-motion: reduce)');
+  const root = document.documentElement;
+  if (root.classList.contains('intro-none')) return;
+  const full = root.classList.contains('intro-full');
+  const logo = document.getElementById('intro-logo'), word = document.getElementById('intro-word');
+  const t0 = performance.now(), MIN = full ? 1900 : 250;
+  let ready = false, leaving = false;
+
+  /* mot-symbole : caractères aléatoires qui se fixent de gauche à droite */
+  if (full) {
+    const final = word.textContent, glyphs = '▮▯/\\_-=+*#01<>', start = t0 + 1050;
+    word.textContent = '';
+    const step = now => {
+      const k = (now - start) / 650;
+      if (k < 0) { requestAnimationFrame(step); return; }
+      word.textContent = [...final].map((ch, i) => (k * final.length > i ? ch : (k * final.length > i - 3 ? glyphs[(Math.random() * glyphs.length) | 0] : ' '))).join('');
+      if (k < 1.05) requestAnimationFrame(step); else word.textContent = final;
+    };
+    requestAnimationFrame(step);
+  }
+
+  const done = () => {
+    root.classList.add('intro-done');
+    try { sessionStorage.setItem('gd-intro', '1'); } catch (e) {}
+  };
+  const leave = (skip = false) => {
+    if (leaving) return; leaving = true;
+    root.classList.add('intro-out');
+    dispatchEvent(new CustomEvent('guardess:intro', { detail: { skip } }));
+    const target = document.getElementById('nav-logo').getBoundingClientRect(), from = logo.getBoundingClientRect();
+    if (!skip && target.width) {
+      /* FLIP : le grand logo glisse jusqu'à celui de la barre de navigation */
+      const s = target.width / from.width;
+      logo.style.transition = 'transform .85s cubic-bezier(.7,0,.2,1), filter .85s ease';
+      logo.style.transform = `translate(${target.left - from.left}px, ${target.top - from.top}px) scale(${s})`;
+      logo.style.filter = 'none';
+      setTimeout(done, 820);
+    } else { logo.style.opacity = '0'; done(); }
+  };
+  const tryLeave = () => { if (ready && performance.now() - t0 >= MIN) leave(); };
+  addEventListener('guardess:ready', () => { ready = true; setTimeout(tryLeave, Math.max(0, MIN - (performance.now() - t0))); });
+  document.getElementById('intro-skip').addEventListener('click', () => leave(true));
+  addEventListener('keydown', e => { if (e.key === 'Escape') leave(true); });
+  setTimeout(() => leave(), 6500);   // sécurité : jamais bloqué derrière l'intro
+})();
+</script>
+
+<script>
+/* ---------- Interface : progression, apparitions, scènes épinglées (sans 3D) ---------- */
+(() => {
+  const root = document.documentElement;
+  const RM = root.classList.contains('rm');
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const sm = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
-  const bar = document.getElementById('progress');
-  const reveals = [...document.querySelectorAll('.rv')];
-  const steps = document.getElementById('steps');
-  const stepEls = [...steps.children];
+  const $ = s => document.querySelector(s);
+  const GD = window.GD = window.GD || {};
+  /* progression d'une scène épinglée (0 → 1 pendant qu'elle reste à l'écran) */
+  GD.pinP = el => { const r = el.getBoundingClientRect(), d = r.height - innerHeight; return d > 1 ? clamp(-r.top / d) : r.top < 0 ? 1 : 0; };
+  GD.heroAngle = p => 10 + 62 * sm(.1, .86, p);
+  GD.tilt = 0;
+  const pins = {}; document.querySelectorAll('[data-pin]').forEach(el => { pins[el.dataset.pin] = el; });
 
-  /* Tailles à l'échelle : 1 mm = 3 unités SVG */
+  /* Images de repli (sans WebGL ou mouvement réduit) : chargées seulement si besoin */
+  GD.loadStills = () => document.querySelectorAll('.still[data-src]').forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
+  if (RM) GD.loadStills();
+
+  /* Titres découpés en mots, apparitions */
+  document.querySelectorAll('[data-split]').forEach(h => {
+    const words = h.textContent.trim().split(/\s+/);
+    h.setAttribute('aria-label', h.textContent.trim());
+    h.innerHTML = words.map((w, i) => `<span class="w" aria-hidden="true"><span style="--i:${i}">${w}</span></span>`).join(' ');
+  });
+  const scramble = el => {
+    const final = el.textContent, glyphs = '▮▯/\\_-=+*#01<>'; let f = 0;
+    el.setAttribute('aria-label', final);
+    const id = setInterval(() => {
+      f++; const k = f / 14;
+      el.textContent = [...final].map((ch, i) => (ch === ' ' || k * final.length > i ? ch : glyphs[(Math.random() * glyphs.length) | 0])).join('');
+      if (k >= 1) { clearInterval(id); el.textContent = final; }
+    }, 34);
+  };
+  const count = el => {
+    const n = +el.dataset.count, suf = el.dataset.suffix || '', t0 = performance.now();
+    const step = now => { const k = clamp((now - t0) / 900), v = Math.round(n * (1 - (1 - k) ** 3)); el.innerHTML = v + (suf ? `<small>${suf}</small>` : ''); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  };
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target; io.unobserve(el); el.classList.add('in');
+    if (RM) return;
+    if (el.hasAttribute('data-scramble')) scramble(el);
+    el.querySelectorAll('[data-count]').forEach(count);
+  }), { threshold: .2, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('[data-rv], [data-split], [data-scramble], .size').forEach(el => io.observe(el));
+
+  /* Tailles à l'échelle : 1 mm = 3 unités SVG, planches techniques */
   const sizes = [
     { mm: 40, w: 34, models: 'Series 4, 5, 6 and SE' },
     { mm: 41, w: 35, models: 'Series 7, 8 and 9' },
@@ -697,44 +871,45 @@ footer a:hover { color: var(--ink); }
     { mm: 45, w: 38, models: 'Series 7, 8 and 9' },
     { mm: 49, w: 44, models: 'Ultra and Ultra 2', ultra: true },
   ];
-  const K = 3, BASE = 190;
-  document.getElementById('sizes').innerHTML = sizes.map(s => {
-    const h = s.mm * K, w = s.w * K, x = 100 - w / 2 + 10, y = BASE - h;
-    const r = s.ultra ? 16 : 26;
-    let ticks = '';
-    for (let v = 0; v <= 50; v += 5) {
-      const ty = BASE - v * K, long = v % 10 === 0;
-      ticks += `<line class="ruler" x1="${long ? 0 : 4}" y1="${ty}" x2="10" y2="${ty}"/>` + (long ? `<text class="ruler-t" x="-4" y="${ty + 3}" text-anchor="end">${v}</text>` : '');
-    }
-    return `<article class="size glass rv${s.ultra ? ' ultra' : ''}">
-      <svg viewBox="-24 -8 230 206" aria-hidden="true">
-        ${ticks}<line class="ruler" x1="10" y1="${BASE}" x2="10" y2="${BASE - 50 * K}"/>
-        <rect class="band" x="${x + w * .2}" y="-6" width="${w * .6}" height="${h + 12}" rx="10"/>
-        <rect class="case" x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}"/>
-        <rect class="scr" x="${x + 7}" y="${y + 7}" width="${w - 14}" height="${h - 14}" rx="${r - 6}"/>
+  const K = 3, BASE = 176;
+  const sizesEl = $('#sizes');
+  sizesEl.innerHTML = sizes.map((s, i) => {
+    const h = s.mm * K, w = s.w * K, x = 100 - w / 2, y = BASE - h, r = s.ultra ? 16 : 26;
+    let grid = '';
+    for (let gx = -10; gx <= 210; gx += 15) grid += `<line class="bp-grid" x1="${gx}" y1="0" x2="${gx}" y2="196"/>`;
+    for (let gy = 0; gy <= 196; gy += 15) grid += `<line class="bp-grid" x1="-10" y1="${gy}" x2="210" y2="${gy}"/>`;
+    return `<article class="size glass${s.ultra ? ' ultra' : ''}" style="--i:${i}">
+      <svg viewBox="-12 -6 224 214" aria-hidden="true">
+        ${grid}
+        <rect class="bp-case bp-draw" pathLength="1" x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}"/>
+        <rect class="bp-scr bp-draw" pathLength="1" x="${x + 7}" y="${y + 7}" width="${w - 14}" height="${h - 14}" rx="${r - 6}"/>
         ${s.ultra ? `<rect x="${x + w - 1}" y="${y + h * .3}" width="5" height="${h * .18}" rx="2" fill="#FF8A3D"/>` : ''}
+        <path class="bp-dim bp-draw" pathLength="1" d="M${x - 10} ${y} V${BASE} M${x - 14} ${y} h8 M${x - 14} ${BASE} h8"/>
+        <path class="bp-dim bp-draw" pathLength="1" d="M${x} ${BASE + 12} H${x + w} M${x} ${BASE + 8} v8 M${x + w} ${BASE + 8} v8"/>
+        <text class="bp-txt" x="${x - 14}" y="${y + h / 2}" text-anchor="end">${s.mm}</text>
+        <text class="bp-txt" x="100" y="${BASE + 24}" text-anchor="middle">${s.w}</text>
       </svg>
       <p class="mm">${s.mm}<small>mm</small></p>
       <p>${s.models}</p>
     </article>`;
   }).join('');
-  reveals.push(...document.querySelectorAll('#sizes .rv'));
+  sizesEl.querySelectorAll('.size').forEach(el => io.observe(el));
 
-  /* Schéma des lamelles (échelle ×1000 : pas 28, hauteur 38, épaisseur 4) */
+  /* Schéma des lamelles (pas 28, hauteur 38, épaisseur 4) */
   const SVGNS = 'http://www.w3.org/2000/svg';
   const LV_TOP = 158, LV_BOT = 196, PITCH = 28, THICK = 4, X0 = 12;
-  const gLv = document.getElementById('louvres'), gRays = document.getElementById('rays');
-  const gaps = [];
+  const gLv = $('#louvres'), gRays = $('#rays'), gaps = [];
   for (let x = X0; x + THICK <= 352; x += PITCH) {
     const r = document.createElementNS(SVGNS, 'rect');
-    r.setAttribute('class', 'louvre'); r.setAttribute('x', x); r.setAttribute('y', LV_TOP);
+    r.setAttribute('class', 'lv'); r.setAttribute('x', x); r.setAttribute('y', LV_TOP);
     r.setAttribute('width', THICK); r.setAttribute('height', LV_BOT - LV_TOP); r.setAttribute('rx', 1.5);
     gLv.append(r);
     if (x + PITCH + THICK <= 352) gaps.push([x + THICK, x + PITCH]);
   }
-  const input = document.getElementById('angle'), out = document.getElementById('angle-out');
-  let userDriven = false;
+  const input = $('#angle'), out = $('#angle-out');
+  let userDriven = false, lastDeg = -1;
   const draw = deg => {
+    if (deg === lastDeg) return; lastDeg = deg;
     const tan = Math.tan(deg * Math.PI / 180);
     gRays.replaceChildren();
     gaps.forEach(([l, r], i) => {
@@ -743,52 +918,112 @@ footer a:hover { color: var(--ink); }
       const ln = document.createElementNS(SVGNS, 'line');
       ln.setAttribute('x1', x0); ln.setAttribute('y1', LV_BOT);
       if (climb >= h) {
-        ln.setAttribute('class', 'ray');
-        ln.setAttribute('x2', x0 + (LV_BOT - 12) * tan); ln.setAttribute('y2', 12);
-        gRays.append(ln);
+        ln.setAttribute('class', 'ray'); ln.setAttribute('x2', x0 + (LV_BOT - 12) * tan); ln.setAttribute('y2', 12); gRays.append(ln);
       } else {
-        ln.setAttribute('class', 'ray blocked');
-        ln.setAttribute('x2', r); ln.setAttribute('y2', LV_BOT - climb);
+        ln.setAttribute('class', 'ray blocked'); ln.setAttribute('x2', r); ln.setAttribute('y2', LV_BOT - climb);
         const c = document.createElementNS(SVGNS, 'circle');
         c.setAttribute('class', 'hit'); c.setAttribute('cx', r); c.setAttribute('cy', LV_BOT - climb); c.setAttribute('r', 3.2);
         gRays.append(ln, c);
       }
     });
     out.textContent = `${Math.round(deg)}°`;
+    GD.tilt = deg; GD.kick?.();
   };
   input.addEventListener('input', () => { userDriven = true; draw(+input.value); });
   draw(0);
-  const fig = document.querySelector('.tech-fig');
+
+  /* Finitions : la montre 3D (ou l'image de repli) et le formulaire de commande suivent le choix */
+  const swatches = [...document.querySelectorAll('.swatch')];
+  GD.finish = 'silver';
+  GD.pickFinish = (name, from) => {
+    if (!name) return;
+    GD.finish = name;
+    swatches.forEach(b => b.setAttribute('aria-pressed', b.dataset.finish === name ? 'true' : 'false'));
+    GD.setFinish3d?.(name);
+    ['finish-still', 'buy-still'].forEach(id => {
+      const img = document.getElementById(id), src = `assets/img/still-finish-${name}.webp`;
+      if (img.hasAttribute('data-src')) img.dataset.src = src; else img.src = src;
+    });
+    if (from !== 'shop') GD.syncShopFinish?.(name);
+  };
+  swatches.forEach(b => b.addEventListener('click', () => GD.pickFinish(b.dataset.finish, 'swatch')));
 
   /* Copier l'adresse */
-  const copyBtn = document.getElementById('copy-btn'), state = document.getElementById('copy-state');
+  const copyBtn = $('#copy-btn'), state = $('#copy-state');
   copyBtn.addEventListener('click', () => {
-    const addr = document.getElementById('mail-addr');
+    const addr = $('#mail-addr');
     const fallback = () => { const s = getSelection(), rg = document.createRange(); rg.selectNodeContents(addr); s.removeAllRanges(); s.addRange(rg); state.textContent = 'Address selected: copy it with your keyboard.'; };
     try { navigator.clipboard.writeText(addr.textContent).then(() => { state.textContent = 'Address copied.'; }, fallback); } catch { fallback(); }
   });
 
+  /* Scènes : textes du hero, jauge, étapes, statut de recharge */
+  const bar = $('#progress');
+  const beats = [...document.querySelectorAll('.beat')];
+  const needle = $('#needle'), gDeg = $('#g-deg'), gState = $('#g-state');
+  const parts = [...document.querySelectorAll('#parts li')];
+  const steps = [...document.querySelectorAll('#steps .step')];
+  const chargeEl = $('#charge-state'), chargeText = $('#charge-text');
+  const lockChip = $('#lock-chip'), lockText = $('#lock-text');
+  const ticker = $('#ticker');
+  let tickAnim = null, lastY = scrollY, vel = 0, lastT = performance.now();
+  const set = (el, prop, v) => { if (el[prop] !== v) el[prop] = v; };
+
   const tick = () => {
     const vh = innerHeight, max = document.documentElement.scrollHeight - vh;
     bar.style.setProperty('--p', max > 0 ? (scrollY / max).toFixed(4) : 0);
-    for (const el of reveals) {
-      const top = el.getBoundingClientRect().top;
-      el.style.setProperty('--r', RM.matches ? 1 : clamp((vh * .96 - top) / (vh * .3)).toFixed(3));
-    }
-    const sr = steps.getBoundingClientRect();
-    const d = RM.matches ? 1 : clamp((vh * .78 - sr.top) / (sr.height * .9));
-    steps.style.setProperty('--draw', d.toFixed(3));
-    stepEls.forEach((el, i) => el.classList.toggle('on', d >= (i / stepEls.length) + .02 || RM.matches));
-    if (!userDriven && !RM.matches) {
-      const fr = fig.getBoundingClientRect();
-      const deg = Math.round(60 * sm(.25, .7, (vh - fr.top) / (vh + fr.height)));
+    if (RM) return;   /* états finaux posés une fois pour toutes (plus bas) */
+    /* hero : trois messages calés sur l'angle de la montre */
+    const p = GD.pinP(pins.hero), a = GD.heroAngle(p);
+    const o = [1 - sm(.07, .15, p), sm(.13, .2, p) * (1 - sm(.34, .4, p)), sm(.42, .5, p)];
+    beats.forEach((b, i) => {
+      b.style.opacity = o[i].toFixed(3);
+      b.style.transform = `translate3d(0, ${((1 - o[i]) * 16).toFixed(1)}px, 0)`;
+      b.style.pointerEvents = o[i] > .5 ? 'auto' : 'none';
+      b.setAttribute('aria-hidden', o[i] > .5 ? 'false' : 'true');
+    });
+    needle.style.transform = `rotate(${a.toFixed(1)}deg)`;
+    set(gDeg, 'textContent', `${Math.round(a)}°`);
+    const blocked = a >= 32;
+    set(gState, 'textContent', a < 18 ? 'Head-on · clear' : blocked ? 'Side · dark' : 'Getting darker');
+    gState.classList.toggle('is-blocked', blocked);
+    /* une seule pièce : la pièce décrite s'allume quand la coque est écartée */
+    const pe = GD.pinP(pins.explode);
+    parts.forEach((li, i) => li.classList.toggle('on', pe > .42 + i * .07 && pe < .76));
+    /* filtre : l'angle suit le défilement tant que le curseur n'a pas été touché */
+    if (!userDriven) {
+      const deg = Math.round(60 * sm(.12, .7, GD.pinP(pins.tilt)));
       if (+input.value !== deg) { input.value = deg; draw(deg); }
     }
+    /* recharge */
+    const pc = GD.pinP(pins.charge);
+    set(chargeText, 'textContent', pc < .3 ? 'Back open' : pc < .48 ? 'Charger connecting' : 'Charging');
+    chargeEl.classList.toggle('on', pc >= .48);
+    /* pose */
+    const pf = GD.pinP(pins.fit), cur = pf < .33 ? 0 : pf < .66 ? 1 : 2;
+    steps.forEach((s, i) => {
+      s.classList.toggle('on', i === cur); s.classList.toggle('done', i < cur);
+      s.style.setProperty('--f', clamp((pf - i / 3) * 3).toFixed(3));
+    });
+    const locked = pf > .8;
+    lockChip.classList.toggle('on', locked);
+    set(lockText, 'textContent', locked ? 'Locked in place' : pf > .36 ? 'Aligning' : 'Waiting');
+    /* bandeau : il accélère avec la vitesse de défilement */
+    const now = performance.now(), dt = Math.max(16, now - lastT);
+    vel += ((scrollY - lastY) / dt * 1000 - vel) * .2; lastY = scrollY; lastT = now;
+    tickAnim = tickAnim || ticker.getAnimations?.()[0];
+    if (tickAnim) tickAnim.playbackRate = 1 + Math.min(5, Math.abs(vel) / 380);
   };
   let raf = 0;
-  addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; tick(); }); }, { passive: true });
-  addEventListener('resize', tick);
+  const req = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; tick(); }); };
+  addEventListener('scroll', req, { passive: true });
+  addEventListener('resize', req);
   tick();
+  if (RM) {
+    chargeText.textContent = 'Charging'; chargeEl.classList.add('on');
+    lockText.textContent = 'Locked in place'; lockChip.classList.add('on');
+  }
+  /* le bandeau ralentit après un défilement */
+  setInterval(() => { if (Math.abs(vel) > 1) { vel *= .6; if (tickAnim) tickAnim.playbackRate = 1 + Math.min(5, Math.abs(vel) / 380); } }, 120);
 })();
 </script>
 
@@ -798,10 +1033,34 @@ footer a:hover { color: var(--ink); }
   var node = document.getElementById('product-component-1790866120223');
   if (!node) return;
   var SDK = 'assets/vendor/shopify/buybutton.min.js';
+  var FINISH = { black: 'Black', transparent: 'Transparent', starlight: 'Starlight', silver: 'Silver' };
   var started = false;
   function fail() {
     node.innerHTML = '<p class="shop-loading">The shop didn’t load. Email us at the address below to order.</p>';
   }
+  /* finition choisie dans le formulaire ↔ montre 3D et pastilles */
+  function finishSelect() {
+    var sels = node.querySelectorAll('select');
+    for (var i = 0; i < sels.length; i++) {
+      for (var j = 0; j < sels[i].options.length; j++) if (/^(Black|Transparent|Starlight|Silver)$/i.test(sels[i].options[j].value)) return sels[i];
+    }
+    return null;
+  }
+  function fromValue(v) { for (var k in FINISH) if (FINISH[k].toLowerCase() === String(v).toLowerCase()) return k; return null; }
+  window.GD = window.GD || {};
+  window.GD.syncShopFinish = function (name) {
+    var sel = finishSelect(); if (!sel || !FINISH[name]) return;
+    for (var j = 0; j < sel.options.length; j++) {
+      if (sel.options[j].value.toLowerCase() === FINISH[name].toLowerCase() && sel.value !== sel.options[j].value) {
+        sel.value = sel.options[j].value;
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+  };
+  node.addEventListener('change', function (e) {
+    var k = e.target && e.target.tagName === 'SELECT' ? fromValue(e.target.value) : null;
+    if (k && window.GD.pickFinish) window.GD.pickFinish(k, 'shop');
+  });
   function init() {
     var client = ShopifyBuy.buildClient({
       domain: 'eqe0ex-41.myshopify.com',
@@ -811,10 +1070,10 @@ footer a:hover { color: var(--ink); }
     var ready = ShopifyBuy.UI.onReady ? ShopifyBuy.UI.onReady(client) : Promise.resolve(ShopifyBuy.UI.init(client));
     ready.then(function (ui) {
       node.innerHTML = '';
-      ui.createComponent('product', {
+      return ui.createComponent('product', {
         id: '15817235497300',
         node: node,
-        moneyFormat: '%E2%82%AC%7B%7Bamount%7D%7D',   /* €29.90 */
+        moneyFormat: '%E2%82%AC%7B%7Bamount%7D%7D',   /* €19.90 */
         options: {
           product: {
             iframe: false,
@@ -839,6 +1098,9 @@ footer a:hover { color: var(--ink); }
           }
         }
       });
+    }).then(function () {
+      /* le formulaire présélectionne la finition déjà affichée sur la montre */
+      if (window.GD.finish) window.GD.syncShopFinish(window.GD.finish);
     }).catch(fail);
   }
   function load() {
@@ -856,280 +1118,176 @@ footer a:hover { color: var(--ink); }
   document.querySelectorAll('a[href="#lancement"]').forEach(function (a) { a.addEventListener('click', load); });
 })();
 </script>
-<script type="module">
-/* ---------- 3D temps réel : montre du hero + vue éclatée du pack (three.js r170) ---------- */
-import * as THREE from './assets/vendor/three/three.module.min.js';
 
-const RM = matchMedia('(prefers-reduced-motion: reduce)');
+<script type="module">
+/* ---------- 3D : une seule montre, fixée derrière la page, qui rejoint chaque scène ---------- */
+const root = document.documentElement, GD = window.GD;
+const D = Math.PI / 180;
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const sm = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
-const D2R = Math.PI / 180;
-const pinP = el => { const r = el.getBoundingClientRect(), d = r.height - innerHeight; return d > 1 ? clamp(-r.top / d) : .5; };
+const bump = (p, a, b, c) => sm(a, b, p) * (1 - sm(b, c, p));
+const ready = () => dispatchEvent(new Event('guardess:ready'));
+const SNAP = new URLSearchParams(location.search).has('snap');   // tests : poses appliquées sans amortissement
 
-/* ---------- Dimensions réelles (mm) : boîtier 45 mm ---------- */
-const A = 19, B = 22.5, DEPTH = 10.7;          // demi-largeur, demi-hauteur, épaisseur
-const BEV = 2.6, BT = 3.2;                    // arrondi des tranches
-const CORE = DEPTH - 2 * BT;                  // partie droite de la tranche
-const FRONT = DEPTH / 2;                      // face avant
-const N_SQ = 4.6;                             // exposant du « squircle » (coins continus)
+const canvas = document.getElementById('gl');
+/* sans WebGL, en mouvement réduit ou si le module ne charge pas : images fixes */
+let failed = false;
+const fail = e => { if (failed) return; failed = true; if (e) console.warn('3D unavailable', e); root.classList.add('no-gl'); GD.loadStills(); ready(); };
+if (root.classList.contains('rm')) fail();
+else import('./assets/js/scene.js?v=dev').then(async ({ createWatchScene, A, B }) => {
+  const S = createWatchScene(canvas);
+  canvas.addEventListener('webglcontextlost', ev => { ev.preventDefault(); fail(new Error('WebGL context lost')); });
+  S.setView(canvas.clientWidth || innerWidth, canvas.clientHeight || innerHeight, innerWidth * .7, innerHeight * .5, innerHeight * .8);
+  try { await S.compile(); } catch (e) { /* compilation au premier rendu */ }
+  run(S, A, B);
+}).catch(fail);
 
-/* Contour superellipse : coins continus façon Apple */
-const squircle = (a, b, n = N_SQ, seg = 180) => {
-  const s = new THREE.Shape();
-  for (let i = 0; i < seg; i++) {   /* pas de point de fermeture dupliqué */
-    const t = i / seg * Math.PI * 2, c = Math.cos(t), si = Math.sin(t);
-    const x = a * Math.sign(c) * Math.abs(c) ** (2 / n), y = b * Math.sign(si) * Math.abs(si) ** (2 / n);
-    i ? s.lineTo(x, y) : s.moveTo(x, y);
-  }
-  return s;
-};
-const fitUv = g => {
-  g.computeBoundingBox(); const { min, max } = g.boundingBox, p = g.attributes.position, uv = g.attributes.uv;
-  for (let i = 0; i < p.count; i++) uv.setXY(i, (p.getX(i) - min.x) / (max.x - min.x), (p.getY(i) - min.y) / (max.y - min.y));
-  uv.needsUpdate = true; return g;
-};
-/* Bracelet : section plate aux bords arrondis balayée le long d'une courbe du plan YZ */
-const sweep = (curve, width, thick, steps = 260, ring = 36) => {
-  const pos = [], idx = [], X = new THREE.Vector3(1, 0, 0), sec = [];
-  for (let j = 0; j < ring; j++) { const a = j / ring * Math.PI * 2, c = Math.cos(a), s = Math.sin(a); sec.push([Math.sign(c) * Math.abs(c) ** .22 * width / 2, Math.sign(s) * Math.abs(s) ** .5 * thick / 2]); }
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps, p = curve.getPointAt(t), T = curve.getTangentAt(t), N = new THREE.Vector3().crossVectors(T, X).normalize();
-    for (const [x, n] of sec) pos.push(p.x + x, p.y + N.y * n, p.z + N.z * n);
-  }
-  for (let i = 0; i < steps; i++) for (let j = 0; j < ring; j++) { const a = i * ring + j, b = i * ring + (j + 1) % ring; idx.push(a, a + ring, b, b, a + ring, b + ring); }
-  /* bouchons aux deux extrémités (bracelet coupé net) */
-  [[0, false], [steps, true]].forEach(([i, flip]) => {
-    const p = curve.getPointAt(i / steps), c = pos.length / 3; pos.push(p.x, p.y, p.z);
-    for (let j = 0; j < ring; j++) { const a = i * ring + j, b = i * ring + (j + 1) % ring; flip ? idx.push(c, a, b) : idx.push(c, b, a); }
-  });
-  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals(); return g;
-};
-
-/* ---------- Écran : interface dessinée en haute définition ---------- */
-const SW = 1024, SH = Math.round(1024 * (B - 3.3) / (A - 3.3));
-const scr = document.createElement('canvas'); scr.width = SW; scr.height = SH;
-const drawScreen = () => {
-  const c = scr.getContext('2d'), k = SW / 600;
-  c.fillStyle = '#000'; c.fillRect(0, 0, SW, SH);
-  c.fillStyle = '#fff'; c.textAlign = 'center'; c.textBaseline = 'alphabetic';
-  let s = 200 * k; c.font = `700 ${s}px "Space Grotesk", "Helvetica Neue", Arial, sans-serif`;
-  s = Math.min(s, s * (SW * .74) / c.measureText('10:09').width); c.font = `700 ${s}px "Space Grotesk", "Helvetica Neue", Arial, sans-serif`;
-  c.fillText('10:09', SW / 2, SH * .44);
-  const bx = 56 * k, by = SH * .56, bw = SW - 112 * k, bh = 150 * k;
-  const g = c.createLinearGradient(bx, by, bx + bw, by + bh); g.addColorStop(0, '#2F5EFF'); g.addColorStop(1, '#7A6CFF');
-  c.fillStyle = g; c.beginPath(); c.roundRect(bx, by, bw, bh, 44 * k); c.fill();
-  c.fillStyle = '#fff'; c.textAlign = 'left';
-  c.font = `600 ${44 * k}px Manrope, "Helvetica Neue", Arial, sans-serif`; c.fillText('Lea', bx + 32 * k, by + 62 * k);
-  c.font = `400 ${40 * k}px Manrope, "Helvetica Neue", Arial, sans-serif`; c.fillText('Dinner at 7?', bx + 32 * k, by + 116 * k);
-};
-drawScreen();
-const screenTextures = new Set();
-document.fonts?.ready.then(() => { drawScreen(); screenTextures.forEach(t => { t.needsUpdate = true; }); });
-
-/* ---------- Environnement studio : panneaux de lumière douce (reflets sur l'alu) ---------- */
-function studioEnv(renderer) {
-  const s = new THREE.Scene(); s.background = new THREE.Color(0x4a5470);
-  const panel = (w, h, pos, rgb, k) => {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(...rgb).multiplyScalar(k), side: THREE.DoubleSide }));
-    m.position.set(...pos); m.lookAt(0, 0, 0); s.add(m);
-  };
-  panel(12, 4, [0, 6.5, 3], [1, 1, 1], 3.4);         // softbox haut
-  panel(3, 11, [-7, .5, 3.5], [1, 1, 1], 2.8);       // bande gauche
-  panel(3, 11, [7, 1, 1], [.95, .97, 1], 2.6);       // bande droite
-  panel(3, 11, [6, 1, -6], [.9, .94, 1], 2);         // contre-jour droit
-  panel(14, 14, [0, 0, -10], [.5, .56, .8], .45);    // fond légèrement bleuté
-  panel(8, 2.4, [0, -6.5, 4], [.35, .45, 1], .7);    // rebond bas bleu
-  const pm = new THREE.PMREMGenerator(renderer), tex = pm.fromScene(s, .02).texture; pm.dispose();
-  return tex;
-}
-
-function makeKit(canvas) {
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
-  const scene = new THREE.Scene();
-  scene.environment = studioEnv(renderer);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x2a3fb0, .45));
-  const key = new THREE.DirectionalLight(0xffffff, 1.3); key.position.set(-30, 55, 70); scene.add(key);
-  const tex = new THREE.CanvasTexture(scr); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  screenTextures.add(tex);
-  const M = {
-    alu: new THREE.MeshPhysicalMaterial({ color: 0xe6e7ea, metalness: 1, roughness: .26, clearcoat: .3, clearcoatRoughness: .2, envMapIntensity: 1.25 }),
-    aluDark: new THREE.MeshPhysicalMaterial({ color: 0xc9ccd2, metalness: 1, roughness: .35, envMapIntensity: 1.1 }),
-    band: new THREE.MeshPhysicalMaterial({ color: 0xe1e3e8, roughness: .5, clearcoat: .25, clearcoatRoughness: .55, sheen: .3, sheenRoughness: .7, sheenColor: 0xffffff, envMapIntensity: .8 }),
-    glass: new THREE.MeshPhysicalMaterial({ color: 0x020203, metalness: 0, roughness: .08, clearcoat: 1, clearcoatRoughness: .05, envMapIntensity: .55 }),
-    hole: new THREE.MeshBasicMaterial({ color: 0x08090c }),
-    gloss: new THREE.MeshPhysicalMaterial({ color: 0x000000, roughness: .05, envMapIntensity: 1.1, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }),
-    screen: new THREE.ShaderMaterial({
-      uniforms: { map: { value: tex }, uA: { value: 18 }, uB: { value: 32 } },
-      vertexShader: 'varying vec2 vUv;varying vec3 vN;varying vec3 vP;void main(){vUv=uv;vN=normalize(mat3(modelMatrix)*normal);vec4 w=modelMatrix*vec4(position,1.);vP=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
-      fragmentShader: 'uniform sampler2D map;uniform float uA;uniform float uB;varying vec2 vUv;varying vec3 vN;varying vec3 vP;void main(){float c=clamp(dot(normalize(vN),normalize(cameraPosition-vP)),0.,1.);float v=1.-smoothstep(uA,uB,degrees(acos(c)));vec3 col=texture2D(map,vUv).rgb*v*v;float sh=smoothstep(.55,.0,distance(vUv,vec2(.1+.5*(1.-c),.95)))*.07;col+=vec3(.75,.8,1.)*sh;gl_FragColor=vec4(col,1.);\n#include <colorspace_fragment>\n}',
+function run(S, A, B) {
+  const BASE = { rx: 0, ry: 0, rz: 0, x: 0, y: 0, explode: 0, caseTilt: 0, caseY: 0, power: 1, boot: 0, charge: 0, chargerIn: 0, shadow: 1, scanY: 99, scanAmt: 0, privacy: 1, exposure: 1 };
+  const KEYS = Object.keys(BASE);
+  /* reflet lumineux qui balaie la coque au moment où elle s'emboîte */
+  const flash = (p, at) => ({ scanY: lerp(30, -30, sm(at, at + .1, p)), scanAmt: bump(p, at, at + .025, at + .1) * 1.3 });
+  /* chaque scène : une pose fonction de sa progression p (0 → 1) */
+  const POSES = {
+    hero: p => ({ ry: -GD.heroAngle(p) * D, rx: (5 + 5 * sm(.1, .86, p)) * D }),
+    explode: p => {
+      const e = sm(.16, .44, p) * (1 - sm(.74, .86, p));
+      return { ry: (-20 - 12 * sm(0, .3, p) + 10 * sm(.48, .72, p)) * D, rx: (9 + 6 * sm(0, .3, p)) * D, explode: e, ...flash(p, .85) };
+    },
+    tilt: () => ({ ry: -GD.tilt * D, rx: 6 * D }),
+    charge: p => ({
+      ry: (-18 + 218 * sm(.03, .3, p) + 152 * sm(.62, .95, p)) * D, rx: (10 - 4 * sm(.62, .95, p)) * D,
+      chargerIn: sm(.26, .48, p), charge: sm(.44, .6, p),
     }),
+    finish: p => ({ ry: (338 + 30 * (p - .5)) * D, rx: 9 * D }),
+    fit: p => {
+      const al = sm(.36, .6, p), sn = sm(.68, .8, p);
+      const sc = p < .5 ? { scanY: lerp(32, -32, sm(.05, .3, p)), scanAmt: bump(p, .04, .08, .31) } : flash(p, .79);
+      return { ry: (346 + 6 * al) * D, rx: 8 * D, explode: lerp(.75, .32, al) * (1 - sn), caseY: 62 * (1 - al), caseTilt: .25 * (1 - al), ...sc };
+    },
+    buy: p => ({ ry: (338 + 24 * (p - .5)) * D, rx: 7 * D }),
   };
-  return { renderer, scene, M };
+  const FILL = { hero: 1, explode: .7, tilt: .92, charge: .9, finish: .95, fit: .8, buy: .9 };
+  const stations = [...document.querySelectorAll('[data-station]')].map(el => ({ el, name: el.dataset.station, pin: el.closest('[data-pin]') }));
+
+  const cur = { ...BASE }, tgt = { ...BASE };
+  const view = { cx: 0, cy: 0, th: 1 };
+  let shown = false, introK = 0, introT0 = -1;
+  let finishT0 = -1, last = performance.now(), running = false, still = 0, W = 0;
+
+  const glow = document.getElementById('glow');
+  const lock = document.getElementById('lock'), lockI = [...lock.querySelectorAll('i')], lockTag = document.getElementById('lock-tag');
+  const calls = { glass: document.getElementById('co-glass'), bumper: document.getElementById('co-bumper'), open: document.getElementById('co-open') };
+
+  /* l'intro a pu se terminer avant que la 3D soit prête (appareil lent) : la montre s'allume tout de suite */
+  const introGone = root.classList.contains('intro-out') || root.classList.contains('intro-done');
+  if (introGone) introT0 = performance.now();
+  else addEventListener('guardess:intro', e => { if (e.detail?.skip) { introK = 1; introT0 = -1; } else introT0 = performance.now(); kick(); }, { once: true });
+  GD.setFinish3d = name => { if (S.setFinish(name)) { finishT0 = performance.now(); kick(); } };
+  GD.kick = () => kick();
+  if (GD.finish && GD.finish !== 'silver') S.setFinish(GD.finish);
+
+  /* les scènes sont mesurées dans le DOM : position, taille et poids de chaque emplacement */
+  function measure(vh) {
+    const acc = Object.fromEntries(KEYS.map(k => [k, 0]));
+    let w = 0, cx = 0, cy = 0, th = 0, hero = 0, explode = 0, ep = 0;
+    for (const s of stations) {
+      const r = s.el.getBoundingClientRect();
+      if (r.bottom < -vh || r.top > vh * 2 || !r.height) continue;
+      const c = r.top + r.height / 2, d = Math.abs(c - vh / 2) / vh;
+      const k = 1 - sm(.15, .95, d);
+      if (k <= 0) continue;
+      const p = s.pin ? GD.pinP(s.pin) : clamp((vh - r.top) / (vh + r.height));
+      const pose = { ...BASE, ...POSES[s.name](p) };
+      for (const key of KEYS) acc[key] += pose[key] * k;
+      w += k; cx += (r.left + r.width / 2) * k; cy += c * k;
+      th += Math.min(r.height, r.width * 1.5) * FILL[s.name] * k;
+      if (s.name === 'hero') hero = k;
+      if (s.name === 'explode') { explode = k; ep = p; }
+    }
+    if (w > 0) { for (const key of KEYS) tgt[key] = acc[key] / w; view.cx = cx / w; view.cy = cy / w; view.th = th / w; }
+    W = w;
+    return { hero, explode, ep };
+  }
+
+  /* cadre de visée autour de la montre et légendes de la vue éclatée */
+  const corners = [[-1, 1], [1, 1], [-1, -1], [1, -1]];
+  function hud(m) {
+    const op = clamp(m.hero * 1.4 - .4) * introK;
+    lock.style.opacity = op.toFixed(3);
+    if (op > 0) {
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      for (const [sx, sy] of corners) for (const z of [-5, 5.8]) {
+        const [x, y] = S.project(sx * (A + 1.4), sy * (B + 1.4), z);
+        x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+      }
+      const pad = 14;
+      [[x0 - pad, y0 - pad], [x1 + pad, y0 - pad], [x0 - pad, y1 + pad], [x1 + pad, y1 + pad]].forEach(([x, y], i) => { lockI[i].style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`; });
+      lockTag.style.transform = `translate3d(${(x0 - pad).toFixed(1)}px, ${(y0 - pad).toFixed(1)}px, 0)`;
+    }
+    const co = m.explode > .6 ? sm(.4, .48, m.ep) * (1 - sm(.7, .76, m.ep)) : 0;
+    const place = (el, pt, of) => {
+      el.style.opacity = co.toFixed(3);
+      if (co <= 0) return;
+      const [x, y] = S.project(...pt, of), [cx] = S.project(0, 0, 0, of), wpx = el.offsetWidth;
+      /* légende vers l'extérieur de la pièce, sauf si elle sortirait de l'écran */
+      let left = x < cx;
+      if (left && x - wpx < 8) left = false; else if (!left && x + wpx > innerWidth - 8) left = true;
+      el.classList.toggle('left', left);
+      el.style.transform = `translate3d(${(left ? x - wpx : x).toFixed(1)}px, ${(y - 14).toFixed(1)}px, 0)`;
+    };
+    place(calls.glass, [-(A - 4), B - 7, 5.7], 'case');
+    place(calls.bumper, [-(A + 1.1), -9, 2.5], 'case');
+    place(calls.open, [A + 1.1, 6, 3.8], 'case');
+  }
+
+  function frame() {
+    /* horloge propre : l'horodatage de requestAnimationFrame peut être antérieur au dernier passage après un long calcul */
+    const t = performance.now(), dt = clamp((t - last) / 1000, 0, .05); last = t;
+    const w = canvas.clientWidth, h = canvas.clientHeight, vh = innerHeight;
+    const m = measure(vh);
+    /* amortissement indépendant de la fréquence d'affichage */
+    const k = SNAP ? 1 : 1 - Math.exp(-dt * 9);
+    let moving = false;
+    for (const key of KEYS) { const d = tgt[key] - cur[key]; if (Math.abs(d) > 1e-4) moving = true; cur[key] += d * k; }
+    /* intro : la montre sort de l'ombre, l'écran démarre sur le logo puis affiche l'heure */
+    if (introT0 >= 0) { introK = clamp((t - introT0) / 1900); if (introK >= 1) introT0 = -1; moving = true; }
+    const e = 1 - (1 - introK) ** 3;
+    const pose = { ...cur };
+    pose.exposure *= lerp(.04, 1, e);
+    pose.power *= sm(.12, .42, introK);
+    pose.boot = Math.max(pose.boot, 1 - sm(.55, .85, introK));
+    pose.ry += (1 - e) * -40 * D; pose.rx += (1 - e) * 16 * D; pose.y += (1 - e) * -5;
+    /* changement de finition : un reflet balaie la coque */
+    if (finishT0 >= 0) {
+      const f = (t - finishT0) / 900;
+      if (f >= 1) finishT0 = -1; else { pose.scanY = lerp(30, -30, f); pose.scanAmt = Math.max(pose.scanAmt, Math.sin(Math.PI * f) * 1.2); moving = true; }
+    }
+    const op = sm(0, .3, W);
+    canvas.style.opacity = op.toFixed(3);
+    glow.style.opacity = (op * .9 * introK).toFixed(3);
+    glow.style.transform = `translate3d(${view.cx.toFixed(1)}px, ${view.cy.toFixed(1)}px, 0)`;
+    if (op > 0 || !shown) {
+      S.setView(w, h, view.cx || w * .7, view.cy || h * .5, view.th || h * .8);
+      try { S.apply(pose); S.render(); } catch (err) { fail(err); return; }
+      if (!shown) { shown = true; ready(); }
+    }
+    hud(m);
+    still = moving ? 0 : still + 1;
+    if (still > 20) { running = false; return; }
+    requestAnimationFrame(frame);
+  }
+  function kick() { still = 0; if (!running) { running = true; last = performance.now(); requestAnimationFrame(frame); } }
+  addEventListener('scroll', kick, { passive: true });
+  addEventListener('resize', kick);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) kick(); });
+  document.fonts?.ready.then(() => { S.redrawScreens(); kick(); });
+  /* une fois l'intro passée, les autres finitions se compilent en tâche de fond */
+  const warmLater = () => setTimeout(() => S.warm().catch(() => {}), 1500);
+  if (introGone) warmLater(); else addEventListener('guardess:intro', warmLater, { once: true });
+  kick();
 }
-
-function buildWatch(M, { band = true } = {}) {
-  const g = new THREE.Group();
-  /* Boîtier : squircle extrudé, tranches entièrement arrondies */
-  const caseG = new THREE.ExtrudeGeometry(squircle(A - BEV, B - BEV), { depth: CORE, bevelEnabled: true, bevelThickness: BT, bevelSize: BEV, bevelSegments: 22, curveSegments: 12 });
-  caseG.translate(0, 0, -CORE / 2); caseG.computeVertexNormals();
-  g.add(new THREE.Mesh(caseG, M.alu));
-  /* Verre bombé noir qui sort du boîtier */
-  /* verre posé sur le boîtier (aucune surface qui se chevauche), bombé sur 0,9 mm */
-  const glassG = new THREE.ExtrudeGeometry(squircle(A - 2.5, B - 2.5), { depth: .05, bevelEnabled: true, bevelThickness: .42, bevelSize: 1.1, bevelSegments: 16, curveSegments: 12 });
-  const glass = new THREE.Mesh(glassG, M.glass); glass.position.z = FRONT + .43; g.add(glass);
-  const screen = new THREE.Mesh(fitUv(new THREE.ShapeGeometry(squircle(A - 4, B - 4))), M.screen); screen.position.z = FRONT + .93; g.add(screen);
-  /* Couronne : fine, peu saillante, crantage serré (proportions d'une Series 7-9) */
-  const CR = 3.1, CL = 1.7, CX = A + .15, CY = 7.4;
-  const crownG = new THREE.CylinderGeometry(CR, CR, CL, 192, 1), cp = crownG.attributes.position;
-  for (let i = 0; i < cp.count; i++) { const x = cp.getX(i), z = cp.getZ(i); if (Math.hypot(x, z) > CR - .1) { const k = 1 + .018 * Math.cos(Math.atan2(z, x) * 90); cp.setX(i, x * k); cp.setZ(i, z * k); } }
-  crownG.computeVertexNormals(); crownG.rotateZ(Math.PI / 2);
-  const crown = new THREE.Mesh(crownG, M.alu); crown.position.set(CX + .75 + CL / 2, CY, 0); g.add(crown);
-  const cap = new THREE.Mesh(new THREE.CylinderGeometry(CR - .45, CR - .2, .22, 96).rotateZ(Math.PI / 2), M.aluDark); cap.position.set(CX + .75 + CL + .1, CY, 0); g.add(cap);
-  const neck = new THREE.Mesh(new THREE.CylinderGeometry(1.7, 1.7, 1, 48).rotateZ(Math.PI / 2), M.aluDark); neck.position.set(CX + .4, CY, 0); g.add(neck);
-  const btn = new THREE.Mesh(new THREE.CapsuleGeometry(1.05, 9, 12, 32), M.alu); btn.scale.set(.75, 1, .75); btn.position.set(A - .2, -6.4, 0); g.add(btn);
-  const mic = new THREE.Mesh(new THREE.CylinderGeometry(.38, .38, .6, 20).rotateZ(Math.PI / 2), M.hole); mic.position.set(A - .1, 1.3, 0); g.add(mic);
-  if (band) {
-    /* Bracelet coupé : deux bouts qui partent du boîtier et s'incurvent vers l'arrière */
-    const top = new THREE.CatmullRomCurve3([[0, 18, -1.6], [0, 25, -2.2], [0, 31, -4.2], [0, 36, -8.4], [0, 39.5, -14.5]].map(p => new THREE.Vector3(...p)));
-    const bot = new THREE.CatmullRomCurve3([[0, -18, -1.6], [0, -25, -2.2], [0, -31, -4.2], [0, -36, -8.4], [0, -39.5, -14.5]].map(p => new THREE.Vector3(...p)));
-    g.add(new THREE.Mesh(sweep(top, 24, 3.4, 120), M.band), new THREE.Mesh(sweep(bot, 24, 3.4, 120), M.band));
-  }
-  return g;
-}
-
-/* Ombre de contact douce (texture générée) */
-const shadowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'); const g = x.createRadialGradient(128, 128, 0, 128, 128, 128); g.addColorStop(0, 'rgba(3,6,20,.55)'); g.addColorStop(.5, 'rgba(3,6,20,.22)'); g.addColorStop(1, 'rgba(3,6,20,0)'); x.fillStyle = g; x.fillRect(0, 0, 256, 256); return new THREE.CanvasTexture(c); })();
-const contactShadow = (w, d) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false })); m.rotation.x = -Math.PI / 2; return m; };
-
-/* ---------- HERO ---------- */
-const hero = document.getElementById('hero');
-const heroCanvas = document.getElementById('hero-canvas');
-const beats = [...document.querySelectorAll('.beat')];
-const beatsEl = document.getElementById('beats'), navEl = document.querySelector('.nav');
-const needle = document.getElementById('needle'), hudDeg = document.getElementById('hud-deg'), hudState = document.getElementById('hud-state');
-const MAX_DEG = 70, MODEL_H = 90;   // hauteur à cadrer (bracelet compris), en mm
-const H1 = (() => {
-  const kit = makeKit(heroCanvas);
-  const cam = new THREE.PerspectiveCamera(20, 1, 10, 2000);
-  const pivot = new THREE.Group(), model = buildWatch(kit.M);
-  model.position.z = 5;    // pivot près du centre du boîtier
-  pivot.add(model); kit.scene.add(pivot);
-  const shadow = contactShadow(70, 26); shadow.position.set(0, -46, 8); kit.scene.add(shadow);
-  const frame = () => {
-    const w = heroCanvas.clientWidth, h = heroCanvas.clientHeight; if (!w || !h) return;
-    kit.renderer.setSize(w, h, false);
-    let cx, cy, th;
-    if (innerWidth > 860) { cx = w * .72; cy = h * .53; th = Math.min(h * .82, 820); }
-    else { const top = navEl.getBoundingClientRect().bottom + 6, bottom = beatsEl.offsetTop - 6; cx = w / 2; cy = (top + bottom) / 2; th = Math.max(160, bottom - top); }
-    const dist = MODEL_H * (h / th) / (2 * Math.tan(10 * D2R));
-    cam.aspect = w / h; cam.position.set(0, 0, dist); cam.lookAt(0, 0, 0);
-    cam.setViewOffset(w, h, w / 2 - cx, h / 2 - cy, w, h); cam.updateProjectionMatrix();
-  };
-  new ResizeObserver(frame).observe(heroCanvas); new ResizeObserver(frame).observe(beatsEl);
-  addEventListener('resize', frame); document.fonts?.ready.then(frame); frame();
-  return { kit, cam, pivot, cur: 0 };
-})();
-
-const setBeats = p => {
-  /* calé sur l'angle : net sous 18° (p < .30), noir au-delà de 30° (p > .41) */
-  const o = [1 - sm(.08, .16, p), sm(.12, .18, p) * (1 - sm(.3, .36, p)), sm(.38, .46, p)];
-  beats.forEach((b, i) => {
-    b.style.opacity = o[i].toFixed(3);
-    b.style.transform = `translate3d(0, ${((1 - o[i]) * 18).toFixed(1)}px, 0)`;
-    b.style.pointerEvents = o[i] > .5 ? 'auto' : 'none';
-    b.setAttribute('aria-hidden', o[i] > .5 ? 'false' : 'true');
-  });
-};
-const setHud = deg => {
-  needle.style.transform = `rotate(${deg.toFixed(1)}deg)`;
-  hudDeg.textContent = `${Math.round(deg)}°`;
-  const blocked = deg >= 30;
-  hudState.textContent = deg < 18 ? 'Head-on · clear' : blocked ? 'Side · dark' : 'Getting darker';
-  hudState.classList.toggle('is-blocked', blocked);
-};
-
-/* ---------- PACK : vue éclatée ---------- */
-const pack = document.getElementById('pack');
-const packCanvas = document.getElementById('pack-canvas');
-const calls = { glass: document.getElementById('c-glass'), watch: document.getElementById('c-watch'), kase: document.getElementById('c-case') };
-const P = (() => {
-  const kit = makeKit(packCanvas);
-  const cam = new THREE.PerspectiveCamera(24, 1, 10, 2000);
-  const root = new THREE.Group(); kit.scene.add(root);
-  const watch = buildWatch(kit.M, { band: false }); root.add(watch);
-  /* Coque : cadre ajusté autour du boîtier */
-  const outer = squircle(A + 2.2, B + 2.2); outer.holes.push(squircle(A + .3, B + .3));
-  const caseG = new THREE.ExtrudeGeometry(outer, { depth: DEPTH - 1.6, bevelEnabled: true, bevelThickness: 1.2, bevelSize: 1.1, bevelSegments: 12, curveSegments: 12 });
-  caseG.translate(0, 0, -(DEPTH - 1.6) / 2);
-  const bumper = new THREE.Mesh(caseG, new THREE.MeshPhysicalMaterial({ color: 0x2c55e8, roughness: .32, clearcoat: .9, clearcoatRoughness: .2, envMapIntensity: 1.1 }));
-  root.add(bumper);
-  /* Vitre : plaque de verre à micro-lamelles */
-  const plateG = new THREE.ExtrudeGeometry(squircle(A + .4, B + .4), { depth: .5, bevelEnabled: true, bevelThickness: .4, bevelSize: .6, bevelSegments: 8, curveSegments: 12 });
-  const plate = new THREE.Group();
-  plate.add(new THREE.Mesh(plateG, new THREE.MeshPhysicalMaterial({ color: 0xc9d6ff, roughness: .03, clearcoat: 1, transparent: true, opacity: .28, envMapIntensity: 1.8, depthWrite: false })));
-  const lc = document.createElement('canvas'); lc.width = 1024; lc.height = 4; const lx = lc.getContext('2d');
-  for (let x = 0; x < 1024; x += 5) { lx.fillStyle = 'rgba(183,198,255,.5)'; lx.fillRect(x, 0, 1.4, 4); }
-  const ltex = new THREE.CanvasTexture(lc); ltex.anisotropy = 8;
-  const lam = new THREE.Mesh(fitUv(new THREE.ShapeGeometry(squircle(A, B))), new THREE.MeshBasicMaterial({ map: ltex, transparent: true, opacity: .5, depthWrite: false }));
-  lam.position.z = 1; plate.add(lam);
-  root.add(plate);
-  const frame = () => {
-    const w = packCanvas.clientWidth, h = packCanvas.clientHeight; if (!w || !h) return;
-    kit.renderer.setSize(w, h, false);
-    const wide = w > 860;
-    const cx = wide ? w * .68 : w / 2, cy = wide ? h * .5 : h * .3, th = wide ? Math.min(h * .7, 640) : Math.min(h * .42, w * 1.1);
-    const dist = 72 * (h / th) / (2 * Math.tan(12 * D2R));
-    cam.aspect = w / h; cam.position.set(0, 0, dist); cam.lookAt(0, 0, 0);
-    cam.setViewOffset(w, h, w / 2 - cx, h / 2 - cy, w, h); cam.updateProjectionMatrix();
-  };
-  new ResizeObserver(frame).observe(packCanvas); addEventListener('resize', frame); frame();
-  return { kit, cam, root, watch, bumper, plate, cur: 0 };
-})();
-const v3 = new THREE.Vector3();
-const place = (el, obj, local, cam, canvas, o) => {
-  v3.copy(local); obj.localToWorld(v3); v3.project(cam);
-  const x = (v3.x * .5 + .5) * canvas.clientWidth, y = (-v3.y * .5 + .5) * canvas.clientHeight;
-  el.classList.toggle('left', x > canvas.clientWidth * .55);
-  el.style.setProperty('--x', `${x.toFixed(1)}px`); el.style.setProperty('--y', `${(y - 14).toFixed(1)}px`); el.style.setProperty('--o', o.toFixed(3));
-};
-
-/* ---------- Boucle de rendu : amortissement indépendant de la fréquence d'affichage ---------- */
-let heroVis = true, packVis = false, last = performance.now();
-new IntersectionObserver(([e]) => { heroVis = e.isIntersecting; }).observe(hero);
-new IntersectionObserver(([e]) => { packVis = e.isIntersecting; }).observe(pack);
-const loop = t => {
-  const dt = Math.min(.05, (t - last) / 1000); last = t;
-  const still = RM.matches, ease = still ? 1 : 1 - Math.exp(-dt * 9);
-  if (heroVis) {
-    const p = still ? 0 : pinP(hero);
-    H1.cur += (MAX_DEG * sm(.04, .86, p) - H1.cur) * ease;
-    const a = H1.cur;
-    H1.pivot.rotation.set(lerp(.02, .12, a / MAX_DEG), -a * D2R, 0);
-    H1.pivot.position.y = still ? 0 : Math.sin(t / 1500) * .7;
-    H1.kit.renderer.render(H1.kit.scene, H1.cam);
-    if (!H1.shown) { H1.shown = true; dispatchEvent(new Event('guardess:ready')); }
-    setBeats(still ? 0 : p); setHud(a);
-  }
-  if (packVis) {
-    const p = still ? .7 : pinP(pack);
-    P.cur += ((still ? 1 : sm(.08, .62, p)) - P.cur) * ease;
-    const e = P.cur;
-    P.root.rotation.set(lerp(-.55, -.32, p), lerp(.95, .45, p), lerp(-.08, 0, p));
-    P.bumper.position.z = -e * 30;
-    P.plate.position.z = FRONT + .4 + e * 36;
-    P.watch.position.y = still ? 0 : Math.sin(t / 1600) * .5;
-    P.kit.renderer.render(P.kit.scene, P.cam);
-    const o = sm(.35, .9, e);
-    place(calls.glass, P.plate, new THREE.Vector3(A, B - 8, 1), P.cam, packCanvas, o);
-    place(calls.watch, P.watch, new THREE.Vector3(A + 4, 7.6, 0), P.cam, packCanvas, o);
-    place(calls.kase, P.bumper, new THREE.Vector3(-(A + 2.4), -B + 6, 0), P.cam, packCanvas, o);
-  }
-  requestAnimationFrame(loop);
-};
-requestAnimationFrame(loop);
 </script>
 </body>
 </html>
