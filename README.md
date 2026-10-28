@@ -56,3 +56,9 @@ La clé n'est pas dans le dépôt : elle est lue dans la variable d'environnemen
 `API_KEY_21ST` (clé gratuite sur https://21st.dev/mcp). Dans une session Claude Code
 sur le web, ajoute cette variable dans les réglages de l'environnement et autorise
 le domaine `21st.dev` dans l'accès réseau.
+
+## Skills Claude Code
+
+`.claude/skills/` contient des skills de design (ui-ux-pro-max et ses six
+compagnons, design-taste), chargés dans chaque session Claude Code sur ce dépôt.
+Origine, versions et mise à jour : `.claude/skills/README.md`.

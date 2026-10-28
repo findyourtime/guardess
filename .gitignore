@@ -1,0 +1,3 @@
+# Résidus des scripts Python des skills (.claude/skills)
+__pycache__/
+.coverage
