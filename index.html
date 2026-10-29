@@ -1167,6 +1167,8 @@ function run(S, A, B) {
       return { ry: (346 + 6 * al) * D, rx: 8 * D, explode: lerp(.75, .32, al) * (1 - sn), caseY: 62 * (1 - al), caseTilt: .25 * (1 - al), ...sc };
     },
     buy: p => ({ ry: (338 + 24 * (p - .5)) * D, rx: 7 * D }),
+    /* fond : entre deux scènes, la montre reste derrière le contenu, un peu en retrait */
+    bg: p => ({ ry: (-16 + 14 * Math.sin(p * Math.PI * 3)) * D, rx: 8 * D, exposure: .6, shadow: .5 }),
   };
   const FILL = { hero: 1, explode: .7, tilt: .92, charge: .9, finish: .95, fit: .8, buy: .9 };
   const stations = [...document.querySelectorAll('[data-station]')].map(el => ({ el, name: el.dataset.station, pin: el.closest('[data-pin]') }));
@@ -1191,7 +1193,13 @@ function run(S, A, B) {
   /* les scènes sont mesurées dans le DOM : position, taille et poids de chaque emplacement */
   function measure(vh) {
     const acc = Object.fromEntries(KEYS.map(k => [k, 0]));
-    let w = 0, cx = 0, cy = 0, th = 0, hero = 0, explode = 0, ep = 0;
+    let w = 0, cx = 0, cy = 0, th = 0, rc = 0, rs = 0, hero = 0, explode = 0, ep = 0, top = null, topW = 0;
+    const add = (pose, k, x, y, h) => {
+      for (const key of KEYS) acc[key] += pose[key] * k;
+      rc += Math.cos(pose.ry) * k; rs += Math.sin(pose.ry) * k;
+      w += k; cx += x * k; cy += y * k; th += h * k;
+      if (k > topW) { topW = k; top = pose; }
+    };
     for (const s of stations) {
       const r = s.el.getBoundingClientRect();
       if (r.bottom < -vh || r.top > vh * 2 || !r.height) continue;
@@ -1199,15 +1207,21 @@ function run(S, A, B) {
       const k = 1 - sm(.15, .95, d);
       if (k <= 0) continue;
       const p = s.pin ? GD.pinP(s.pin) : clamp((vh - r.top) / (vh + r.height));
-      const pose = { ...BASE, ...POSES[s.name](p) };
-      for (const key of KEYS) acc[key] += pose[key] * k;
-      w += k; cx += (r.left + r.width / 2) * k; cy += c * k;
-      th += Math.min(r.height, r.width * 1.5) * FILL[s.name] * k;
+      add({ ...BASE, ...POSES[s.name](p) }, k, r.left + r.width / 2, c, Math.min(r.height, r.width * 1.5) * FILL[s.name]);
       if (s.name === 'hero') hero = k;
       if (s.name === 'explode') { explode = k; ep = p; }
     }
-    if (w > 0) { for (const key of KEYS) tgt[key] = acc[key] / w; view.cx = cx / w; view.cy = cy / w; view.th = th / w; }
-    W = w;
+    /* aucune scène ne la réclame entièrement : elle complète avec sa place de fond, sans jamais disparaître */
+    const bg = clamp(1 - w);
+    if (bg > 0) {
+      const wide = innerWidth >= 900, max = document.documentElement.scrollHeight - vh;
+      add({ ...BASE, ...POSES.bg(max > 0 ? scrollY / max : 0) }, bg, innerWidth * (wide ? .74 : .5), vh * (wide ? .52 : .48), vh * (wide ? .8 : .66));
+    }
+    for (const key of KEYS) tgt[key] = acc[key] / w;
+    tgt.ry = Math.atan2(rs, rc);          // moyenne circulaire : pas de tour complet entre deux scènes
+    tgt.charge = top.charge;              // l'écran suit la scène dominante, jamais un mélange de deux écrans
+    view.cx = cx / w; view.cy = cy / w; view.th = th / w;
+    W = 1 - bg;
     return { hero, explode, ep };
   }
 
@@ -1250,7 +1264,12 @@ function run(S, A, B) {
     /* amortissement indépendant de la fréquence d'affichage */
     const k = SNAP ? 1 : 1 - Math.exp(-dt * 9);
     let moving = false;
-    for (const key of KEYS) { const d = tgt[key] - cur[key]; if (Math.abs(d) > 1e-4) moving = true; cur[key] += d * k; }
+    for (const key of KEYS) {
+      let d = tgt[key] - cur[key];
+      if (key === 'ry') d = Math.atan2(Math.sin(d), Math.cos(d));   // tourne par le plus court chemin
+      if (Math.abs(d) > 1e-4) moving = true;
+      cur[key] += d * k;
+    }
     /* intro : la montre sort de l'ombre, l'écran démarre sur le logo puis affiche l'heure */
     if (introT0 >= 0) { introK = clamp((t - introT0) / 1900); if (introK >= 1) introT0 = -1; moving = true; }
     const e = 1 - (1 - introK) ** 3;
@@ -1264,11 +1283,10 @@ function run(S, A, B) {
       const f = (t - finishT0) / 900;
       if (f >= 1) finishT0 = -1; else { pose.scanY = lerp(30, -30, f); pose.scanAmt = Math.max(pose.scanAmt, Math.sin(Math.PI * f) * 1.2); moving = true; }
     }
-    const op = sm(0, .3, W);
-    canvas.style.opacity = op.toFixed(3);
-    glow.style.opacity = (op * .9 * introK).toFixed(3);
+    canvas.style.opacity = '1';
+    glow.style.opacity = ((.45 + .45 * W) * introK).toFixed(3);
     glow.style.transform = `translate3d(${view.cx.toFixed(1)}px, ${view.cy.toFixed(1)}px, 0)`;
-    if (op > 0 || !shown) {
+    {
       S.setView(w, h, view.cx || w * .7, view.cy || h * .5, view.th || h * .8);
       try { S.apply(pose); S.render(); } catch (err) { fail(err); return; }
       if (!shown) { shown = true; ready(); }

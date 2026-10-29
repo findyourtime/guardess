@@ -454,7 +454,8 @@ export function createWatchScene(canvas, { pixelRatio = Math.min(devicePixelRati
     screen: new THREE.ShaderMaterial({
       uniforms: screenU,
       vertexShader: 'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-      fragmentShader: 'uniform sampler2D tFace;uniform sampler2D tBoot;uniform sampler2D tCharge;uniform float uPower;uniform float uBoot;uniform float uCharge;varying vec2 vUv;void main(){vec3 c=mix(mix(texture2D(tFace,vUv).rgb,texture2D(tCharge,vUv).rgb,uCharge),texture2D(tBoot,vUv).rgb,uBoot)*uPower;gl_FragColor=vec4(c,1.);\n#include <colorspace_fragment>\n}',
+      /* écrans exclusifs : on passe par le noir, jamais deux écrans superposés */
+      fragmentShader: 'uniform sampler2D tFace;uniform sampler2D tBoot;uniform sampler2D tCharge;uniform float uPower;uniform float uBoot;uniform float uCharge;varying vec2 vUv;void main(){vec3 c=texture2D(tFace,vUv).rgb*(1.-smoothstep(0.,.5,uCharge))+texture2D(tCharge,vUv).rgb*smoothstep(.5,1.,uCharge);c=c*(1.-smoothstep(0.,.5,uBoot))+texture2D(tBoot,vUv).rgb*smoothstep(.5,1.,uBoot);gl_FragColor=vec4(c*uPower,1.);\n#include <colorspace_fragment>\n}',
     }),
     charger: new THREE.MeshPhysicalMaterial({ color: 0xf2f3f5, roughness: .42, clearcoat: .3, clearcoatRoughness: .4, envMapIntensity: .9 }),
     chargerRing: new THREE.MeshPhysicalMaterial({ color: 0xd8dbe0, metalness: 1, roughness: .25, envMapIntensity: 1.1 }),
